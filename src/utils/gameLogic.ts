@@ -18,7 +18,10 @@ const calculateChampionClickValue = (champion: any, inventory: any[]) => {
   );
 };
 
-export const handleGameClick = (gameState: GameState): GameState => {
+export const handleGameClick = (
+  gameState: GameState,
+  isChampionClick: boolean = false
+): GameState => {
   const winChance = calculateWinChance(
     gameState.inventory,
     gameState.player.rank,
@@ -27,10 +30,13 @@ export const handleGameClick = (gameState: GameState): GameState => {
   const totalStats = calculateTotalStats(gameState.inventory);
 
   // Calculate champion contributions
-  const championContribution =
-    gameState.player.champions?.reduce((total, champion) => {
-      return total + calculateChampionClickValue(champion, champion.inventory);
-    }, 0) || 1;
+  const championContribution = isChampionClick
+    ? gameState.player.champions.reduce((total, champion) => {
+        return (
+          total + calculateChampionClickValue(champion, champion.inventory)
+        );
+      }, 0)
+    : 0;
 
   // AD-dependent crit chance
   const critChance =
@@ -51,7 +57,9 @@ export const handleGameClick = (gameState: GameState): GameState => {
       );
 
   // Add champion contribution to LP gain
-  lpChange = Math.round(lpChange * (1 + championContribution * 0.01));
+  if (isChampionClick) {
+    lpChange = Math.round(lpChange * (championContribution * 0.01));
+  }
 
   if (isCrit && isWin) {
     lpChange *= 2;
@@ -88,7 +96,7 @@ export const handleGameClick = (gameState: GameState): GameState => {
     updatedLpHistory,
     updatedRankHistory,
     updatedDivisionHistory,
-    Date.now()
+    isChampionClick ? gameState.player.lastGameTime : Date.now()
   );
 };
 
@@ -111,7 +119,7 @@ const updateGameState = (
     if (newLp >= 100) {
       if (division === "1") {
         const currentRankIndex = RANKS.indexOf(rank);
-        if (currentRankIndex < RANKS.length - 1) {
+        if (currentRankIndex < RANKS?.length - 1) {
           rank = RANKS[currentRankIndex + 1];
           // For ranks that use divisions, set starting division to "4"
           division =

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { GameState, Item } from "../types";
 import { extractStatFromDescription } from "../utils/extractStatFromDescription";
+import { handleGameClick } from "../utils/gameLogic";
 
 const STORAGE_KEY = "league-clicker-save";
 
@@ -18,7 +19,8 @@ const INITIAL_STATE: GameState = {
     divisionHistory: [],
     lastGameTime: Date.now(),
     inactivityWarning: false,
-    champions: [], // Add champions array
+    champions: [],
+    lastChampionClickTime: Date.now(),
   },
   inventory: [],
   baseGoldPerClick: 10,
@@ -30,12 +32,13 @@ export const useGameState = () => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);
-      // Ensure lastGameTime is properly restored
       return {
         ...parsed,
         player: {
           ...parsed.player,
           lastGameTime: Number(parsed.player.lastGameTime),
+          lastChampionClickTime: Date.now(),
+          champions: parsed.player.champions || [], // Ensure champions array exists
         },
       };
     }
@@ -49,6 +52,46 @@ export const useGameState = () => {
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(gameState));
   }, [gameState]);
+
+  // Champion auto-clicking system
+  useEffect(() => {
+    if (!gameState.player.champions) return; // Guard against undefined champions
+
+    const championCount = gameState.player.champions.length;
+    if (championCount === 0) return;
+
+    // Calculate click interval based on champion count
+    // 100 champions = 1 click per second
+    // 1 champion = 1 click per 100 seconds
+    const clickInterval = 100000 / championCount; // in milliseconds
+
+    const autoClickInterval = setInterval(() => {
+      const now = Date.now();
+      const timeSinceLastClick = now - gameState.player.lastChampionClickTime;
+
+      // Calculate how many clicks should have happened
+      const clicksDue = Math.floor(timeSinceLastClick / clickInterval);
+
+      if (clicksDue > 0) {
+        // Process all due clicks
+        let currentState = gameState;
+        for (let i = 0; i < clicksDue; i++) {
+          currentState = handleGameClick(currentState, true);
+        }
+
+        // Update state with all clicks processed
+        setGameState({
+          ...currentState,
+          player: {
+            ...currentState.player,
+            lastChampionClickTime: now,
+          },
+        });
+      }
+    }, 1000); // Check every second
+
+    return () => clearInterval(autoClickInterval);
+  }, [gameState.player.champions?.length]);
 
   // Reset game function
   const resetGame = () => {
@@ -173,7 +216,7 @@ export const useGameState = () => {
                 item.stats.FlatHPRegenMod ||
                 item.stats.FlatMPRegenMod)
           )
-          ?.map(([id, item]: [string, any]) => {
+          .map(([id, item]: [string, any]) => {
             // Remove HTML tags from the description for easier parsing.
             const plainDesc = item.description.replace(/<[^>]+>/g, " ");
 

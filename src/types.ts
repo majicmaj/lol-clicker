@@ -1,3 +1,5 @@
+import { Item, Rank, Division } from "./types";
+
 export type Rank =
   | "IRON"
   | "BRONZE"
@@ -62,6 +64,7 @@ export interface PlayerStats {
   lastGameTime: number;
   inactivityWarning: boolean;
   champions: Champion[];
+  lastChampionClickTime: number;
 }
 
 export interface ItemStats {

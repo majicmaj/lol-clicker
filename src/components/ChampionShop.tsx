@@ -23,7 +23,7 @@ export const ChampionShop: React.FC<ChampionShopProps> = ({
         );
         const data = await response.json();
 
-        const processedChampions = Object.values(data?.data || {})?.map(
+        const processedChampions = Object.values(data.data || {}).map(
           (champion: any) => ({
             id: champion.id,
             name: champion.name,
@@ -59,13 +59,7 @@ export const ChampionShop: React.FC<ChampionShopProps> = ({
           champions: [
             ...(gameState.player.champions || []),
             {
-              id: champion.id,
-              name: champion.name,
-              title: champion.title,
-              image: champion.image,
-              stats: champion.stats,
-              info: champion.info,
-              tags: champion.tags,
+              ...champion,
               inventory: [],
             },
           ],
@@ -78,7 +72,9 @@ export const ChampionShop: React.FC<ChampionShopProps> = ({
   const filteredChampions = champions.filter(
     (champion) =>
       champion.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      !gameState.player.champions?.some((owned) => owned.id === champion.id)
+      !(gameState.player.champions || []).some(
+        (owned) => owned.id === champion.id
+      )
   );
 
   if (loading) {
