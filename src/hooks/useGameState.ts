@@ -8,7 +8,7 @@ const INITIAL_STATE: GameState = {
     rank: "IRON",
     division: "4",
     lp: 0,
-    gold: 0,
+    gold: 500,
     lastLpChange: 0,
     wins: 0,
     losses: 0,
@@ -138,6 +138,7 @@ export const useGameState = () => {
     return () => clearInterval(decayInterval);
   }, []);
 
+  const blacklistedItems = ["Empyrean Promise"];
   useEffect(() => {
     const fetchItems = async () => {
       try {
@@ -149,6 +150,8 @@ export const useGameState = () => {
         const processedItems: Item[] = Object.entries(data.data)
           .filter(
             ([, item]: [string, any]) =>
+              item.maps["11"] &&
+              !blacklistedItems.includes(item.name) &&
               item.gold.purchasable &&
               (item.stats.FlatPhysicalDamageMod ||
                 item.stats.FlatMagicDamageMod ||
