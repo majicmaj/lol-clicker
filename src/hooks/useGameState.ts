@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { GameState, Item } from "../types";
+import { extractStatFromDescription } from "../utils/extractStatFromDescription";
 
 const STORAGE_KEY = "league-clicker-save";
 
@@ -171,35 +172,114 @@ export const useGameState = () => {
                 item.stats.FlatHPRegenMod ||
                 item.stats.FlatMPRegenMod)
           )
-          .map(([id, item]: [string, any]) => ({
-            id,
-            name: item.name,
-            description: item.description,
-            cost: item.gold.total,
-            image: `https://ddragon.leagueoflegends.com/cdn/15.2.1/img/item/${item.image.full}`,
-            stats: {
-              ad: item.stats.FlatPhysicalDamageMod || 0,
-              ap: item.stats.FlatMagicDamageMod || 0,
-              armor: item.stats.FlatArmorMod || 0,
-              magicResist: item.stats.FlatSpellBlockMod || 0,
-              critChance: item.stats.FlatCritChanceMod || 0,
-              lethality: item.stats.rFlatArmorPenetrationMod || 0,
-              armorPen: item.stats.rPercentArmorPenetrationMod || 0,
-              magicPen: item.stats.rFlatMagicPenetrationMod || 0,
-              magicPenPercent: item.stats.rPercentMagicPenetrationMod || 0,
-              moveSpeed: item.stats.FlatMovementSpeedMod || 0,
-              moveSpeedPercent: item.stats.PercentMovementSpeedMod || 0,
-              abilityHaste: -(item.stats.rPercentCooldownMod || 0),
-              attackSpeed:
-                (item.stats.FlatAttackSpeedMod || 0) +
-                (item.stats.PercentAttackSpeedMod || 0),
-              health: item.stats.FlatHPPoolMod || 0,
-              healthRegen: item.stats.FlatHPRegenMod || 0,
-              mana: item.stats.FlatMPPoolMod || 0,
-              manaRegen: item.stats.FlatMPRegenMod || 0,
-            },
-            from: item.from || [],
-          }));
+          .map(([id, item]: [string, any]) => {
+            // Remove HTML tags from the description for easier parsing.
+            const plainDesc = item.description.replace(/<[^>]+>/g, " ");
+
+            // For each stat, use the provided value or extract from description as fallback.
+            const ad =
+              item.stats.FlatPhysicalDamageMod ||
+              extractStatFromDescription(plainDesc, "Attack Damage") ||
+              0;
+            const ap =
+              item.stats.FlatMagicDamageMod ||
+              extractStatFromDescription(plainDesc, "Ability Power") ||
+              0;
+            const armor =
+              item.stats.FlatArmorMod ||
+              extractStatFromDescription(plainDesc, "Armor") ||
+              0;
+            const magicResist =
+              item.stats.FlatSpellBlockMod ||
+              extractStatFromDescription(plainDesc, "Magic Resist") ||
+              0;
+            const critChance =
+              item.stats.FlatCritChanceMod ||
+              extractStatFromDescription(plainDesc, "Critical Strike Chance") ||
+              0;
+            // For lethality, sometimes the JSON might not include it.
+            const lethality =
+              item.stats.ArmorPenetration ||
+              extractStatFromDescription(plainDesc, "Lethality") ||
+              0;
+            const armorPen =
+              item.stats.PercentArmorPenetrationMod ||
+              extractStatFromDescription(plainDesc, "Armor Penetration") ||
+              0;
+            const magicPen =
+              item.stats.FlatMagicPenetrationMod ||
+              extractStatFromDescription(plainDesc, "Magic Penetration") ||
+              0;
+            const magicPenPercent =
+              item.stats.magicPenertration || // note: spelling in the JSON may vary
+              extractStatFromDescription(
+                plainDesc,
+                "Magic Penetration Percent"
+              ) ||
+              0;
+            const moveSpeed =
+              item.stats.FlatMovementSpeedMod ||
+              extractStatFromDescription(plainDesc, "Move Speed") ||
+              0;
+            const moveSpeedPercent =
+              item.stats.PercentMovementSpeedMod ||
+              extractStatFromDescription(plainDesc, "Move Speed Percent") ||
+              0;
+            const abilityHaste = -(
+              item.stats.rPercentCooldownMod ||
+              extractStatFromDescription(plainDesc, "Cooldown Reduction") ||
+              0
+            );
+            const attackSpeed =
+              (item.stats.FlatAttackSpeedMod || 0) +
+              (item.stats.PercentAttackSpeedMod ||
+                extractStatFromDescription(plainDesc, "Attack Speed") ||
+                0);
+            const health =
+              item.stats.FlatHPPoolMod ||
+              extractStatFromDescription(plainDesc, "Health") ||
+              0;
+            const healthRegen =
+              item.stats.FlatHPRegenMod ||
+              extractStatFromDescription(plainDesc, "Health Regen") ||
+              0;
+            const mana =
+              item.stats.FlatMPPoolMod ||
+              extractStatFromDescription(plainDesc, "Mana") ||
+              0;
+            const manaRegen =
+              item.stats.FlatMPRegenMod ||
+              extractStatFromDescription(plainDesc, "Mana Regen") ||
+              0;
+
+            return {
+              id,
+              name: item.name,
+              description: item.description,
+              cost: item.gold.total,
+              image: `https://ddragon.leagueoflegends.com/cdn/15.2.1/img/item/${item.image.full}`,
+              stats: {
+                ad,
+                ap,
+                armor,
+                magicResist,
+                critChance,
+                lethality,
+                armorPen,
+                magicPen,
+                magicPenPercent,
+                moveSpeed,
+                moveSpeedPercent,
+                abilityHaste,
+                attackSpeed,
+                health,
+                healthRegen,
+                mana,
+                manaRegen,
+              },
+              from: item.from || [],
+            };
+          });
 
         setItems(processedItems);
         setLoading(false);
@@ -210,6 +290,7 @@ export const useGameState = () => {
     };
 
     fetchItems();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return { gameState, setGameState, items, loading, resetGame };
