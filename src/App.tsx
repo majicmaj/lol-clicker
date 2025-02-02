@@ -50,10 +50,10 @@ function App() {
     <div className="min-h-screen bg-[#091428] bg-[radial-gradient(circle_at_center,rgba(0,168,255,0.15),rgba(9,20,40,0))] p-6 pb-24 lg:pb-6">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Reset Button */}
-        <div className="absolute top-4 right-4">
+        <div className="absolute top-2 right-2">
           <button
             onClick={handleReset}
-            className={`flex items-center gap-2 px-4 py-2 rounded transition-all duration-300
+            className={`flex items-center gap-2 px-4 py-1 text-sm rounded transition-all duration-300
               ${
                 showResetConfirm
                   ? "bg-red-500 hover:bg-red-600"
@@ -61,8 +61,8 @@ function App() {
               } 
               border border-[#C8AA6E]/30`}
           >
-            <RotateCcw size={16} />
-            <span>{showResetConfirm ? "Confirm Reset" : "Reset Game"}</span>
+            <RotateCcw size={12} />
+            <span>{showResetConfirm ? "Confirm" : "Reset"}</span>
           </button>
         </div>
 
