@@ -227,7 +227,7 @@ export const useGameState = () => {
               0;
             const abilityHaste = -(
               item.stats.rPercentCooldownMod ||
-              extractStatFromDescription(plainDesc, "Cooldown Reduction") ||
+              -extractStatFromDescription(plainDesc, "Ability Haste") ||
               0
             );
             const attackSpeed =

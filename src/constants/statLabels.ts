@@ -1,0 +1,17 @@
+export const STAT_LABELS = {
+  ad: "AD",
+  ap: "AP",
+  armor: "Armor",
+  magicResist: "MR",
+  critChance: "Crit Chance",
+  abilityHaste: "Haste",
+  attackSpeed: "AS",
+  moveSpeed: "MS",
+  lethality: "Lethal",
+  armorPen: "Armor Pen",
+  magicPen: "Magic Pen",
+  health: "HP",
+  mana: "Mana",
+  healthRegen: "HP Regen",
+  manaRegen: "Mana Regen",
+};

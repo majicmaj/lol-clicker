@@ -53,12 +53,12 @@ export const GameStats: React.FC<GameStatsProps> = ({ player, inventory }) => {
 
   const avgLpGain =
     lpGains.length > 0
-      ? lpGains.reduce((sum, lp) => sum + lp, 0) / lpGains.length
+      ? lpGains.slice(-10).reduce((sum, lp) => sum + lp, 0) / 10
       : 0;
 
   const avgLpLoss =
     lpLosses.length > 0
-      ? lpLosses.reduce((sum, lp) => sum + Math.abs(lp), 0) / lpLosses.length
+      ? lpLosses.slice(-10).reduce((sum, lp) => sum + Math.abs(lp), 0) / 10
       : 0;
 
   // Convert LP history to absolute values based on rank and division

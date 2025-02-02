@@ -29,7 +29,7 @@ export const Inventory: React.FC<InventoryProps> = ({ items, onSell }) => {
         Inventory
       </h2>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 lg:grid-cols-8 gap-3">
+      <div className="flex flex-wrap items-center justify-center gap-2">
         {groupedItems.map((group) => (
           <div
             key={group.item.id}
@@ -58,9 +58,10 @@ export const Inventory: React.FC<InventoryProps> = ({ items, onSell }) => {
                 {group.indices.length}
               </div>
             )}
-            <div className="opacity-0 group-hover:opacity-100 absolute inset-0 bg-red-500/10 flex items-center justify-center transition-opacity">
-              <div className="text-xs text-[#C8AA6E] font-bold text-center">
-                Sell: {Math.floor(group.item.cost * 0.7)}g
+            <div className="opacity-0 group-hover:opacity-100 absolute inset-0 bg-red-500/50 flex items-center justify-center transition-opacity">
+              <div className="flex flex-col text-xs text-[#C8AA6E] font-bold text-center">
+                <span>Sell</span>
+                <span>{Math.floor(group.item.cost * 0.7)}g</span>
               </div>
             </div>
           </div>

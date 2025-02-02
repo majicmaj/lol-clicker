@@ -1,5 +1,15 @@
-export type Rank = 'IRON' | 'BRONZE' | 'SILVER' | 'GOLD' | 'PLATINUM' | 'EMERALD' | 'DIAMOND' | 'MASTER' | 'GRANDMASTER' | 'CHALLENGER';
-export type Division = '4' | '3' | '2' | '1' | null;
+export type Rank =
+  | "IRON"
+  | "BRONZE"
+  | "SILVER"
+  | "GOLD"
+  | "PLATINUM"
+  | "EMERALD"
+  | "DIAMOND"
+  | "MASTER"
+  | "GRANDMASTER"
+  | "CHALLENGER";
+export type Division = "4" | "3" | "2" | "1" | null;
 
 export interface PlayerStats {
   rank: Rank;
@@ -34,6 +44,8 @@ export interface ItemStats {
   healthRegen?: number;
   mana?: number;
   manaRegen?: number;
+  omnivamp?: number;
+  lifesteal?: number;
 }
 
 export interface Item {
