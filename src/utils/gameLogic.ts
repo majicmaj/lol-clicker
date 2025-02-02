@@ -69,7 +69,6 @@ export const handleGameClick = (gameState: GameState): GameState => {
     Date.now()
   );
 };
-
 const updateGameState = (
   gameState: GameState,
   newLp: number,
@@ -125,12 +124,28 @@ const updateGameState = (
 
   // Additional logic for masters+ (ranks without divisions)
   if (division === null && rank !== "CHALLENGER") {
-    if (rank === "MASTER" && lp >= 200) {
+    // First, check for negative LP (demotion)
+    if (lp < 0) {
+      const currentRankIndex = RANKS.indexOf(rank);
+      if (currentRankIndex > 0) {
+        rank = RANKS[currentRankIndex - 1];
+        // Set the division based on the new rank. If the new rank uses divisions, we set it to "1".
+        division =
+          rank === "MASTER" || rank === "GRANDMASTER" || rank === "CHALLENGER"
+            ? null
+            : "1";
+        lp = 75;
+      } else {
+        lp = 0;
+      }
+    }
+    // Then, check for promotions
+    else if (rank === "MASTER" && lp >= 200) {
       rank = "GRANDMASTER";
-      lp = 0; // or lp -= 200, if you want to carry over extra LP
+      lp = 0; // Or subtract 200 if you prefer carry-over LP
     } else if (rank === "GRANDMASTER" && lp >= 500) {
       rank = "CHALLENGER";
-      lp = 0; // or lp -= 500
+      lp = 0; // Or subtract 500 if you prefer carry-over LP
     }
   }
 
