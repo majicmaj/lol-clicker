@@ -39,7 +39,7 @@ export const GameStats: React.FC<GameStatsProps> = ({ player, inventory }) => {
   const lpLosses = player.lpHistory.filter((lp) => lp < 0);
 
   // Convert LP history to absolute values based on rank and division
-  const lpChartData = player.lpHistory.map((lp, index) => {
+  const lpChartData = player.lpHistory?.map((lp, index) => {
     const currentRank = player.rankHistory[index];
     const currentDivision = player.divisionHistory[index];
 
@@ -83,9 +83,9 @@ export const GameStats: React.FC<GameStatsProps> = ({ player, inventory }) => {
       <AverageStats lpGains={lpGains} lpLosses={lpLosses} />
       <WinRateStats player={player} inventory={inventory} />
       <LPChart
-        lpHistory={lpChartFilteredProps.map((data) => data.lp)}
-        rankHistory={lpChartFilteredProps.map((data) => data.rank)}
-        divisionHistory={lpChartFilteredProps.map((data) => data.division)}
+        lpHistory={lpChartFilteredProps?.map((data) => data.lp)}
+        rankHistory={lpChartFilteredProps?.map((data) => data.rank)}
+        divisionHistory={lpChartFilteredProps?.map((data) => data.division)}
       />
 
       <WinLossChart wins={player.wins} losses={player.losses} />

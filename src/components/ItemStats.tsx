@@ -135,12 +135,12 @@ export const ItemStats: React.FC<ItemStatsProps> = ({ inventory }) => {
         Champion Stats
       </h2>
       <div className="grid grid-cols-2 gap-2">
-        {statGroups.map((group, index) => (
+        {statGroups?.map((group, index) => (
           <div key={index} className="space-y-2">
             <h3 className="text-lg font-beaufort text-[#C8AA6E] mb-2">
               {group.title}
             </h3>
-            {group.stats.map((stat, statIndex) => (
+            {group.stats?.map((stat, statIndex) => (
               <div
                 key={statIndex}
                 className="flex justify-between bg-[#0A1428] p-2 border border-[#0397AB]/30 rounded-none"

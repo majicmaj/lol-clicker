@@ -25,7 +25,7 @@ export const getAvailableUpgrades = (
   items: Item[],
   inventory: Item[]
 ): Item[] => {
-  const inventoryIds = inventory.map((item) => item.id);
+  const inventoryIds = inventory?.map((item) => item.id);
 
   return items.filter(
     (item) =>

@@ -69,7 +69,7 @@ const ShopItemCard: React.FC<{
 
       {/* Stats Grid */}
       <div className="grid text-xs">
-        {Object.entries(item.stats).map(([stat, value]) => {
+        {Object.entries(item.stats || {})?.map(([stat, value]) => {
           if (!value) return null;
           return (
             <div

@@ -30,7 +30,7 @@ export const Inventory: React.FC<InventoryProps> = ({ items, onSell }) => {
       </h2>
 
       <div className="flex flex-wrap items-center justify-center gap-2">
-        {groupedItems.map((group) => (
+        {groupedItems?.map((group) => (
           <div
             key={group.item.id}
             className="bg-[#0A1428] p-2 border-2 border-[#0397AB]/30 hover:border-[#0397AB]/50 transition-colors cursor-pointer relative group"

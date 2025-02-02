@@ -173,7 +173,7 @@ export const useGameState = () => {
                 item.stats.FlatHPRegenMod ||
                 item.stats.FlatMPRegenMod)
           )
-          .map(([id, item]: [string, any]) => {
+          ?.map(([id, item]: [string, any]) => {
             // Remove HTML tags from the description for easier parsing.
             const plainDesc = item.description.replace(/<[^>]+>/g, " ");
 

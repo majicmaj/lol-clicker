@@ -29,7 +29,7 @@ export const LPChart: React.FC<LPChartProps> = ({
   rankHistory,
   divisionHistory,
 }) => {
-  const lpChartData: ChartData[] = lpHistory.map((lp, index) => {
+  const lpChartData: ChartData[] = lpHistory?.map((lp, index) => {
     const currentRank = rankHistory[index];
     const currentDivision = divisionHistory[index];
 

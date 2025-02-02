@@ -142,7 +142,7 @@ export const ItemShop: React.FC<ItemShopProps> = ({
                 Filter by Stats:
               </h3>
               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
-                {Object.entries(STAT_LABELS).map(([key, label]) => (
+                {Object.entries(STAT_LABELS || {})?.map(([key, label]) => (
                   <button
                     key={key}
                     onClick={() => toggleStatFilter(key)}
@@ -167,7 +167,7 @@ export const ItemShop: React.FC<ItemShopProps> = ({
               Available Upgrades
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {availableUpgrades.map((item) => (
+              {availableUpgrades?.map((item) => (
                 <ShopItemCard
                   key={item.id}
                   item={item}
@@ -186,7 +186,7 @@ export const ItemShop: React.FC<ItemShopProps> = ({
             All Items
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {filteredItems.map((item) => (
+            {filteredItems?.map((item) => (
               <ShopItemCard
                 key={item.id}
                 item={item}

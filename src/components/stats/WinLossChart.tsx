@@ -43,7 +43,7 @@ export const WinLossChart: React.FC<WinLossChartProps> = ({ wins, losses }) => {
               itemStyle={{ color: "#fff" }}
             />
             <Bar dataKey="value" fill="#4ade80">
-              {distributionData.map((entry, index) => (
+              {distributionData?.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.color} />
               ))}
             </Bar>
