@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'BeaufortforLOL';
+  src: url('./assets/beaufort/BeaufortforLOL-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'BeaufortforLOL';
+  src: url('./assets/beaufort/BeaufortforLOL-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'BeaufortforLOL';
+  src: url('./assets/beaufort/BeaufortforLOL-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SpiegelSans';
+  src: url('./assets/spiegel/SpiegelSans-5Regular_TRIAL.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SpiegelSans';
+  src: url('./assets/spiegel/SpiegelSans-7Bold_TRIAL.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@layer base {
+  body {
+    @apply bg-[#091428] font-spiegel text-white;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'BeaufortforLOL', ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+  }
+}
