@@ -62,9 +62,9 @@ export const ItemStats: React.FC<ItemStatsProps> = ({ inventory }) => {
         },
         {
           name: "Attack Speed",
-          value: totalStats.attackSpeed,
+          value: (totalStats.attackSpeed * 100).toFixed(0),
           color: "text-amber-300",
-          suffix: "",
+          suffix: "/s",
         },
       ],
     },
@@ -102,7 +102,7 @@ export const ItemStats: React.FC<ItemStatsProps> = ({ inventory }) => {
       stats: [
         {
           name: "Move Speed",
-          value: totalStats.moveSpeed,
+          value: (totalStats.moveSpeed * 100).toFixed(0),
           color: "text-cyan-300",
           suffix: "",
         },

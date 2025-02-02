@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { GameState, Item } from "../types";
 import { extractStatFromDescription } from "../utils/extractStatFromDescription";
-import { handleGameClick } from "../utils/gameLogic";
 
 const STORAGE_KEY = "league-clicker-save";
 
@@ -52,46 +51,6 @@ export const useGameState = () => {
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(gameState));
   }, [gameState]);
-
-  // Champion auto-clicking system
-  useEffect(() => {
-    if (!gameState.player.champions) return; // Guard against undefined champions
-
-    const championCount = gameState.player.champions.length;
-    if (championCount === 0) return;
-
-    // Calculate click interval based on champion count
-    // 100 champions = 1 click per second
-    // 1 champion = 1 click per 100 seconds
-    const clickInterval = 100000 / championCount; // in milliseconds
-
-    const autoClickInterval = setInterval(() => {
-      const now = Date.now();
-      const timeSinceLastClick = now - gameState.player.lastChampionClickTime;
-
-      // Calculate how many clicks should have happened
-      const clicksDue = Math.floor(timeSinceLastClick / clickInterval);
-
-      if (clicksDue > 0) {
-        // Process all due clicks
-        let currentState = gameState;
-        for (let i = 0; i < clicksDue; i++) {
-          currentState = handleGameClick(currentState, true);
-        }
-
-        // Update state with all clicks processed
-        setGameState({
-          ...currentState,
-          player: {
-            ...currentState.player,
-            lastChampionClickTime: now,
-          },
-        });
-      }
-    }, 1000); // Check every second
-
-    return () => clearInterval(autoClickInterval);
-  }, [gameState.player.champions?.length]);
 
   // Reset game function
   const resetGame = () => {
