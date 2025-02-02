@@ -11,6 +11,43 @@ export type Rank =
   | "CHALLENGER";
 export type Division = "4" | "3" | "2" | "1" | null;
 
+export interface Champion {
+  id: string;
+  name: string;
+  title: string;
+  image: string;
+  stats: {
+    hp: number;
+    hpperlevel: number;
+    mp: number;
+    mpperlevel: number;
+    movespeed: number;
+    armor: number;
+    armorperlevel: number;
+    spellblock: number;
+    spellblockperlevel: number;
+    attackrange: number;
+    hpregen: number;
+    hpregenperlevel: number;
+    mpregen: number;
+    mpregenperlevel: number;
+    crit: number;
+    critperlevel: number;
+    attackdamage: number;
+    attackdamageperlevel: number;
+    attackspeedperlevel: number;
+    attackspeed: number;
+  };
+  info: {
+    attack: number;
+    defense: number;
+    magic: number;
+    difficulty: number;
+  };
+  tags: string[];
+  inventory: Item[];
+}
+
 export interface PlayerStats {
   rank: Rank;
   division: Division;
@@ -24,6 +61,7 @@ export interface PlayerStats {
   divisionHistory: Division[];
   lastGameTime: number;
   inactivityWarning: boolean;
+  champions: Champion[];
 }
 
 export interface ItemStats {

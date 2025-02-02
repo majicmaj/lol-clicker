@@ -54,6 +54,13 @@ export const ItemStats: React.FC<ItemStatsProps> = ({ inventory }) => {
           color: "text-red-600",
           suffix: "",
         },
+        // Crit chance
+        {
+          name: "Crit Chance",
+          value: totalStats.critChance * 100,
+          color: "text-red-300",
+          suffix: "%",
+        },
       ],
     },
     {

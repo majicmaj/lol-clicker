@@ -26,7 +26,7 @@ export const calculateLpGain = (
     totalStats.ap > 0 ? totalStats.abilityHaste * 0.6 : 0;
 
   const rankMultiplier = RANK_DIFFICULTY_MULTIPLIER[rank];
-  const lpScaling = (lp / 100) * 0.05;
+  const lpScaling = (lp / 100) * 0.1;
 
   return Math.round(
     (baseGain +
@@ -62,13 +62,15 @@ export const calculateLpLoss = (
   );
 
   const rankMultiplier = RANK_DIFFICULTY_MULTIPLIER[rank];
-  const lpScaling = (lp / 100) * 0.05;
+  const lpScaling = (lp / 100) * 0.1;
 
   return Math.round(
     Math.max(
       5,
-      (baseLoss - armorReduction - mrReduction - healthReduction) *
-        (rankMultiplier + lpScaling)
+      baseLoss * (rankMultiplier + lpScaling) -
+        armorReduction -
+        mrReduction -
+        healthReduction
     )
   );
 };

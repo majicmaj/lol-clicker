@@ -9,6 +9,8 @@ import { GameStats } from "./components/GameStats";
 import { ItemStats } from "./components/ItemStats";
 import { Navigation } from "./components/Navigation";
 import { RotateCcw } from "lucide-react";
+import { ChampionShop } from "./components/ChampionShop";
+import { ChampionInventory } from "./components/ChampionInventory";
 
 function App() {
   const { gameState, setGameState, items, loading, resetGame } = useGameState();
@@ -23,6 +25,17 @@ function App() {
   const handleSellItem = (index: number) => {
     const newState = sellItem(gameState, index);
     setGameState(newState);
+  };
+
+  const handlePurchaseChampion = (champion: any) => {
+    setGameState((prev) => ({
+      ...prev,
+      player: {
+        ...prev.player,
+        lp: prev.player.lp - 6300,
+        champions: [...prev.player.champions, champion],
+      },
+    }));
   };
 
   const handleReset = () => {
@@ -94,7 +107,6 @@ function App() {
                            border-2 border-[#0397AB]/80 hover:border-[#0AC8B9]
                            shadow-lg shadow-[#0397AB]/20 hover:shadow-[#0AC8B9]/40
                            transform hover:-translate-y-1"
-                  // className="relative font-beaufort uppercase px-6 py-2 transition-transform hover:scale-105 bg-gradient-to-b from-slate-900 to-[#0397AB]/50"
                 />
                 <div className="relative flex items-center justify-center text-md font-beaufort uppercase">
                   Play Game
@@ -108,19 +120,26 @@ function App() {
                 player={gameState.player}
                 inventory={gameState.inventory}
               />
+              <ItemStats inventory={gameState.inventory} />
             </div>
           )}
           {activeTab === "shop" && (
-            <ItemShop
-              items={items}
-              gameState={gameState}
-              onPurchase={setGameState}
-            />
+            <div className="space-y-6">
+              <ItemShop
+                items={items}
+                gameState={gameState}
+                onPurchase={setGameState}
+              />
+              <ChampionShop
+                gameState={gameState}
+                onPurchase={handlePurchaseChampion}
+              />
+            </div>
           )}
           {activeTab === "inventory" && (
             <div className="space-y-6">
-              <ItemStats inventory={gameState.inventory} />
               <Inventory items={gameState.inventory} onSell={handleSellItem} />
+              <ChampionInventory champions={gameState.player.champions} />
             </div>
           )}
         </div>
@@ -140,7 +159,6 @@ function App() {
                            border-2 border-[#0397AB]/80 hover:border-[#0AC8B9]
                            shadow-lg shadow-[#0397AB]/20 hover:shadow-[#0AC8B9]/40
                            transform hover:-translate-y-1"
-              // className="relative font-beaufort uppercase px-6 py-2 transition-transform hover:scale-105 bg-gradient-to-b from-slate-900 to-[#0397AB]/50"
             />
             <div className="relative flex items-center justify-center text-md font-beaufort uppercase">
               Play Game
@@ -148,12 +166,17 @@ function App() {
           </button>
 
           <Inventory items={gameState.inventory} onSell={handleSellItem} />
+          <ChampionInventory champions={gameState.player.champions} />
 
-          <ItemShop
-            items={items}
-            gameState={gameState}
-            onPurchase={setGameState}
-          />
+          <div className="grid grid-cols-2 gap-8">
+            <ItemShop
+              items={items}
+              gameState={gameState}
+              onPurchase={setGameState}
+            />
+
+            <ChampionShop gameState={gameState} onPurchase={setGameState} />
+          </div>
         </div>
       </div>
 

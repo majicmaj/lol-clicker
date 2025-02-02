@@ -5,6 +5,19 @@ import { calculateCritChance } from "./stats";
 import { calculateLpGain, calculateLpLoss } from "./lpCalculations";
 import { calculateWinChance } from "./winChance";
 
+const calculateChampionClickValue = (champion: any, inventory: any[]) => {
+  const baseClick = champion.stats.attackdamage * (champion.info.attack / 10);
+  const championStats = calculateTotalStats(champion.inventory);
+
+  return (
+    baseClick *
+    (1 +
+      (championStats.ad || 0) * 0.01 +
+      (championStats.ap || 0) * 0.01 +
+      (championStats.attackSpeed || 0) * 0.5)
+  );
+};
+
 export const handleGameClick = (gameState: GameState): GameState => {
   const winChance = calculateWinChance(
     gameState.inventory,
@@ -12,6 +25,12 @@ export const handleGameClick = (gameState: GameState): GameState => {
     gameState.player.lp
   );
   const totalStats = calculateTotalStats(gameState.inventory);
+
+  // Calculate champion contributions
+  const championContribution =
+    gameState.player.champions?.reduce((total, champion) => {
+      return total + calculateChampionClickValue(champion, champion.inventory);
+    }, 0) || 1;
 
   // AD-dependent crit chance
   const critChance =
@@ -30,6 +49,9 @@ export const handleGameClick = (gameState: GameState): GameState => {
         gameState.player.rank,
         gameState.player.lp
       );
+
+  // Add champion contribution to LP gain
+  lpChange = Math.round(lpChange * (1 + championContribution * 0.01));
 
   if (isCrit && isWin) {
     lpChange *= 2;
@@ -69,6 +91,7 @@ export const handleGameClick = (gameState: GameState): GameState => {
     Date.now()
   );
 };
+
 const updateGameState = (
   gameState: GameState,
   newLp: number,

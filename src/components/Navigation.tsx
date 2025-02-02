@@ -14,7 +14,7 @@ export const Navigation: React.FC<NavigationProps> = ({
     { id: "overview", icon: LayoutGrid, label: "Overview" },
     { id: "stats", icon: BarChart3, label: "Stats" },
     { id: "shop", icon: ShoppingBag, label: "Shop" },
-    { id: "inventory", icon: Sword, label: "Items" },
+    { id: "inventory", icon: Sword, label: "Inventory" },
   ];
 
   return (

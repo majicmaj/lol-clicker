@@ -18,6 +18,7 @@ const INITIAL_STATE: GameState = {
     divisionHistory: [],
     lastGameTime: Date.now(),
     inactivityWarning: false,
+    champions: [], // Add champions array
   },
   inventory: [],
   baseGoldPerClick: 10,
