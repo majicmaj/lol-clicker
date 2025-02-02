@@ -10,6 +10,7 @@ import {
   ResponsiveContainer,
   BarChart,
   Bar,
+  Cell,
 } from "recharts";
 import { TrendingUp, TrendingDown } from "lucide-react";
 
@@ -86,14 +87,14 @@ export const GameStats: React.FC<GameStatsProps> = ({ player, inventory }) => {
     { name: "Losses", value: player.losses, color: "#f87171" },
   ];
 
-  const formatTooltipValue = (value: number, entry: any) => {
-    const data = entry.payload;
-    if (!data) return "";
+  // const formatTooltipValue = (value: number, entry: any) => {
+  //   const data = entry.payload;
+  //   if (!data) return "";
 
-    return `${data.rank} ${data.division || ""} (${data.change > 0 ? "+" : ""}${
-      data.change
-    } LP)`;
-  };
+  //   return `${data.rank} ${data.division || ""} (${data.change > 0 ? "+" : ""}${
+  //     data.change
+  //   } LP)`;
+  // };
 
   // Add inactivity warning
   const isHighElo = ["DIAMOND", "MASTER", "GRANDMASTER", "CHALLENGER"].includes(
@@ -212,7 +213,7 @@ export const GameStats: React.FC<GameStatsProps> = ({ player, inventory }) => {
               />
               <Bar dataKey="value" fill="#4ade80">
                 {distributionData.map((entry, index) => (
-                  <cell key={index} fill={entry.color} />
+                  <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Bar>
             </BarChart>

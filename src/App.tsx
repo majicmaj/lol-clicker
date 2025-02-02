@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { handleGameClick } from "./utils/gameLogic";
 import { sellItem } from "./utils/inventory";
 import { useGameState } from "./hooks/useGameState";

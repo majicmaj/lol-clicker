@@ -95,26 +95,26 @@ export const useGameState = () => {
           const newLp = Math.max(0, prevState.player.lp + decayAmount);
 
           // Update rank if LP drops below 0
-          let { rank, division, lp } = prevState.player;
+          let { rank, division } = prevState.player;
           if (newLp === 0) {
             if (rank === "CHALLENGER") {
               rank = "GRANDMASTER";
-              lp = 75;
+              // lp = 75;
             } else if (rank === "GRANDMASTER") {
               rank = "MASTER";
-              lp = 75;
+              // lp = 75;
             } else if (rank === "MASTER") {
               rank = "DIAMOND";
               division = "1";
-              lp = 75;
+              // lp = 75;
             } else if (division === "4") {
               // Can't decay below Diamond IV
-              lp = 0;
+              // lp = 0;
             } else if (division) {
               division = ["4", "3", "2", "1"][
                 (["1", "2", "3", "4"].indexOf(division) + 1) % 4
               ] as "4" | "3" | "2" | "1";
-              lp = 75;
+              // lp = 75;
             }
           }
 
@@ -148,7 +148,7 @@ export const useGameState = () => {
 
         const processedItems: Item[] = Object.entries(data.data)
           .filter(
-            ([_, item]: [string, any]) =>
+            ([, item]: [string, any]) =>
               item.gold.purchasable &&
               (item.stats.FlatPhysicalDamageMod ||
                 item.stats.FlatMagicDamageMod ||
