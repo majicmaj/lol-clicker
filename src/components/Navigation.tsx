@@ -1,17 +1,20 @@
-import React from 'react';
-import { LayoutGrid, Sword, ShoppingBag, BarChart3 } from 'lucide-react';
+import React from "react";
+import { LayoutGrid, Sword, ShoppingBag, BarChart3 } from "lucide-react";
 
 interface NavigationProps {
   activeTab: string;
   onTabChange: (tab: string) => void;
 }
 
-export const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange }) => {
+export const Navigation: React.FC<NavigationProps> = ({
+  activeTab,
+  onTabChange,
+}) => {
   const tabs = [
-    { id: 'overview', icon: LayoutGrid, label: 'Overview' },
-    { id: 'stats', icon: BarChart3, label: 'Stats' },
-    { id: 'shop', icon: ShoppingBag, label: 'Shop' },
-    { id: 'inventory', icon: Sword, label: 'Items' }
+    { id: "overview", icon: LayoutGrid, label: "Overview" },
+    { id: "stats", icon: BarChart3, label: "Stats" },
+    { id: "shop", icon: ShoppingBag, label: "Shop" },
+    { id: "inventory", icon: Sword, label: "Items" },
   ];
 
   return (
@@ -22,12 +25,14 @@ export const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange }
             key={id}
             onClick={() => onTabChange(id)}
             className={`flex flex-col items-center justify-center p-2 transition-colors
-              ${activeTab === id 
-                ? 'text-[#C8AA6E] bg-[#0A1428] border border-[#C8AA6E]/30' 
-                : 'text-gray-400 hover:text-[#C8AA6E]/80'}`}
+              ${
+                activeTab === id
+                  ? "text-[#C8AA6E] bg-[#0A1428]"
+                  : "text-gray-400 hover:text-[#C8AA6E]/80"
+              }`}
           >
             <Icon size={20} />
-            <span className="text-xs mt-1">{label}</span>
+            <span className="text-xs mt-1 uppercase">{label}</span>
           </button>
         ))}
       </div>
