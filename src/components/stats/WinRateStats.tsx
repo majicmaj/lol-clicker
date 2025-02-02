@@ -1,16 +1,22 @@
-import React from 'react';
-import { calculateWinChance } from '../../utils/winChance';
-import { PlayerStats, Item } from '../../types';
+import React from "react";
+import { calculateWinChance } from "../../utils/winChance";
+import { PlayerStats, Item } from "../../types";
 
 interface WinRateStatsProps {
   player: PlayerStats;
   inventory: Item[];
 }
 
-export const WinRateStats: React.FC<WinRateStatsProps> = ({ player, inventory }) => {
+export const WinRateStats: React.FC<WinRateStatsProps> = ({
+  player,
+  inventory,
+}) => {
   const totalGames = player.wins + player.losses;
-  const winRate = totalGames > 0 ? (player.wins / totalGames * 100).toFixed(1) : '0.0';
-  const winChance = (calculateWinChance(inventory, player.rank, player.lp) * 100).toFixed(1);
+  const winRate =
+    totalGames > 0 ? ((player.wins / totalGames) * 100).toFixed(1) : "0.0";
+  const winChance = (
+    calculateWinChance(inventory, player.rank, player.lp) * 100
+  ).toFixed(1);
 
   return (
     <div className="grid grid-cols-2 gap-2 mb-3">

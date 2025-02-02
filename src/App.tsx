@@ -126,7 +126,7 @@ function App() {
         </div>
 
         {/* Desktop Play Button and Inventory */}
-        <div className="hidden lg:block">
+        <div className="hidden lg:visible lg:flex flex-col gap-8">
           <button
             onClick={handleClick}
             className="relative w-full grid place-items-center mb-6 active:brightness-50"
@@ -148,6 +148,7 @@ function App() {
           </button>
 
           <Inventory items={gameState.inventory} onSell={handleSellItem} />
+
           <ItemShop
             items={items}
             gameState={gameState}
