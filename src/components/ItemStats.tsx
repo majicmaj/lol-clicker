@@ -14,7 +14,7 @@ export const ItemStats: React.FC<ItemStatsProps> = ({ inventory }) => {
       title: "AP",
       stats: [
         {
-          name: "Ability Power",
+          name: "AP",
           value: totalStats.ap,
           color: "text-[#0397AB]",
           suffix: "",
@@ -37,29 +37,34 @@ export const ItemStats: React.FC<ItemStatsProps> = ({ inventory }) => {
       title: "AD",
       stats: [
         {
-          name: "Attack Damage",
+          name: "AD",
           value: totalStats.ad,
-          color: "text-red-400",
+          color: "text-red-500",
           suffix: "",
         },
         {
           name: "Armor Pen",
           value: totalStats.armorPen,
-          color: "text-red-500",
+          color: "text-red-600",
           suffix: "",
         },
         {
           name: "Lethality",
           value: totalStats.lethality,
-          color: "text-red-600",
+          color: "text-red-800",
           suffix: "",
         },
-        // Crit chance
         {
           name: "Crit Chance",
           value: totalStats.critChance * 100,
-          color: "text-red-300",
+          color: "text-amber-400",
           suffix: "%",
+        },
+        {
+          name: "Attack Speed",
+          value: totalStats.attackSpeed,
+          color: "text-amber-300",
+          suffix: "",
         },
       ],
     },
