@@ -4,6 +4,7 @@ import { calculateTotalStats } from "./stats";
 import { calculateCritChance } from "./stats";
 import { calculateLpGain, calculateLpLoss } from "./lpCalculations";
 import { calculateWinChance } from "./winChance";
+import { calculateGoldGain } from "./goldGain";
 
 export const handleGameClick = (gameState: GameState): GameState => {
   const winChance = calculateWinChance(
@@ -38,13 +39,7 @@ export const handleGameClick = (gameState: GameState): GameState => {
   }
 
   // Movement speed affects gold gain
-  const moveSpeedBonus =
-    totalStats.moveSpeed * 0.2 +
-    (totalStats.moveSpeedPercent * totalStats.moveSpeed) / 100;
-
-  const goldGain = isWin
-    ? Math.round(gameState.baseGoldPerClick * (1 + moveSpeedBonus / 50))
-    : 0;
+  const goldGain = isWin ? calculateGoldGain(totalStats) : 0;
 
   const newLp = gameState.player.lp + lpChange;
   const newGold = gameState.player.gold + goldGain;

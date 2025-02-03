@@ -87,7 +87,12 @@ function App() {
             inventory={gameState.inventory}
           />
           <RankDisplay player={gameState.player} />
-          <ItemStats inventory={gameState.inventory} />
+          <ItemStats
+            inventory={gameState.inventory}
+            champions={gameState.player.champions}
+            rank={gameState.player.rank}
+            lp={gameState.player.lp}
+          />
         </div>
 
         {/* Mobile Layout */}
@@ -121,7 +126,12 @@ function App() {
                 player={gameState.player}
                 inventory={gameState.inventory}
               />
-              <ItemStats inventory={gameState.inventory} />
+              <ItemStats
+                inventory={gameState.inventory}
+                champions={gameState.player.champions}
+                rank={gameState.player.rank}
+                lp={gameState.player.lp}
+              />
             </div>
           )}
           {activeTab === "shop" && (

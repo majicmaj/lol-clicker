@@ -1,21 +1,33 @@
 import React from "react";
-import { Item } from "../types";
+import { Champion, Item, Rank } from "../types";
 import { calculateTotalStats } from "../utils/stats";
 import { STAT_ICON_MAP } from "../constants/statIcons";
 import { formatBigNumbers } from "../utils/formatBigNumbers";
 import gold_divider_sm from "../assets/dividers/gold_divider_sm.png";
+import { calculateWinChance } from "../utils/winChance";
+import { calculateLpGain, calculateLpLoss } from "../utils/lpCalculations";
+import { calculateGoldGain } from "../utils/goldGain";
 
 interface ItemStatsProps {
   inventory: Item[];
+  champions: Champion[];
+  rank: Rank;
+  lp: number;
 }
 
-export const ItemStats: React.FC<ItemStatsProps> = ({ inventory }) => {
+export const ItemStats: React.FC<ItemStatsProps> = ({
+  inventory,
+  rank,
+  lp,
+  champions,
+}) => {
   const totalStats = calculateTotalStats(inventory);
 
   const statGroups = [
     {
       title: "Attack Damage",
       description: "Increases LP Gain",
+      value: calculateLpGain(inventory, rank, lp),
       stats: [
         {
           icon: STAT_ICON_MAP.FlatPhysicalDamageMod,
@@ -57,6 +69,7 @@ export const ItemStats: React.FC<ItemStatsProps> = ({ inventory }) => {
     {
       title: "Ability Power",
       description: "Increases Win Chance",
+      value: calculateWinChance(inventory, rank, lp, champions),
       stats: [
         {
           icon: STAT_ICON_MAP.FlatMagicDamageMod,
@@ -105,6 +118,7 @@ export const ItemStats: React.FC<ItemStatsProps> = ({ inventory }) => {
     {
       title: "Defensive",
       description: "Reduces LP Loss",
+      value: calculateLpLoss(inventory, rank, lp),
       stats: [
         {
           icon: STAT_ICON_MAP.FlatArmorMod,
@@ -139,6 +153,7 @@ export const ItemStats: React.FC<ItemStatsProps> = ({ inventory }) => {
     {
       title: "Movement",
       description: "Increases Gold Gain",
+      value: calculateGoldGain(totalStats),
       stats: [
         {
           icon: STAT_ICON_MAP.FlatMovementSpeedMod,
@@ -167,7 +182,8 @@ export const ItemStats: React.FC<ItemStatsProps> = ({ inventory }) => {
               {group.title}
             </h3>
             <p className="text-sm font-spiegel italic text-white/75 mb-1">
-              {group.description}
+              {group.description}{" "}
+              <span className="font-bold">({group.value.toFixed(1)})</span>
             </p>
             <img src={gold_divider_sm} className="w-full mb-2" />
             <div className="grid grid-cols-2 gap-1 w-full">
