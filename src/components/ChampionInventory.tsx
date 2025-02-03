@@ -11,8 +11,8 @@ export const ChampionInventory: React.FC<{
       </h2>
       <Divider size="sm" />
 
-      <div className="border border-[#C8AA6E] h-full max-h-96 overflow-auto p-2 flex flex-col">
-        <div className="overflow-auto max-h-96 flex flex-wrap items-center gap-2 justify-center">
+      <div className="border border-[#C8AA6E] h-full max-h-48 overflow-auto p-2 flex flex-col">
+        <div className="overflow-auto flex flex-wrap items-center gap-2 justify-center">
           {champions.map((champion) => (
             <div
               key={champion.id}

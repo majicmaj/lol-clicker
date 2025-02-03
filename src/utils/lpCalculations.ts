@@ -28,16 +28,19 @@ export const calculateLpGain = (
   const rankMultiplier = RANK_DIFFICULTY_MULTIPLIER[rank];
   const lpScaling = (lp / 100) * 0.2;
 
-  return Math.round(
-    (baseGain +
-      adBonus +
-      lethalityBonus +
-      attackSpeedBonus +
-      critBonus +
-      apBonus +
-      magicPenBonus +
-      abilityHasteBonus) /
-      (rankMultiplier + lpScaling) ** 2
+  return Math.max(
+    1,
+    Math.round(
+      (baseGain +
+        adBonus +
+        lethalityBonus +
+        attackSpeedBonus +
+        critBonus +
+        apBonus +
+        magicPenBonus +
+        abilityHasteBonus) /
+        (rankMultiplier + lpScaling) ** 2
+    )
   );
 };
 

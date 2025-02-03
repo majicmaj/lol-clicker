@@ -31,7 +31,7 @@ export const Inventory: React.FC<InventoryProps> = ({ items, onSell }) => {
         Inventory
       </h2>
       <Divider size="sm" />
-      <div className="border border-[#C8AA6E] max-h-96 overflow-auto flex flex-wrap items-center justify-center gap-2 p-2">
+      <div className="border border-[#C8AA6E] max-h-48 overflow-auto flex flex-wrap items-center justify-center gap-2 p-2">
         {groupedItems?.map((group) => (
           <div
             key={group.item.id}

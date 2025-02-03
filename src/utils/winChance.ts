@@ -29,7 +29,7 @@ export const calculateWinChance = (
     0.0001;
 
   const rankMultiplier = RANK_DIFFICULTY_MULTIPLIER[rank];
-  const lpScaling = (lp / 100) * 0.1;
+  const lpScaling = (lp / 100) * 0.2;
 
   const maxRequiredGold =
     15000 * (rankMultiplier / RANK_DIFFICULTY_MULTIPLIER.CHALLENGER);
