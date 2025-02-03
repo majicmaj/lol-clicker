@@ -63,7 +63,7 @@ export const Inventory: React.FC<InventoryProps> = ({ items, onSell }) => {
                     : group.item.count}
                 </div>
               ))}
-            <div className="opacity-0 group-hover:opacity-100 absolute inset-0 bg-red-500/50 flex items-center justify-center transition-opacity">
+            <div className="opacity-0 group-hover:opacity-100 absolute inset-0 bg-slate-950/60 flex items-center justify-center transition-opacity">
               <div className="flex flex-col text-xs text-[#C8AA6E] font-bold text-center">
                 <span>Sell</span>
                 <span>
