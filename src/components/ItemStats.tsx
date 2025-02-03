@@ -3,6 +3,7 @@ import { Item } from "../types";
 import { calculateTotalStats } from "../utils/stats";
 import { STAT_ICON_MAP } from "../constants/statIcons";
 import { formatBigNumbers } from "../utils/formatBigNumbers";
+import gold_divider_sm from "../assets/dividers/gold_divider_sm.png";
 
 interface ItemStatsProps {
   inventory: Item[];
@@ -13,7 +14,8 @@ export const ItemStats: React.FC<ItemStatsProps> = ({ inventory }) => {
 
   const statGroups = [
     {
-      title: "AP",
+      title: "Offensive",
+      description: "Increases LP Gain",
       stats: [
         {
           icon: STAT_ICON_MAP.FlatMagicDamageMod,
@@ -43,11 +45,6 @@ export const ItemStats: React.FC<ItemStatsProps> = ({ inventory }) => {
           color: "text-blue-300",
           suffix: "",
         },
-      ],
-    },
-    {
-      title: "AD",
-      stats: [
         {
           icon: STAT_ICON_MAP.FlatPhysicalDamageMod,
           name: "AD",
@@ -83,10 +80,25 @@ export const ItemStats: React.FC<ItemStatsProps> = ({ inventory }) => {
           color: "text-amber-300",
           suffix: "/s",
         },
+        {
+          icon: STAT_ICON_MAP.Mana,
+          name: "Mana",
+          value: totalStats.mana,
+          color: "text-blue-400",
+          suffix: "",
+        },
+        {
+          icon: STAT_ICON_MAP.ManaRegen,
+          name: "Mana Regen",
+          value: totalStats.manaRegen.toFixed(0),
+          color: "text-blue-500",
+          suffix: "",
+        },
       ],
     },
     {
       title: "Defensive",
+      description: "Reduces LP Loss",
       stats: [
         {
           icon: STAT_ICON_MAP.FlatArmorMod,
@@ -119,7 +131,8 @@ export const ItemStats: React.FC<ItemStatsProps> = ({ inventory }) => {
       ],
     },
     {
-      title: "Utility",
+      title: "Movement",
+      description: "Increases Gold Gain",
       stats: [
         {
           icon: STAT_ICON_MAP.FlatMovementSpeedMod,
@@ -135,54 +148,44 @@ export const ItemStats: React.FC<ItemStatsProps> = ({ inventory }) => {
           color: "text-cyan-400",
           suffix: "%",
         },
-        {
-          icon: STAT_ICON_MAP.Mana,
-          name: "Mana",
-          value: totalStats.mana,
-          color: "text-blue-400",
-          suffix: "",
-        },
-        {
-          icon: STAT_ICON_MAP.ManaRegen,
-          name: "Mana Regen",
-          value: totalStats.manaRegen.toFixed(0),
-          color: "text-blue-500",
-          suffix: "",
-        },
       ],
     },
   ];
 
   return (
-    <div className="bg-[#091428] p-6 border-2 border-[#C8AA6E] shadow-lg shadow-[#C8AA6E]/20">
-      <h2 className="text-2xl font-bold mb-4 text-center bg-gradient-to-r from-[#C8AA6E] to-[#C8AA6E]/80 text-transparent bg-clip-text">
-        Champion Stats
-      </h2>
-      <div className="grid grid-cols-2 gap-2">
+    <div className="bg-[#091428] p-4 pb-6 border-2 border-[#C8AA6E] shadow-lg shadow-[#C8AA6E]/20">
+      <div className="grid grid-cols-1 gap-2">
         {statGroups?.map((group, index) => (
-          <div key={index} className="space-y-2">
-            <h3 className="text-lg font-beaufort text-[#C8AA6E] mb-2">
+          <div key={index} className="flex flex-col items-center">
+            <h3 className="text-lg font-beaufort text-[#C8AA6E]">
               {group.title}
             </h3>
-            {group.stats?.map((stat, statIndex) => (
-              <div
-                key={statIndex}
-                className="flex justify-between bg-[#0A1428] p-2 border border-[#0397AB]/30 rounded-none"
-              >
-                <div className={`${stat.color} text-sm font-bold`}>
-                  <img
-                    src={stat.icon}
-                    alt={stat.name}
-                    className="h-4 w-4 inline-block mr-2"
-                  />
-                  {stat.name}
+            <p className="text-sm font-spiegel italic text-white/75 mb-1">
+              {group.description}
+            </p>
+            <img src={gold_divider_sm} className="w-full mb-2" />
+            <div className="grid grid-cols-2 gap-1 w-full">
+              {group.stats?.map((stat, statIndex) => (
+                <div
+                  key={statIndex}
+                  className="w-full flex items-center justify-between bg-[#0A1428] px-1 py-0.5 border border-[#0397AB]/30 rounded-none"
+                >
+                  <div className={`${stat.color} text-sm font-bold`}>
+                    <img
+                      src={stat.icon}
+                      alt={stat.name}
+                      className="h-4 w-4 inline-block mr-2"
+                    />
+                    {stat.name}
+                  </div>
+
+                  <div className="text-sm font-bold text-white">
+                    +{formatBigNumbers(stat?.value || 0)}
+                    {stat.suffix}
+                  </div>
                 </div>
-                <div className="text-sm font-bold text-white">
-                  +{formatBigNumbers(stat?.value || 0)}
-                  {stat.suffix}
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         ))}
       </div>

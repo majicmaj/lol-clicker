@@ -155,21 +155,20 @@ function App() {
               style={{
                 transform: "perspective(100px) rotateX(20deg)",
               }}
-              className="absolute w-full max-w-32 bg-gradient-to-b from-slate-900 to-[#0397AB]/50
-                           text-white font-bold py-5 px-1 transition-all duration-300
+              className="absolute w-full max-w-[200px] bg-gradient-to-b from-slate-900 to-[#0397AB]/50
+                           text-white font-bold py-6 px-1 transition-all duration-300
                            border-2 border-[#0397AB]/80 hover:border-[#0AC8B9]
                            shadow-lg shadow-[#0397AB]/20 hover:shadow-[#0AC8B9]/40
                            transform hover:-translate-y-1"
             />
-            <div className="relative flex items-center justify-center text-md font-beaufort uppercase">
+            <div className="relative flex items-center justify-center text-xl font-beaufort uppercase">
               Play Game
             </div>
           </button>
 
-          <Inventory items={gameState.inventory} onSell={handleSellItem} />
-          <ChampionInventory champions={gameState.player.champions} />
-
           <div className="grid grid-cols-2 gap-8">
+            <Inventory items={gameState.inventory} onSell={handleSellItem} />
+            <ChampionInventory champions={gameState.player.champions} />
             <ItemShop
               items={items}
               gameState={gameState}
