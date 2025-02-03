@@ -279,6 +279,7 @@ export const useGameState = () => {
                 manaRegen,
               },
               from: item.from || [],
+              count: 1,
             };
           });
 
