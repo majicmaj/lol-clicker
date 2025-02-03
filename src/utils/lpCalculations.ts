@@ -17,13 +17,13 @@ export const calculateLpGain = (
   const critBonus = totalStats.ad > 0 ? totalStats.critChance * 100 : 0;
 
   // AP synergies - only work if you have AP
-  const apBonus = totalStats.ap * 0.2;
-  const magicPenBonus =
-    totalStats.ap > 0
-      ? totalStats.magicPen * 0.8 + totalStats.magicPenPercent * 40
-      : 0;
-  const abilityHasteBonus =
-    totalStats.ap > 0 ? totalStats.abilityHaste * 0.6 : 0;
+  // const apBonus = totalStats.ap * 0.2;
+  // const magicPenBonus =
+  //   totalStats.ap > 0
+  //     ? totalStats.magicPen * 0.8 + totalStats.magicPenPercent * 40
+  //     : 0;
+  // const abilityHasteBonus =
+  //   totalStats.ap > 0 ? totalStats.abilityHaste * 0.6 : 0;
 
   const rankMultiplier = RANK_DIFFICULTY_MULTIPLIER[rank];
   const lpScaling = (lp / 100) * 0.2;
@@ -31,14 +31,10 @@ export const calculateLpGain = (
   return Math.max(
     1,
     Math.round(
-      (baseGain +
-        adBonus +
-        lethalityBonus +
-        attackSpeedBonus +
-        critBonus +
-        apBonus +
-        magicPenBonus +
-        abilityHasteBonus) /
+      (baseGain + adBonus + lethalityBonus + attackSpeedBonus + critBonus) /
+        // + apBonus +
+        // magicPenBonus +
+        // abilityHasteBonus
         (rankMultiplier + lpScaling) ** 1.5
     )
   );

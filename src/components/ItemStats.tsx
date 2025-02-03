@@ -14,37 +14,9 @@ export const ItemStats: React.FC<ItemStatsProps> = ({ inventory }) => {
 
   const statGroups = [
     {
-      title: "Offensive",
+      title: "Attack Damage",
       description: "Increases LP Gain",
       stats: [
-        {
-          icon: STAT_ICON_MAP.FlatMagicDamageMod,
-          name: "AP",
-          value: totalStats.ap,
-          color: "text-[#0397AB]",
-          suffix: "",
-        },
-        {
-          icon: STAT_ICON_MAP.FlatSpellBlockMod,
-          name: "AP Pen",
-          value: totalStats.magicPen,
-          color: "text-purple-400",
-          suffix: "",
-        },
-        {
-          icon: STAT_ICON_MAP.PercentMagicPenetrationMod,
-          name: "AP Pen %",
-          value: (totalStats.magicPenPercent * 100).toFixed(1),
-          color: "text-purple-500",
-          suffix: "%",
-        },
-        {
-          icon: STAT_ICON_MAP.rPercentCooldownMod,
-          name: "Ability Haste",
-          value: totalStats.abilityHaste,
-          color: "text-blue-300",
-          suffix: "",
-        },
         {
           icon: STAT_ICON_MAP.FlatPhysicalDamageMod,
           name: "AD",
@@ -79,6 +51,40 @@ export const ItemStats: React.FC<ItemStatsProps> = ({ inventory }) => {
           value: (totalStats.attackSpeed * 100).toFixed(0),
           color: "text-amber-300",
           suffix: "/s",
+        },
+      ],
+    },
+    {
+      title: "Ability Power",
+      description: "Increases Win Chance",
+      stats: [
+        {
+          icon: STAT_ICON_MAP.FlatMagicDamageMod,
+          name: "AP",
+          value: totalStats.ap,
+          color: "text-[#0397AB]",
+          suffix: "",
+        },
+        {
+          icon: STAT_ICON_MAP.FlatSpellBlockMod,
+          name: "AP Pen",
+          value: totalStats.magicPen,
+          color: "text-purple-400",
+          suffix: "",
+        },
+        {
+          icon: STAT_ICON_MAP.PercentMagicPenetrationMod,
+          name: "AP Pen %",
+          value: (totalStats.magicPenPercent * 100).toFixed(1),
+          color: "text-purple-500",
+          suffix: "%",
+        },
+        {
+          icon: STAT_ICON_MAP.rPercentCooldownMod,
+          name: "Ability Haste",
+          value: totalStats.abilityHaste,
+          color: "text-blue-300",
+          suffix: "",
         },
         {
           icon: STAT_ICON_MAP.Mana,

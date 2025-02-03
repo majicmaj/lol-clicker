@@ -13,18 +13,18 @@ export const calculateWinChance = (
   const totalGoldValue = inventory.reduce((sum, item) => sum + item.cost, 0);
 
   const statBonus =
-    (totalStats.ad * 35 +
-      totalStats.ap * 20 +
-      totalStats.armor * 20 +
-      totalStats.magicResist * 20 +
-      totalStats.critChance * 40 +
+    // totalStats.ad * 35 +
+    // totalStats.armor * 20 +
+    // totalStats.magicResist * 20 +
+    // totalStats.critChance * 40 +
+    // totalStats.attackSpeed * 25 +
+    // totalStats.healthRegen * 3 +
+    // totalStats.lethality * 30 +
+    // totalStats.armorPen * 40 +
+    (totalStats.ap * 20 +
       totalStats.abilityHaste * 50 +
-      totalStats.attackSpeed * 25 +
       totalStats.mana +
-      totalStats.healthRegen * 3 +
       totalStats.manaRegen * 4 +
-      totalStats.lethality * 30 +
-      totalStats.armorPen * 40 +
       totalStats.magicPen * 30) *
     0.0001;
 
