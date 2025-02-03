@@ -16,6 +16,7 @@ export const sellItem = (
     player: {
       ...gameState.player,
       gold: gameState.player.gold + sellValue,
+      lastGoldChange: sellValue,
     },
     inventory: newInventory,
   };
@@ -92,6 +93,7 @@ export const purchaseItem = (
     player: {
       ...gameState.player,
       gold: gameState.player.gold - discountedCost,
+      lastGoldChange: -discountedCost,
     },
     inventory: [...newInventory, item],
   };

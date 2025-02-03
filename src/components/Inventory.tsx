@@ -1,3 +1,4 @@
+import { GOLD_ICON } from "../constants/goldIcon";
 import { Item } from "../types";
 
 interface InventoryProps {
@@ -61,7 +62,10 @@ export const Inventory: React.FC<InventoryProps> = ({ items, onSell }) => {
             <div className="opacity-0 group-hover:opacity-100 absolute inset-0 bg-red-500/50 flex items-center justify-center transition-opacity">
               <div className="flex flex-col text-xs text-[#C8AA6E] font-bold text-center">
                 <span>Sell</span>
-                <span>{Math.floor(group.item.cost * 0.7)}g</span>
+                <span>
+                  {Math.floor(group.item.cost * 0.7)}{" "}
+                  <img src={GOLD_ICON} className="h-4 w-4 inline-block mr-2" />
+                </span>
               </div>
             </div>
           </div>

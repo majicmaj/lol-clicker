@@ -13,6 +13,8 @@ import masterRank from "../assets/ranks/master.webp";
 import platinumRank from "../assets/ranks/platinum.webp";
 import silverRank from "../assets/ranks/silver.webp";
 import { formatBigNumbers } from "../utils/formatBigNumbers";
+import { GOLD_ICON } from "../constants/goldIcon";
+import { Tooltip } from "recharts";
 
 interface RankDisplayProps {
   player: PlayerStats;
@@ -115,7 +117,20 @@ export const RankDisplay: React.FC<RankDisplayProps> = ({ player }) => {
             </div>
 
             <div className="mt-4 text-2xl font-bold bg-gradient-to-r from-[#C8AA6E] to-[#C8AA6E]/80 text-transparent bg-clip-text">
-              {formatBigNumbers(player.gold)} Gold
+              {formatBigNumbers(player.gold)}{" "}
+              {
+                <span
+                  className={`${
+                    player.lastGoldChange > 0
+                      ? "text-green-500"
+                      : "text-red-500"
+                  }`}
+                >
+                  {player.lastGoldChange > 0 ? "+" : ""}
+                  {player.lastGoldChange}
+                </span>
+              }
+              <img src={GOLD_ICON} className="h-4 w-4 inline-block mr-2" />
             </div>
           </div>
         </div>

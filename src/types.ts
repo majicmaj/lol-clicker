@@ -55,6 +55,7 @@ export interface PlayerStats {
   division: Division;
   lp: number;
   gold: number;
+  lastGoldChange: number;
   lastLpChange: number;
   wins: number;
   losses: number;

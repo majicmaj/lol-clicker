@@ -10,6 +10,7 @@ const INITIAL_STATE: GameState = {
     division: "4",
     lp: 0,
     gold: 500,
+    lastGoldChange: 0,
     lastLpChange: 0,
     wins: 0,
     losses: 0,
@@ -58,86 +59,86 @@ export const useGameState = () => {
   };
 
   // Handle rank decay
-  useEffect(() => {
-    const decayInterval = setInterval(() => {
-      setGameState((prevState) => {
-        const now = Date.now();
-        const inactivityTime = now - prevState.player.lastGameTime;
-        const isHighElo = [
-          "DIAMOND",
-          "MASTER",
-          "GRANDMASTER",
-          "CHALLENGER",
-        ].includes(prevState.player.rank);
+  // useEffect(() => {
+  //   const decayInterval = setInterval(() => {
+  //     setGameState((prevState) => {
+  //       const now = Date.now();
+  //       const inactivityTime = now - prevState.player.lastGameTime;
+  //       const isHighElo = [
+  //         "DIAMOND",
+  //         "MASTER",
+  //         "GRANDMASTER",
+  //         "CHALLENGER",
+  //       ].includes(prevState.player.rank);
 
-        // Only apply decay to Diamond+ ranks
-        if (!isHighElo) return prevState;
+  //       // Only apply decay to Diamond+ ranks
+  //       if (!isHighElo) return prevState;
 
-        // 1 minute in milliseconds
-        const inactivityThreshold = 60 * 1000;
+  //       // 1 minute in milliseconds
+  //       const inactivityThreshold = 60 * 1000;
 
-        // Show warning at 30 seconds
-        const warningThreshold = 30 * 1000;
-        const shouldWarn =
-          inactivityTime >= warningThreshold &&
-          !prevState.player.inactivityWarning;
+  //       // Show warning at 30 seconds
+  //       const warningThreshold = 30 * 1000;
+  //       const shouldWarn =
+  //         inactivityTime >= warningThreshold &&
+  //         !prevState.player.inactivityWarning;
 
-        if (shouldWarn) {
-          return {
-            ...prevState,
-            player: {
-              ...prevState.player,
-              inactivityWarning: true,
-            },
-          };
-        }
+  //       if (shouldWarn) {
+  //         return {
+  //           ...prevState,
+  //           player: {
+  //             ...prevState.player,
+  //             inactivityWarning: true,
+  //           },
+  //         };
+  //       }
 
-        // Apply decay after threshold
-        if (inactivityTime >= inactivityThreshold) {
-          const decayAmount = -1; // -1 LP per second of inactivity after threshold
-          const newLp = Math.max(0, prevState.player.lp + decayAmount);
+  //       // Apply decay after threshold
+  //       if (inactivityTime >= inactivityThreshold) {
+  //         const decayAmount = -1; // -1 LP per second of inactivity after threshold
+  //         const newLp = Math.max(0, prevState.player.lp + decayAmount);
 
-          // Update rank if LP drops below 0
-          let { rank, division } = prevState.player;
-          if (newLp === 0) {
-            if (rank === "CHALLENGER") {
-              rank = "GRANDMASTER";
-              // lp = 75;
-            } else if (rank === "GRANDMASTER") {
-              rank = "MASTER";
-              // lp = 75;
-            } else if (rank === "MASTER") {
-              rank = "DIAMOND";
-              division = "1";
-              // lp = 75;
-            } else if (division === "4") {
-              // Can't decay below Diamond IV
-              // lp = 0;
-            } else if (division) {
-              division = ["4", "3", "2", "1"][
-                (["1", "2", "3", "4"].indexOf(division) + 1) % 4
-              ] as "4" | "3" | "2" | "1";
-              // lp = 75;
-            }
-          }
+  //         // Update rank if LP drops below 0
+  //         let { rank, division } = prevState.player;
+  //         if (newLp === 0) {
+  //           if (rank === "CHALLENGER") {
+  //             rank = "GRANDMASTER";
+  //             // lp = 75;
+  //           } else if (rank === "GRANDMASTER") {
+  //             rank = "MASTER";
+  //             // lp = 75;
+  //           } else if (rank === "MASTER") {
+  //             rank = "DIAMOND";
+  //             division = "1";
+  //             // lp = 75;
+  //           } else if (division === "4") {
+  //             // Can't decay below Diamond IV
+  //             // lp = 0;
+  //           } else if (division) {
+  //             division = ["4", "3", "2", "1"][
+  //               (["1", "2", "3", "4"].indexOf(division) + 1) % 4
+  //             ] as "4" | "3" | "2" | "1";
+  //             // lp = 75;
+  //           }
+  //         }
 
-          return {
-            ...prevState,
-            player: {
-              ...prevState.player,
-              rank,
-              division,
-              lp: newLp,
-            },
-          };
-        }
+  //         return {
+  //           ...prevState,
+  //           player: {
+  //             ...prevState.player,
+  //             rank,
+  //             division,
+  //             lp: newLp,
+  //           },
+  //         };
+  //       }
 
-        return prevState;
-      });
-    }, 1000); // Check every second
+  //       return prevState;
+  //     });
+  //   }, 1000); // Check every second
 
-    return () => clearInterval(decayInterval);
-  }, []);
+  //   return () => clearInterval(decayInterval);
+  // }, []);
 
   const blacklistedItems = ["Empyrean Promise"];
   useEffect(() => {

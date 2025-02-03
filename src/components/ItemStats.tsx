@@ -123,14 +123,14 @@ export const ItemStats: React.FC<ItemStatsProps> = ({ inventory }) => {
       stats: [
         {
           icon: STAT_ICON_MAP.FlatMovementSpeedMod,
-          name: "Move Speed",
+          name: "MS",
           value: totalStats.moveSpeed.toFixed(0),
           color: "text-cyan-300",
           suffix: "",
         },
         {
           icon: STAT_ICON_MAP.PercentMovementSpeedMod,
-          name: "% Move Speed",
+          name: "% MS",
           value: (totalStats.moveSpeedPercent * 100).toFixed(0),
           color: "text-cyan-400",
           suffix: "%",
