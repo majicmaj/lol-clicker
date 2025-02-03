@@ -1,11 +1,12 @@
-import { Item, Rank } from "../types";
+import { Champion, Item, Rank } from "../types";
 import { RANK_DIFFICULTY_MULTIPLIER } from "./ranks";
 import { calculateTotalStats } from "./stats";
 
 export const calculateWinChance = (
   inventory: Item[],
   rank: Rank,
-  lp: number
+  lp: number,
+  champions: Champion[]
 ): number => {
   const baseWinChance = 0.5;
   const totalStats = calculateTotalStats(inventory);
@@ -38,9 +39,12 @@ export const calculateWinChance = (
     (totalGoldValue / maxRequiredGold) * 0.25
   );
 
+  // having 150 champions gives you +0.25 win chance
+  const perChampionBonus = champions.length / 150;
+
   return Math.min(
-    0.75,
-    (baseWinChance + statBonus + goldValueContribution) /
+    0.999,
+    (baseWinChance + statBonus + goldValueContribution + perChampionBonus) /
       (rankMultiplier + lpScaling)
   );
 };

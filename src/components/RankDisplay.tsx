@@ -14,7 +14,6 @@ import platinumRank from "../assets/ranks/platinum.webp";
 import silverRank from "../assets/ranks/silver.webp";
 import { formatBigNumbers } from "../utils/formatBigNumbers";
 import { GOLD_ICON } from "../constants/goldIcon";
-import { Tooltip } from "recharts";
 
 interface RankDisplayProps {
   player: PlayerStats;

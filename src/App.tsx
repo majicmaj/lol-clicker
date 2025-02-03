@@ -11,6 +11,7 @@ import { Navigation } from "./components/Navigation";
 import { RotateCcw } from "lucide-react";
 import { ChampionShop } from "./components/ChampionShop";
 import { ChampionInventory } from "./components/ChampionInventory";
+import { Champion } from "./types";
 
 function App() {
   const { gameState, setGameState, items, loading, resetGame } = useGameState();
@@ -27,7 +28,7 @@ function App() {
     setGameState(newState);
   };
 
-  const handlePurchaseChampion = (champion: any) => {
+  const handlePurchaseChampion = (champion: Champion) => {
     setGameState((prev) => ({
       ...prev,
       player: {
@@ -175,7 +176,10 @@ function App() {
               onPurchase={setGameState}
             />
 
-            <ChampionShop gameState={gameState} onPurchase={setGameState} />
+            <ChampionShop
+              gameState={gameState}
+              onPurchase={handlePurchaseChampion}
+            />
           </div>
         </div>
       </div>

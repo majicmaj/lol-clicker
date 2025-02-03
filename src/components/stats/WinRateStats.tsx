@@ -15,7 +15,8 @@ export const WinRateStats: React.FC<WinRateStatsProps> = ({
   const winRate =
     totalGames > 0 ? ((player.wins / totalGames) * 100).toFixed(1) : "0.0";
   const winChance = (
-    calculateWinChance(inventory, player.rank, player.lp) * 100
+    calculateWinChance(inventory, player.rank, player.lp, player.champions) *
+    100
   ).toFixed(1);
 
   return (

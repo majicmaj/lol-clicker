@@ -1,4 +1,4 @@
-import { GameState, Rank, Division, Champion } from "../types";
+import { GameState, Rank, Division } from "../types";
 import { RANKS, DIVISIONS } from "./ranks";
 import { calculateTotalStats } from "./stats";
 import { calculateCritChance } from "./stats";
@@ -9,7 +9,8 @@ export const handleGameClick = (gameState: GameState): GameState => {
   const winChance = calculateWinChance(
     gameState.inventory,
     gameState.player.rank,
-    gameState.player.lp
+    gameState.player.lp,
+    gameState.player.champions
   );
 
   const totalStats = calculateTotalStats(gameState.inventory);

@@ -4,7 +4,7 @@ import { RANK_VALUES } from "../utils/ranks";
 
 interface ChampionShopProps {
   gameState: GameState;
-  onPurchase: (newState: GameState) => void;
+  onPurchase: (champion: Champion) => void;
 }
 
 export const ChampionShop: React.FC<ChampionShopProps> = ({
@@ -23,18 +23,18 @@ export const ChampionShop: React.FC<ChampionShopProps> = ({
         );
         const data = await response.json();
 
-        const processedChampions = Object.values(data.data || {}).map(
-          (champion: any) => ({
-            id: champion.id,
-            name: champion.name,
-            title: champion.title,
-            image: `https://ddragon.leagueoflegends.com/cdn/15.2.1/img/champion/${champion.image.full}`,
-            stats: champion.stats,
-            info: champion.info,
-            tags: champion.tags,
-            inventory: [],
-          })
-        );
+        const processedChampions = (
+          Object.values(data.data || {}) as Champion[]
+        ).map((champion: Champion) => ({
+          id: champion.id,
+          name: champion.name,
+          title: champion.title,
+          image: `https://ddragon.leagueoflegends.com/cdn/15.2.1/img/champion/${champion.image.full}`,
+          stats: champion.stats,
+          info: champion.info,
+          tags: champion.tags,
+          inventory: [],
+        }));
 
         setChampions(processedChampions);
         setLoading(false);
@@ -51,21 +51,11 @@ export const ChampionShop: React.FC<ChampionShopProps> = ({
     const lpCost = 6300;
 
     if (gameState.player.lp >= lpCost) {
-      const newState = {
-        ...gameState,
-        player: {
-          ...gameState.player,
-          lp: gameState.player.lp - lpCost,
-          champions: [
-            ...(gameState.player.champions || []),
-            {
-              ...champion,
-              inventory: [],
-            },
-          ],
-        },
-      };
-      onPurchase(newState);
+      onPurchase(champion);
+
+      setChampions((prev) =>
+        prev.filter((prevChampion) => prevChampion.id !== champion.id)
+      );
     }
   };
 

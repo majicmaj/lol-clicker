@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { PlayerStats } from "../types";
+import { Item, PlayerStats } from "../types";
 
 import { WinLossChart } from "./stats/WinLossChart";
 import { LPChart } from "./stats/LPChart";
@@ -8,7 +8,7 @@ import { WinRateStats } from "./stats/WinRateStats";
 
 interface GameStatsProps {
   player: PlayerStats;
-  inventory: any[];
+  inventory: Item[];
 }
 
 const RANK_VALUES = {

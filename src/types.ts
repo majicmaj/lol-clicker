@@ -1,5 +1,3 @@
-import { Item, Rank, Division } from "./types";
-
 export type Rank =
   | "IRON"
   | "BRONZE"
