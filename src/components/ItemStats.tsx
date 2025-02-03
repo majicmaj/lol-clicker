@@ -69,7 +69,7 @@ export const ItemStats: React.FC<ItemStatsProps> = ({
     {
       title: "Ability Power",
       description: "Increases Win Chance",
-      value: calculateWinChance(inventory, rank, lp, champions),
+      value: calculateWinChance(inventory, rank, lp, champions) * 100,
       stats: [
         {
           icon: STAT_ICON_MAP.FlatMagicDamageMod,
@@ -153,7 +153,7 @@ export const ItemStats: React.FC<ItemStatsProps> = ({
     {
       title: "Movement",
       description: "Increases Gold Gain",
-      value: calculateGoldGain(totalStats),
+      value: calculateGoldGain(totalStats, rank, lp),
       stats: [
         {
           icon: STAT_ICON_MAP.FlatMovementSpeedMod,

@@ -29,7 +29,7 @@ export const calculateWinChance = (
       totalStats.mana +
       totalStats.manaRegen * 4 +
       totalStats.magicPen * 30) *
-    0.0001;
+    0.0002;
 
   const rankMultiplier = RANK_DIFFICULTY_MULTIPLIER[rank];
   const lpScaling = (lp / 100) * 0.2;

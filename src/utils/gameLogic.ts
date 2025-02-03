@@ -39,10 +39,12 @@ export const handleGameClick = (gameState: GameState): GameState => {
   }
 
   // Movement speed affects gold gain
-  const goldGain = isWin ? calculateGoldGain(totalStats) : 0;
+  const goldGain = isWin
+    ? calculateGoldGain(totalStats, gameState.player.rank, gameState.player.lp)
+    : 0;
 
   const newLp = gameState.player.lp + lpChange;
-  const newGold = gameState.player.gold + goldGain;
+  const newGold = (gameState.player.gold || 0) + goldGain;
 
   // Store current rank and division before any changes
   const currentRank = gameState.player.rank;
