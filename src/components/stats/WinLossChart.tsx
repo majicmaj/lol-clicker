@@ -16,8 +16,8 @@ interface WinLossChartProps {
 
 export const WinLossChart: React.FC<WinLossChartProps> = ({ wins, losses }) => {
   const distributionData = [
-    { name: "Wins", value: wins, color: "#4ade80" },
-    { name: "Losses", value: losses, color: "#f87171" },
+    { name: "Wins", value: wins, color: "#0AC8B9" },
+    { name: "Losses", value: losses, color: "#0397AB" },
   ];
 
   return (

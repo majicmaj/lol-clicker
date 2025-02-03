@@ -58,7 +58,7 @@ export const calculateLpLoss = (
 
   return Math.round(
     Math.max(
-      5,
+      1,
       baseLoss * (rankMultiplier + lpScaling) -
         armorReduction -
         mrReduction -
