@@ -76,37 +76,32 @@ export const purchaseItem = (
     return null;
   }
 
-  // Build a frequency map for the items that should be removed
+  // Build a frequency map for the items that should be removed and their counts
   const removalMap: { [id: string]: number } = {};
   item.from.forEach((id) => {
     removalMap[id] = (removalMap[id] || 0) + 1;
   });
 
   // Create a new inventory by removing only the required amount of items
-  const newInventory = [];
-  for (const invItem of gameState.inventory) {
-    // If this item is required and we still need to remove one, skip it
-    if (removalMap[invItem.id] && removalMap[invItem.id] > 0) {
+  const newInventory = gameState.inventory.reduce((acc, invItem) => {
+    if (removalMap[invItem.id]) {
       removalMap[invItem.id]--;
-    } else {
-      newInventory.push(invItem);
-    }
-  }
 
-  // return {
-  //   ...gameState,
-  //   player: {
-  //     ...gameState.player,
-  //     gold: gameState.player.gold - discountedCost,
-  //     lastGoldChange: -discountedCost,
-  //   },
-  //   inventory: [...newInventory, item],
-  // };
+      if (removalMap[invItem.id] === 0) {
+        if (invItem.count && invItem.count > 1) {
+          return [...acc, { ...invItem, count: invItem.count - 1 }];
+        }
+        return acc;
+      }
+    }
+    return [...acc, invItem];
+  }, [] as Item[]);
+  newInventory.push({ ...item });
 
   // If Item already exists, +1 to count, else add it to inventory
   let itemExists = false;
 
-  const newItems = gameState.inventory.map((invItem) => {
+  const newItems = newInventory.map((invItem) => {
     if (invItem.id === item.id) {
       itemExists = true;
       return { ...invItem, count: (invItem.count || 0) + 1 };
