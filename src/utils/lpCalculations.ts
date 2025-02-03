@@ -47,19 +47,11 @@ export const calculateLpLoss = (
   lp: number
 ): number => {
   const baseLoss = 20;
-  const armorReduction = inventory.reduce(
-    (sum, item) => sum + (item.stats.armor || 0) * 0.4,
-    0
-  );
-  const mrReduction = inventory.reduce(
-    (sum, item) => sum + (item.stats.magicResist || 0) * 0.4,
-    0
-  );
+  const totalStats = calculateTotalStats(inventory);
 
-  const healthReduction = inventory.reduce(
-    (sum, item) => sum + (item.stats.health || 0) * 0.02,
-    0
-  );
+  const armorReduction = totalStats.armor * 0.4;
+  const mrReduction = totalStats.magicResist * 0.4;
+  const healthReduction = totalStats.health * 0.02;
 
   const rankMultiplier = RANK_DIFFICULTY_MULTIPLIER[rank];
   const lpScaling = (lp / 100) * 0.1;
