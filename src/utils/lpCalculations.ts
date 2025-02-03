@@ -26,7 +26,7 @@ export const calculateLpGain = (
     totalStats.ap > 0 ? totalStats.abilityHaste * 0.6 : 0;
 
   const rankMultiplier = RANK_DIFFICULTY_MULTIPLIER[rank];
-  const lpScaling = (lp / 100) * 0.1;
+  const lpScaling = (lp / 100) * 0.2;
 
   return Math.round(
     (baseGain +
@@ -54,7 +54,7 @@ export const calculateLpLoss = (
   const healthReduction = totalStats.health * 0.02;
 
   const rankMultiplier = RANK_DIFFICULTY_MULTIPLIER[rank];
-  const lpScaling = (lp / 100) * 0.1;
+  const lpScaling = (lp / 100) * 0.2;
 
   return Math.round(
     Math.max(

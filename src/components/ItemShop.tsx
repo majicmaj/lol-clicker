@@ -21,7 +21,7 @@ export const ItemShop: React.FC<ItemShopProps> = ({
 }) => {
   const [searchQuery, setSearchQuery] = React.useState("");
   const [selectedStats, setSelectedStats] = React.useState<string[]>([]);
-  const [showFilters, setShowFilters] = React.useState(true);
+  const [showFilters, setShowFilters] = React.useState(false);
   const [showSuggestions, setShowSuggestions] = React.useState(false);
   const searchRef = React.useRef<HTMLDivElement>(null);
 
@@ -162,7 +162,7 @@ export const ItemShop: React.FC<ItemShopProps> = ({
 
         {/* Available Upgrades */}
         {availableUpgrades.length > 0 && (
-          <section className="mb-8">
+          <section className="mb-8 max-h-96 overflow-auto border border-[#C8AA6E] p-4">
             <h3 className="text-xl font-bold mb-4 bg-gradient-to-r from-[#C8AA6E] to-[#C8AA6E]/80 text-transparent bg-clip-text">
               Available Upgrades
             </h3>
@@ -185,7 +185,7 @@ export const ItemShop: React.FC<ItemShopProps> = ({
           <h3 className="text-xl font-bold mb-4 bg-gradient-to-r from-[#C8AA6E] to-[#C8AA6E]/80 text-transparent bg-clip-text">
             All Items
           </h3>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="max-h-96 overflow-auto border border-[#C8AA6E] p-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {filteredItems?.map((item) => (
               <ShopItemCard
                 key={item.id}

@@ -93,7 +93,11 @@ export const ChampionShop: React.FC<ChampionShopProps> = ({
         />
       </div>
 
-      <div className="flex flex-wrap justify-center gap-4">
+      <h3 className="text-xl font-bold mb-4 bg-gradient-to-r from-[#C8AA6E] to-[#C8AA6E]/80 text-transparent bg-clip-text">
+        {filteredChampions.length} champions available
+      </h3>
+
+      <div className="flex flex-wrap justify-center gap-4 max-h-96 overflow-auto border border-[#C8AA6E] p-4">
         {filteredChampions.map((champion) => {
           const lpCost = 6300;
           const canAfford =

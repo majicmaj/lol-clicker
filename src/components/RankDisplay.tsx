@@ -14,6 +14,7 @@ import platinumRank from "../assets/ranks/platinum.webp";
 import silverRank from "../assets/ranks/silver.webp";
 import { formatBigNumbers } from "../utils/formatBigNumbers";
 import { GOLD_ICON } from "../constants/goldIcon";
+import { Divider } from "./dividers/Divider";
 
 interface RankDisplayProps {
   player: PlayerStats;
@@ -71,6 +72,8 @@ export const RankDisplay: React.FC<RankDisplayProps> = ({ player }) => {
         <h2 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-[#C8AA6E] via-[#C8AA6E]/80 to-[#C8AA6E] text-transparent bg-clip-text">
           Current Rank
         </h2>
+
+        <Divider />
 
         <div className="flex flex-col items-center">
           {/* Rank Image with Glow */}
