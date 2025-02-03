@@ -5,7 +5,7 @@ export const ChampionInventory: React.FC<{
   champions?: Champion[];
 }> = ({ champions = [] }) => {
   return (
-    <div className="bg-[#091428] p-4 border-2 border-[#C8AA6E] shadow-lg shadow-[#C8AA6E]/20">
+    <div className="flex flex-col bg-[#091428] p-4 border-2 border-[#C8AA6E] shadow-lg shadow-[#C8AA6E]/20">
       <h2 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-[#C8AA6E] to-[#C8AA6E]/80 text-transparent bg-clip-text">
         Champions ({champions.length})
       </h2>
