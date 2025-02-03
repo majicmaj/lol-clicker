@@ -54,11 +54,14 @@ export const Inventory: React.FC<InventoryProps> = ({ items, onSell }) => {
               className="w-12 h-12 mx-auto border border-[#C8AA6E]/30"
             />
             {/* Show a counter badge if there is more than one item in this group */}
-            {group.indices.length > 1 && (
-              <div className="absolute bottom-1 right-1 text-xs text-[#C8AA6E] font-bold bg-[#0A1428] border border-[#C8AA6E] px-1">
-                {group.indices.length}
-              </div>
-            )}
+            {group.indices.length > 1 ||
+              (group.item.count > 1 && (
+                <div className="absolute bottom-1 right-1 text-xs text-[#C8AA6E] font-bold bg-[#0A1428] border border-[#C8AA6E] px-1">
+                  {group.indices.length > 1
+                    ? group.indices.length
+                    : group.item.count}
+                </div>
+              ))}
             <div className="opacity-0 group-hover:opacity-100 absolute inset-0 bg-red-500/50 flex items-center justify-center transition-opacity">
               <div className="flex flex-col text-xs text-[#C8AA6E] font-bold text-center">
                 <span>Sell</span>

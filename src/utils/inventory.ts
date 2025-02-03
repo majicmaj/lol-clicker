@@ -9,7 +9,12 @@ export const sellItem = (
 
   const sellValue = Math.floor(item.cost * 0.7);
   const newInventory = [...gameState.inventory];
-  newInventory.splice(itemIndex, 1);
+
+  if (item.count && item.count > 1) {
+    newInventory[itemIndex] = { ...item, count: item.count - 1 };
+  } else {
+    newInventory.splice(itemIndex, 1);
+  }
 
   return {
     ...gameState,
@@ -88,6 +93,42 @@ export const purchaseItem = (
     }
   }
 
+  // return {
+  //   ...gameState,
+  //   player: {
+  //     ...gameState.player,
+  //     gold: gameState.player.gold - discountedCost,
+  //     lastGoldChange: -discountedCost,
+  //   },
+  //   inventory: [...newInventory, item],
+  // };
+
+  // If Item already exists, +1 to count, else add it to inventory
+  let itemExists = false;
+
+  const newItems = gameState.inventory.map((invItem) => {
+    if (invItem.id === item.id) {
+      itemExists = true;
+      return { ...invItem, count: (invItem.count || 0) + 1 };
+    }
+    return invItem;
+  });
+
+  if (!itemExists) {
+    newItems.push({ ...item, count: 1 });
+  }
+
+  // Remove duplicates by incrementing count while we're at it (older game versions had duplicates)
+
+  const newItemsWithCount = newItems.reduce((acc, invItem) => {
+    const existingItem = acc.find((item) => item.id === invItem.id);
+    if (existingItem) {
+      existingItem.count = (existingItem.count || 0) + 1;
+      return acc;
+    }
+    return [...acc, invItem];
+  }, [] as Item[]);
+
   return {
     ...gameState,
     player: {
@@ -95,6 +136,6 @@ export const purchaseItem = (
       gold: gameState.player.gold - discountedCost,
       lastGoldChange: -discountedCost,
     },
-    inventory: [...newInventory, item],
+    inventory: newItemsWithCount,
   };
 };

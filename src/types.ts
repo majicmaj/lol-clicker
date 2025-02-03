@@ -95,6 +95,7 @@ export interface Item {
   stats: ItemStats;
   image: string;
   from: string[];
+  count: number;
 }
 
 export interface GameState {
