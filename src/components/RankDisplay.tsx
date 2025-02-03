@@ -12,6 +12,7 @@ import ironRank from "../assets/ranks/iron.webp";
 import masterRank from "../assets/ranks/master.webp";
 import platinumRank from "../assets/ranks/platinum.webp";
 import silverRank from "../assets/ranks/silver.webp";
+import { formatBigNumbers } from "../utils/formatBigNumbers";
 
 interface RankDisplayProps {
   player: PlayerStats;
@@ -100,7 +101,7 @@ export const RankDisplay: React.FC<RankDisplayProps> = ({ player }) => {
             )}
 
             <div className="text-3xl font-bold text-white font-beaufort">
-              {player.lp} LP
+              {formatBigNumbers(player.lp)} LP
               {player.lastLpChange !== 0 && (
                 <span
                   className={`ml-2 ${
@@ -114,7 +115,7 @@ export const RankDisplay: React.FC<RankDisplayProps> = ({ player }) => {
             </div>
 
             <div className="mt-4 text-2xl font-bold bg-gradient-to-r from-[#C8AA6E] to-[#C8AA6E]/80 text-transparent bg-clip-text">
-              {player.gold} Gold
+              {formatBigNumbers(player.gold)} Gold
             </div>
           </div>
         </div>
