@@ -31,6 +31,12 @@ export const ItemStats: React.FC<ItemStatsProps> = ({ inventory }) => {
           color: "text-purple-500",
           suffix: "%",
         },
+        {
+          name: "Ability Haste",
+          value: totalStats.abilityHaste,
+          color: "text-blue-300",
+          suffix: "",
+        },
       ],
     },
     {
@@ -102,13 +108,13 @@ export const ItemStats: React.FC<ItemStatsProps> = ({ inventory }) => {
       stats: [
         {
           name: "Move Speed",
-          value: (totalStats.moveSpeed * 100).toFixed(0),
+          value: totalStats.moveSpeed.toFixed(0),
           color: "text-cyan-300",
           suffix: "",
         },
         {
           name: "% Move Speed",
-          value: totalStats.moveSpeedPercent,
+          value: (totalStats.moveSpeedPercent * 100).toFixed(0),
           color: "text-cyan-400",
           suffix: "%",
         },
@@ -122,12 +128,6 @@ export const ItemStats: React.FC<ItemStatsProps> = ({ inventory }) => {
           name: "Mana Regen",
           value: totalStats.manaRegen.toFixed(0),
           color: "text-blue-500",
-          suffix: "",
-        },
-        {
-          name: "Ability Haste",
-          value: totalStats.abilityHaste,
-          color: "text-blue-300",
           suffix: "",
         },
       ],

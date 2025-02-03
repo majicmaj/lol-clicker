@@ -1,42 +1,18 @@
-import { GameState, Rank, Division } from "../types";
+import { GameState, Rank, Division, Champion } from "../types";
 import { RANKS, DIVISIONS } from "./ranks";
 import { calculateTotalStats } from "./stats";
 import { calculateCritChance } from "./stats";
 import { calculateLpGain, calculateLpLoss } from "./lpCalculations";
 import { calculateWinChance } from "./winChance";
 
-const calculateChampionClickValue = (champion: any, inventory: any[]) => {
-  const baseClick = champion.stats.attackdamage * (champion.info.attack / 10);
-  const championStats = calculateTotalStats(champion.inventory);
-
-  return (
-    baseClick *
-    (1 +
-      (championStats.ad || 0) * 0.01 +
-      (championStats.ap || 0) * 0.01 +
-      (championStats.attackSpeed || 0) * 0.5)
-  );
-};
-
-export const handleGameClick = (
-  gameState: GameState,
-  isChampionClick: boolean = false
-): GameState => {
+export const handleGameClick = (gameState: GameState): GameState => {
   const winChance = calculateWinChance(
     gameState.inventory,
     gameState.player.rank,
     gameState.player.lp
   );
-  const totalStats = calculateTotalStats(gameState.inventory);
 
-  // Calculate champion contributions
-  const championContribution = isChampionClick
-    ? gameState.player.champions.reduce((total, champion) => {
-        return (
-          total + calculateChampionClickValue(champion, champion.inventory)
-        );
-      }, 0)
-    : 0;
+  const totalStats = calculateTotalStats(gameState.inventory);
 
   // AD-dependent crit chance
   const critChance =
@@ -56,21 +32,18 @@ export const handleGameClick = (
         gameState.player.lp
       );
 
-  // Add champion contribution to LP gain
-  if (isChampionClick) {
-    lpChange = Math.round(lpChange * (championContribution * 0.01));
-  }
-
   if (isCrit && isWin) {
     lpChange *= 2;
   }
 
   // Movement speed affects gold gain
   const moveSpeedBonus =
-    totalStats.moveSpeed * 0.2 + totalStats.moveSpeedPercent * 4;
-  const goldGain = Math.round(
-    gameState.baseGoldPerClick * (1 + moveSpeedBonus / 50)
-  );
+    totalStats.moveSpeed * 0.2 +
+    (totalStats.moveSpeedPercent * totalStats.moveSpeed) / 100;
+
+  const goldGain = isWin
+    ? Math.round(gameState.baseGoldPerClick * (1 + moveSpeedBonus / 50))
+    : 0;
 
   const newLp = gameState.player.lp + lpChange;
   const newGold = gameState.player.gold + goldGain;
@@ -96,7 +69,7 @@ export const handleGameClick = (
     updatedLpHistory,
     updatedRankHistory,
     updatedDivisionHistory,
-    isChampionClick ? gameState.player.lastGameTime : Date.now()
+    Date.now()
   );
 };
 

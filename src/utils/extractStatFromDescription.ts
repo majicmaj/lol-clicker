@@ -1,13 +1,29 @@
-// A helper that strips HTML tags and searches for a stat in the plain text.
+// A helper that extracts a stat's value from an item description.
+// It first isolates the <stats> block (if it exists) so that values in other sections (like passives)
+// aren't accidentally matched.
 export function extractStatFromDescription(
   description: string,
   statLabel: string
 ): number {
-  // Remove HTML tags (e.g. <mainText>, <attention>, etc.)
-  const plain = description.replace(/<[^>]+>/g, " ");
-  // Create a regex to search for the stat label followed by a number.
-  // This example looks for something like "Lethality 15" or "Ability Power: 20"
-  const regex = new RegExp(`${statLabel}[:\\s]*([\\d\\.]+)`, "i");
-  const match = plain.match(regex);
+  // Try to extract the content of the <stats> block.
+  const statsMatch = description.match(/<stats[^>]*>(.*?)<\/stats>/is);
+  // If found, only use that section; otherwise, fall back to the entire description.
+  const statsSection = statsMatch ? statsMatch[1] : description;
+
+  // Remove HTML tags from the stats section.
+  const plainText = statsSection.replace(/<[^>]+>/g, " ");
+
+  // Attempt 1: Look for a number that appears immediately BEFORE the stat label.
+  // This handles cases like "15 Lethality"
+  let regex = new RegExp(`([\\d\\.]+)(?=\\s+${statLabel}\\b)`, "i");
+  let match = plainText.match(regex);
+  if (match && match[1]) {
+    return parseFloat(match[1]);
+  }
+
+  // Attempt 2 (fallback): Look for the stat label followed by a number.
+  // This handles cases like "Ability Power: 20"
+  regex = new RegExp(`${statLabel}\\s*[:\\s]+([\\d\\.]+)`, "i");
+  match = plainText.match(regex);
   return match && match[1] ? parseFloat(match[1]) : 0;
 }

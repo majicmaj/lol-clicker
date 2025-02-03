@@ -72,7 +72,9 @@ export const GameStats: React.FC<GameStatsProps> = ({ player, inventory }) => {
       {showInactivityWarning && (
         <div className="bg-red-500/10 border border-red-500/30 p-2 mb-4 text-center">
           <span className="text-red-400 font-bold">Warning: </span>
-          <span className="text-white">Rank decay will begin in 24 hours!</span>
+          <span className="text-white">
+            Inactivity Rank decay will begin in 30 seconds!
+          </span>
         </div>
       )}
 

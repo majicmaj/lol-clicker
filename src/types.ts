@@ -64,7 +64,6 @@ export interface PlayerStats {
   lastGameTime: number;
   inactivityWarning: boolean;
   champions: Champion[];
-  lastChampionClickTime: number;
 }
 
 export interface ItemStats {

@@ -19,7 +19,6 @@ const INITIAL_STATE: GameState = {
     lastGameTime: Date.now(),
     inactivityWarning: false,
     champions: [],
-    lastChampionClickTime: Date.now(),
   },
   inventory: [],
   baseGoldPerClick: 10,
@@ -29,6 +28,7 @@ const INITIAL_STATE: GameState = {
 export const useGameState = () => {
   const [gameState, setGameState] = useState<GameState>(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
+
     if (saved) {
       const parsed = JSON.parse(saved);
       return {
@@ -36,7 +36,6 @@ export const useGameState = () => {
         player: {
           ...parsed.player,
           lastGameTime: Number(parsed.player.lastGameTime),
-          lastChampionClickTime: Date.now(),
           champions: parsed.player.champions || [], // Ensure champions array exists
         },
       };
@@ -74,11 +73,11 @@ export const useGameState = () => {
         // Only apply decay to Diamond+ ranks
         if (!isHighElo) return prevState;
 
-        // 7 days inactivity threshold
-        const inactivityThreshold = 7 * 24 * 60 * 60 * 1000;
+        // 1 minute in milliseconds
+        const inactivityThreshold = 60 * 1000;
 
-        // Show warning at 6 days
-        const warningThreshold = 6 * 24 * 60 * 60 * 1000;
+        // Show warning at 30 seconds
+        const warningThreshold = 30 * 1000;
         const shouldWarn =
           inactivityTime >= warningThreshold &&
           !prevState.player.inactivityWarning;
@@ -93,7 +92,7 @@ export const useGameState = () => {
           };
         }
 
-        // Apply decay after 7 days
+        // Apply decay after threshold
         if (inactivityTime >= inactivityThreshold) {
           const decayAmount = -1; // -1 LP per second of inactivity after threshold
           const newLp = Math.max(0, prevState.player.lp + decayAmount);
@@ -129,8 +128,6 @@ export const useGameState = () => {
               rank,
               division,
               lp: newLp,
-              lastGameTime: now,
-              inactivityWarning: false,
             },
           };
         }
