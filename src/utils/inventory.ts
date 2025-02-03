@@ -58,7 +58,13 @@ export const calculateDiscountedCost = (
     if (index !== -1) {
       // Add its cost and remove it so it can't be used again.
       componentCost += tempInventory[index].cost;
-      tempInventory.splice(index, 1);
+
+      // If its count > 1, decrement the count. Otherwise, remove it from the inventory.
+      if (tempInventory[index].count && tempInventory[index].count > 1) {
+        tempInventory[index].count -= 1;
+      } else {
+        tempInventory.splice(index, 1);
+      }
     }
   }
 
@@ -76,53 +82,35 @@ export const purchaseItem = (
     return null;
   }
 
-  // Build a frequency map for the items that should be removed and their counts
-  const removalMap: { [id: string]: number } = {};
-  item.from.forEach((id) => {
-    removalMap[id] = (removalMap[id] || 0) + 1;
-  });
+  const newInventory = [...gameState.inventory];
 
-  // Create a new inventory by removing only the required amount of items
-  const newInventory = gameState.inventory.reduce((acc, invItem) => {
-    if (removalMap[invItem.id]) {
-      removalMap[invItem.id]--;
-
-      if (removalMap[invItem.id] === 0) {
-        if (invItem.count && invItem.count > 1) {
-          return [...acc, { ...invItem, count: invItem.count - 1 }];
-        }
-        return acc;
+  // Find the item's components in the inventory and decrement their counts / remove them if they become 0.
+  for (const componentId of item.from) {
+    const index = newInventory.findIndex(
+      (invItem) => invItem.id === componentId
+    );
+    if (index !== -1) {
+      if (newInventory[index].count && newInventory[index].count > 1) {
+        newInventory[index].count -= 1;
+      } else {
+        newInventory.splice(index, 1);
       }
     }
-    return [...acc, invItem];
-  }, [] as Item[]);
-  newInventory.push({ ...item });
-
-  // If Item already exists, +1 to count, else add it to inventory
-  let itemExists = false;
-
-  const newItems = newInventory.map((invItem) => {
-    if (invItem.id === item.id) {
-      itemExists = true;
-      return { ...invItem, count: (invItem.count || 0) + 1 };
-    }
-    return invItem;
-  });
-
-  if (!itemExists) {
-    newItems.push({ ...item, count: 1 });
   }
 
-  // Remove duplicates by incrementing count while we're at it (older game versions had duplicates)
+  // Find the index of the item in the inventory.
+  const index = newInventory.findIndex((invItem) => invItem.id === item.id);
 
-  const newItemsWithCount = newItems.reduce((acc, invItem) => {
-    const existingItem = acc.find((item) => item.id === invItem.id);
-    if (existingItem) {
-      existingItem.count = (existingItem.count || 0) + 1;
-      return acc;
-    }
-    return [...acc, invItem];
-  }, [] as Item[]);
+  if (index !== -1) {
+    // If the item is already in the inventory, increment its count.
+    newInventory[index] = {
+      ...newInventory[index],
+      count: newInventory[index].count + 1,
+    };
+  } else {
+    // Otherwise, add the item to the inventory.
+    newInventory.push({ ...item, count: 1 });
+  }
 
   return {
     ...gameState,
@@ -131,6 +119,6 @@ export const purchaseItem = (
       gold: gameState.player.gold - discountedCost,
       lastGoldChange: -discountedCost,
     },
-    inventory: newItemsWithCount,
+    inventory: newInventory,
   };
 };

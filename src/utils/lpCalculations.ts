@@ -37,7 +37,7 @@ export const calculateLpGain = (
       apBonus +
       magicPenBonus +
       abilityHasteBonus) /
-      (rankMultiplier + lpScaling)
+      (rankMultiplier + lpScaling) ** 2
   );
 };
 
