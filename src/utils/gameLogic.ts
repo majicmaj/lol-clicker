@@ -54,12 +54,17 @@ export const handleGameClick = (gameState: GameState): GameState => {
   const currentDivision = gameState.player.division;
 
   // Update histories
-  const updatedRankHistory = [...gameState.player.rankHistory, currentRank];
+  const updatedRankHistory = [
+    ...gameState.player.rankHistory,
+    currentRank,
+  ].slice(-100); // Keep only the last 100 games
   const updatedDivisionHistory = [
     ...gameState.player.divisionHistory,
     currentDivision,
   ].slice(-100); // Keep only the last 100 games
-  const updatedLpHistory = [...gameState.player.lpHistory, lpChange];
+  const updatedLpHistory = [...gameState.player.lpHistory, lpChange].slice(
+    -100
+  ); // Keep only the last 100 games
 
   return updateGameState(
     gameState,
