@@ -13,6 +13,7 @@ export const calculateLpGain = (
   // AD synergies - only work if you have AD
   const adBonus = totalStats.ad * 0.2;
   const lethalityBonus = totalStats.ad > 0 ? totalStats.lethality * 0.8 : 0;
+  const armorPenBonus = totalStats.ad > 0 ? totalStats.armorPen * 0.8 : 0;
   const attackSpeedBonus = totalStats.ad > 0 ? totalStats.attackSpeed * 1.0 : 0;
   const critBonus = totalStats.ad > 0 ? totalStats.critChance * 100 : 0;
 
@@ -31,7 +32,12 @@ export const calculateLpGain = (
   return Math.max(
     1,
     Math.round(
-      (baseGain + adBonus + lethalityBonus + attackSpeedBonus + critBonus) /
+      (baseGain +
+        adBonus +
+        lethalityBonus +
+        attackSpeedBonus +
+        critBonus +
+        armorPenBonus) /
         // + apBonus +
         // magicPenBonus +
         // abilityHasteBonus
