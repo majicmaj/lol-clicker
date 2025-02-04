@@ -35,7 +35,7 @@ export const calculateLpGain = (
         // + apBonus +
         // magicPenBonus +
         // abilityHasteBonus
-        (rankMultiplier + lpScaling) ** 1.5
+        (rankMultiplier + lpScaling) ** 1.25
     )
   );
 };
@@ -59,7 +59,7 @@ export const calculateLpLoss = (
     Math.max(
       1,
       baseLoss +
-        (rankMultiplier + lpScaling) ** 1.5 -
+        (rankMultiplier + lpScaling) ** 1.25 -
         armorReduction -
         mrReduction -
         healthReduction
