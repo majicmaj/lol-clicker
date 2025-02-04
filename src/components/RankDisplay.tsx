@@ -91,7 +91,7 @@ export const RankDisplay: React.FC<RankDisplayProps> = ({ player }) => {
           </div>
 
           {/* Rank Information */}
-          <div className="text-center space-y-2">
+          <div className="text-center w-full space-y-3">
             <div
               className={`text-4xl font-beaufort font-bold bg-gradient-to-r ${rankGradient} text-transparent bg-clip-text`}
             >
@@ -117,6 +117,18 @@ export const RankDisplay: React.FC<RankDisplayProps> = ({ player }) => {
                 </span>
               )}
             </div>
+            <div className="h-6 w-full p-1 border border-[#C8AA6E] rounded-full bg-[#0A1428]">
+              <div
+                className={`h-full rounded-full transition-all bg-gradient-to-r from-slate-900 ${
+                  player.lastLpChange > 0 ? "to-[#0AC8B9]" : "to-[#CD7F32]"
+                } `}
+                style={{
+                  width: `${
+                    player.lp > 100 ? String(player.lp).slice(-2) : player.lp
+                  }%`,
+                }}
+              />
+            </div>
 
             <div className="mt-4 text-2xl font-bold bg-gradient-to-r from-[#C8AA6E] to-[#C8AA6E]/80 text-transparent bg-clip-text">
               {formatBigNumbers(player.gold)}{" "}
@@ -134,6 +146,13 @@ export const RankDisplay: React.FC<RankDisplayProps> = ({ player }) => {
               }
               <img src={GOLD_ICON} className="h-4 w-4 inline-block mr-2" />
             </div>
+
+            {/* <div className="h-8 w-full p-1 border border-[#C8AA6E] rounded-full bg-[#0A1428]">
+              <div
+                className="h-full bg-[#C8AA6E] rounded-full"
+                style={{ width: `${(player.lp / 100) * 100}%` }}
+              />
+            </div> */}
           </div>
         </div>
       </div>
