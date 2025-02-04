@@ -9,9 +9,9 @@ import { GameStats } from "./components/GameStats";
 import { ItemStats } from "./components/ItemStats";
 import { Navigation } from "./components/Navigation";
 import { RotateCcw } from "lucide-react";
-import { ChampionShop } from "./components/ChampionShop";
-import { ChampionInventory } from "./components/ChampionInventory";
-import { Champion } from "./types";
+// import { ChampionShop } from "./components/ChampionShop";
+// import { ChampionInventory } from "./components/ChampionInventory";
+// import { Champion } from "./types";
 import { Leaderboard } from "./components/Leaderboard";
 
 function App() {
@@ -36,15 +36,15 @@ function App() {
     setGameState(newState);
   };
 
-  const handlePurchaseChampion = (champion: Champion) =>
-    setGameState({
-      ...gameState,
-      player: {
-        ...gameState.player,
-        lp: gameState.player.lp - 6300,
-        champions: [...gameState.player.champions, champion],
-      },
-    });
+  // const handlePurchaseChampion = (champion: Champion) =>
+  //   setGameState({
+  //     ...gameState,
+  //     player: {
+  //       ...gameState.player,
+  //       lp: gameState.player.lp - 6300,
+  //       champions: [...gameState.player.champions, champion],
+  //     },
+  //   });
 
   const handleReset = () => {
     if (showResetConfirm) {
@@ -178,13 +178,13 @@ function App() {
           {activeTab === "shop" && (
             <div className="space-y-6">
               <ItemShop items={items} />
-              <ChampionShop onPurchase={handlePurchaseChampion} />
+              {/* <ChampionShop onPurchase={handlePurchaseChampion} /> */}
             </div>
           )}
           {activeTab === "inventory" && (
             <div className="space-y-6">
               <Inventory items={gameState.inventory} onSell={handleSellItem} />
-              <ChampionInventory champions={gameState.player.champions} />
+              {/* <ChampionInventory champions={gameState.player.champions} /> */}
             </div>
           )}
         </div>
@@ -212,9 +212,9 @@ function App() {
 
           <div className="grid grid-cols-2 gap-8">
             <Inventory items={gameState.inventory} onSell={handleSellItem} />
-            <ChampionInventory champions={gameState.player.champions} />
+            {/* <ChampionInventory champions={gameState.player.champions} /> */}
             <ItemShop items={items} />
-            <ChampionShop onPurchase={handlePurchaseChampion} />
+            {/* <ChampionShop onPurchase={handlePurchaseChampion} /> */}
           </div>
         </div>
       </div>
