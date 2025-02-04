@@ -1,14 +1,19 @@
 import { useEffect, useState } from "react";
 import { GOLD_ICON } from "../constants/goldIcon";
-import { Item } from "../types";
+import { GameState, Item } from "../types";
 import { Divider } from "./dividers/Divider";
 
 interface InventoryProps {
   items: Item[];
   onSell?: (index: number, count: number) => void;
+  setGameState: React.Dispatch<React.SetStateAction<GameState>>;
 }
 
-export const Inventory: React.FC<InventoryProps> = ({ items, onSell }) => {
+export const Inventory: React.FC<InventoryProps> = ({
+  items,
+  onSell,
+  setGameState,
+}) => {
   const [sellPrompt, setSellPrompt] = useState<{
     id: string;
     max: number;
@@ -43,6 +48,34 @@ export const Inventory: React.FC<InventoryProps> = ({ items, onSell }) => {
       return () => window.removeEventListener("click", confirmSell);
     }
   }, [sellPrompt]);
+
+  // Find duplicates in the inventory and stack them by incrementing their count, also if they don't have a count give them a count of 1.
+  const stackItems = (items: Item[]): Item[] => {
+    const stackedItems: Item[] = [];
+    items.forEach((item) => {
+      const existingItem = stackedItems.find((i) => i.id === item.id);
+      if (existingItem) {
+        existingItem.count++;
+      } else {
+        stackedItems.push({ ...item, count: 1 });
+      }
+    });
+    return stackedItems;
+  };
+
+  useEffect(() => {
+    if (items) {
+      const stackedItems = stackItems(items);
+      setGameState((prev) => ({
+        ...prev,
+        player: {
+          ...prev.player,
+          inventory: stackedItems,
+        },
+      }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [items]);
 
   return (
     <div className="relative bg-[#091428] p-6 border-2 border-[#C8AA6E] shadow-lg shadow-[#C8AA6E]/20">

@@ -171,7 +171,11 @@ function App() {
           )}
           {activeTab === "inventory" && (
             <div className="space-y-6">
-              <Inventory items={gameState.inventory} onSell={handleSellItem} />
+              <Inventory
+                items={gameState.inventory}
+                onSell={handleSellItem}
+                setGameState={setGameState}
+              />
               <ChampionInventory champions={gameState.player.champions} />
             </div>
           )}
@@ -199,7 +203,11 @@ function App() {
           </button>
 
           <div className="grid grid-cols-2 gap-8">
-            <Inventory items={gameState.inventory} onSell={handleSellItem} />
+            <Inventory
+              items={gameState.inventory}
+              onSell={handleSellItem}
+              setGameState={setGameState}
+            />
             <ChampionInventory champions={gameState.player.champions} />
             <ItemShop
               items={items}
