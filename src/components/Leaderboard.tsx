@@ -59,7 +59,7 @@ const getRankImage = (rank: string): string => {
   return images[rank] || ironRank;
 };
 
-const wsUrl = "wss://clicker.hobbyhood.app";
+const wsUrl = "wss://lol-clicker.hobbyhood.app";
 
 export const Leaderboard: React.FC<LeaderboardProps> = ({ player }) => {
   const [players, setPlayers] = useState<PlayerStats[]>([]);
@@ -116,7 +116,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ player }) => {
           JSON.stringify({ type: "updatePlayer", data: updatedPlayer })
         );
       }
-    }, 500), // Adjust throttle rate here (500ms)
+    }, 1000), // Adjust throttle rate here (500ms)
     []
   );
 
@@ -166,6 +166,10 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ player }) => {
         return 0;
     }
   });
+
+  const isOnline = (player: PlayerStats) => {
+    return player.lastGameTime && Date.now() - player.lastGameTime < 10000;
+  };
 
   return (
     <div className="flex flex-col bg-[#091428] p-4 border-2 border-[#C8AA6E] shadow-lg shadow-[#C8AA6E]/20">
@@ -225,8 +229,8 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ player }) => {
             className="flex flex-col gap-2 border-b border-[#C8AA6E]/20 pb-2"
           >
             <div className="flex items-center justify-start gap-2">
-              <span className="text-lg font-bold text-white w-4">
-                {index + 1}.
+              <span className="text-lg font-bold text-white w-4 flex justify-between">
+                <span>{index + 1}.</span>
               </span>
 
               <div className="relative">
@@ -241,8 +245,15 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ player }) => {
                   </span>
                 )}
               </div>
-              <span className="text-sm font-bold text-white truncate">
-                {player.username || "_"}
+              <span className="flex items-center gap-2">
+                <span className="text-sm font-bold text-white truncate">
+                  {player.username || "_"}
+                </span>
+                <span
+                  className={`w-2 h-2 rounded-full ${
+                    isOnline(player) ? "bg-green-500" : "bg-gray-500"
+                  }`}
+                />
               </span>
             </div>
 

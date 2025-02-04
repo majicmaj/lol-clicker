@@ -68,25 +68,26 @@ export interface PlayerStats {
 }
 
 export interface ItemStats {
+  abilityHaste?: number;
   ad?: number;
   ap?: number;
   armor?: number;
-  magicResist?: number;
-  critChance?: number;
-  lethality?: number;
   armorPen?: number;
-  magicPen?: number;
-  magicPenPercent?: number;
-  moveSpeed?: number;
-  moveSpeedPercent?: number;
-  abilityHaste?: number;
   attackSpeed?: number;
+  critChance?: number;
   health?: number;
   healthRegen?: number;
+  lethality?: number;
+  lifesteal?: number;
+  magicPen?: number;
+  magicPenPercent?: number;
+  magicResist?: number;
   mana?: number;
   manaRegen?: number;
+  moveSpeed?: number;
+  moveSpeedPercent?: number;
   omnivamp?: number;
-  lifesteal?: number;
+  tenacity?: number;
 }
 
 export interface Item {
@@ -95,6 +96,8 @@ export interface Item {
   description: string;
   cost: number;
   stats: ItemStats;
+  passiveAbilities: string[];
+  activeAbilities: string[];
   image: string;
   from: string[];
   count: number;

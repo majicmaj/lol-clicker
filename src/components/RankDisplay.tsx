@@ -148,13 +148,6 @@ export const RankDisplay: React.FC<RankDisplayProps> = ({ player }) => {
               }
               <img src={GOLD_ICON} className="h-4 w-4 inline-block mr-2" />
             </div>
-
-            {/* <div className="h-8 w-full p-1 border border-[#C8AA6E] rounded-full bg-[#0A1428]">
-              <div
-                className="h-full bg-[#C8AA6E] rounded-full"
-                style={{ width: `${(player.lp / 100) * 100}%` }}
-              />
-            </div> */}
           </div>
         </div>
       </div>

@@ -76,9 +76,10 @@ const ShopItemCard: React.FC<{
                 {stat === "critChance" ||
                 stat === "attackSpeed" ||
                 stat === "moveSpeedPercent"
-                  ? `${(value * 100).toFixed(0)}%`
+                  ? `${value.toFixed(0)}%`
                   : value}
               </span>
+
               <span className="ml-1 text-[#C8AA6E]/80 text-xs uppercase">
                 {STAT_LABELS[stat as keyof typeof STAT_LABELS]}
               </span>

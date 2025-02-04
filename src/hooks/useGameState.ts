@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { GameState, Item } from "../types";
-import { extractStatFromDescription } from "../utils/extractStatFromDescription";
+import { getItemStats } from "../utils/extractStatFromDescription";
+import { ItemStats } from "../components/ItemStats";
 
 const STORAGE_KEY = "league-clicker-save";
 const ITEM_API_URL =
@@ -64,65 +65,13 @@ const fetchItems = async (): Promise<Item[]> => {
         item.gold.purchasable
     )
     .map(([id, item]: [string, any]) => {
-      const plainDesc = item.description.replace(/<[^>]+>/g, " ");
-
       return {
         id,
         name: item.name,
         description: item.description,
         cost: item.gold.total,
         image: `https://ddragon.leagueoflegends.com/cdn/15.2.1/img/item/${item.image.full}`,
-        stats: {
-          ad:
-            item.stats.FlatPhysicalDamageMod ||
-            extractStatFromDescription(plainDesc, "Attack Damage") ||
-            0,
-          ap:
-            item.stats.FlatMagicDamageMod ||
-            extractStatFromDescription(plainDesc, "Ability Power") ||
-            0,
-          armor:
-            item.stats.FlatArmorMod ||
-            extractStatFromDescription(plainDesc, "Armor") ||
-            0,
-          magicResist:
-            item.stats.FlatSpellBlockMod ||
-            extractStatFromDescription(plainDesc, "Magic Resist") ||
-            0,
-          critChance:
-            item.stats.FlatCritChanceMod ||
-            extractStatFromDescription(plainDesc, "Critical Strike Chance") ||
-            0,
-          lethality:
-            item.stats.ArmorPenetration ||
-            extractStatFromDescription(plainDesc, "Lethality") ||
-            0,
-          armorPen:
-            item.stats.PercentArmorPenetrationMod ||
-            extractStatFromDescription(plainDesc, "Armor Penetration") ||
-            0,
-          magicPen:
-            item.stats.FlatMagicPenetrationMod ||
-            extractStatFromDescription(plainDesc, "Magic Penetration") ||
-            0,
-          moveSpeed:
-            item.stats.FlatMovementSpeedMod ||
-            extractStatFromDescription(plainDesc, "Move Speed") ||
-            0,
-          attackSpeed:
-            (item.stats.FlatAttackSpeedMod || 0) +
-            (item.stats.PercentAttackSpeedMod ||
-              extractStatFromDescription(plainDesc, "Attack Speed") ||
-              0),
-          health:
-            item.stats.FlatHPPoolMod ||
-            extractStatFromDescription(plainDesc, "Health") ||
-            0,
-          mana:
-            item.stats.FlatMPPoolMod ||
-            extractStatFromDescription(plainDesc, "Mana") ||
-            0,
-        },
+        ...getItemStats(item),
         count: 1,
         from: item?.from?.length ? item.from : [],
       };
@@ -176,3 +125,54 @@ export const useGameState = () => {
     itemsLoading,
   };
 };
+
+//   ad:
+//     item.stats.FlatPhysicalDamageMod ||
+//     extractStatFromDescription(plainDesc, "Attack Damage") ||
+//     0,
+//   ap:
+//     item.stats.FlatMagicDamageMod ||
+//     extractStatFromDescription(plainDesc, "Ability Power") ||
+//     0,
+//   armor:
+//     item.stats.FlatArmorMod ||
+//     extractStatFromDescription(plainDesc, "Armor") ||
+//     0,
+//   magicResist:
+//     item.stats.FlatSpellBlockMod ||
+//     extractStatFromDescription(plainDesc, "Magic Resist") ||
+//     0,
+//   critChance:
+//     item.stats.FlatCritChanceMod ||
+//     extractStatFromDescription(plainDesc, "Critical Strike Chance") ||
+//     0,
+//   lethality:
+//     item.stats.ArmorPenetration ||
+//     extractStatFromDescription(plainDesc, "Lethality") ||
+//     0,
+//   armorPen:
+//     item.stats.PercentArmorPenetrationMod ||
+//     extractStatFromDescription(plainDesc, "Armor Penetration") ||
+//     0,
+//   magicPen:
+//     item.stats.FlatMagicPenetrationMod ||
+//     extractStatFromDescription(plainDesc, "Magic Penetration") ||
+//     0,
+//   moveSpeed:
+//     item.stats.FlatMovementSpeedMod ||
+//     extractStatFromDescription(plainDesc, "Move Speed") ||
+//     0,
+//   attackSpeed:
+//     (item.stats.FlatAttackSpeedMod || 0) +
+//     (item.stats.PercentAttackSpeedMod ||
+//       extractStatFromDescription(plainDesc, "Attack Speed") ||
+//       0),
+//   health:
+//     item.stats.FlatHPPoolMod ||
+//     extractStatFromDescription(plainDesc, "Health") ||
+//     0,
+//   mana:
+//     item.stats.FlatMPPoolMod ||
+//     extractStatFromDescription(plainDesc, "Mana") ||
+//     0,
+// },

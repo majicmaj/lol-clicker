@@ -23,6 +23,8 @@ export const ItemStats: React.FC<ItemStatsProps> = ({
 }) => {
   const totalStats = calculateTotalStats(inventory);
 
+  console.log(totalStats);
+
   const statGroups = [
     {
       title: "Attack Damage",
@@ -39,9 +41,9 @@ export const ItemStats: React.FC<ItemStatsProps> = ({
         {
           icon: statIconMap.AttackSpeed,
           name: "AS",
-          value: (totalStats.attackSpeed * 100).toFixed(0),
+          value: (totalStats.attackSpeed || 0).toFixed(0),
           color: "text-yellow-100",
-          suffix: "/s",
+          suffix: "%",
         },
         {
           icon: statIconMap.ArmorPenetration,
@@ -60,7 +62,7 @@ export const ItemStats: React.FC<ItemStatsProps> = ({
         {
           icon: statIconMap.CriticalStrike,
           name: "Crit",
-          value: totalStats.critChance * 100,
+          value: (totalStats.critChance || 0) * 100,
           color: "text-orange-600",
           suffix: "%",
         },
@@ -88,7 +90,7 @@ export const ItemStats: React.FC<ItemStatsProps> = ({
         {
           icon: statIconMap.MagicPenetration,
           name: "AP Pen %",
-          value: (totalStats.magicPenPercent * 100).toFixed(1),
+          value: (totalStats.magicPenPercent || 0).toFixed(1),
           color: "text-purple-400",
           suffix: "%",
         },
@@ -165,7 +167,7 @@ export const ItemStats: React.FC<ItemStatsProps> = ({
         {
           icon: statIconMap.Boots,
           name: "% MS",
-          value: (totalStats.moveSpeedPercent * 100)?.toFixed(0),
+          value: (totalStats.moveSpeedPercent || 0)?.toFixed(0),
           color: "text-yellow-100",
           suffix: "%",
         },

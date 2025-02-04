@@ -1,9 +1,16 @@
+import { GOLD_EFFICIENCY } from "../constants/goldEfficiency";
 import { Champion, Item, Rank } from "../types";
 import { RANK_DIFFICULTY_MULTIPLIER } from "./ranks";
 import { calculateTotalStats } from "./stats";
 
 const clamp = (value: number, min: number, max: number): number =>
   Math.min(Math.max(value, min), max);
+
+const getStatBonus = (
+  stat: keyof typeof GOLD_EFFICIENCY,
+  value: number
+): number =>
+  value ? value * GOLD_EFFICIENCY[stat as keyof typeof GOLD_EFFICIENCY] : 0;
 
 export const calculateWinChance = (
   inventory: Record<string, Item>,
@@ -14,32 +21,27 @@ export const calculateWinChance = (
   const baseWinChance = 0.5;
   const totalStats = calculateTotalStats(inventory);
 
+  const apBonus = getStatBonus("abilityPower", totalStats.ap);
+  const abilityHasteBonus = getStatBonus(
+    "abilityHaste",
+    totalStats.abilityHaste
+  );
+  const manaBonus = getStatBonus("mana", totalStats.mana);
+  const manaRegenBonus = getStatBonus("manaRegen", totalStats.manaRegen);
+  const magicPenBonus = getStatBonus("magicPen", totalStats.magicPen);
+
   const statBonus =
-    // totalStats.ad * 35 +
-    // totalStats.armor * 20 +
-    // totalStats.magicResist * 20 +
-    // totalStats.critChance * 40 +
-    // totalStats.attackSpeed * 25 +
-    // totalStats.healthRegen * 3 +
-    // totalStats.lethality * 30 +
-    // totalStats.armorPen * 40 +
-    (totalStats.ap * 20 +
-      totalStats.abilityHaste * 50 +
-      totalStats.mana +
-      totalStats.manaRegen * 4 +
-      totalStats.magicPen * 30) *
-    0.0002;
+    (apBonus + abilityHasteBonus + manaBonus + manaRegenBonus + magicPenBonus) /
+    5000;
 
-  const rankMultiplier = RANK_DIFFICULTY_MULTIPLIER[rank];
-  const lpScaling = (lp / 100) * 0.2;
+  const rankMultiplier = (RANK_DIFFICULTY_MULTIPLIER[rank] + lp / 10000) ** 1.1;
 
-  // having 150 champions gives you +0.25 win chance
+  // having 150 Champions gives you a 100% win chance bonus
   const perChampionBonus = champions.length / 150;
 
   return clamp(
-    (baseWinChance + statBonus + perChampionBonus) /
-      (rankMultiplier + lpScaling),
+    (baseWinChance + statBonus + perChampionBonus) / rankMultiplier,
     0.05,
-    0.95
+    99999.95
   );
 };

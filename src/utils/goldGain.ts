@@ -7,18 +7,15 @@ export const calculateGoldGain = (
   lp: number
 ): number => {
   const { moveSpeed = 0, moveSpeedPercent = 0 } = totalStats;
-  //   const percentAdjustedMoveSpeed = moveSpeed * (1 + moveSpeedPercent / 100);
 
+  const msBonus = moveSpeed * 0.1 + (moveSpeedPercent * moveSpeed) / 100;
+
+  const lpScaling = lp / 10000;
   const rankMultiplier =
-    RANK_DIFFICULTY_MULTIPLIER[rank as keyof typeof RANK_DIFFICULTY_MULTIPLIER];
+    RANK_DIFFICULTY_MULTIPLIER[
+      rank as keyof typeof RANK_DIFFICULTY_MULTIPLIER
+    ] +
+    lpScaling ** 1.1;
 
-  const lpScaling = lp / 100;
-
-  return Math.max(
-    10,
-    Math.round(
-      10 * (1 + (moveSpeed * 0.1 + (moveSpeedPercent * moveSpeed) / 100) / 10) -
-        (rankMultiplier + lpScaling)
-    )
-  );
+  return Math.max(10, Math.round(10 * (1 + msBonus / 10) - rankMultiplier));
 };
