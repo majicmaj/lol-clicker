@@ -27,10 +27,34 @@ export const ItemShop: React.FC<ItemShopProps> = ({
 
   const handlePurchase = (item: Item) => {
     const discountedCost = calculateDiscountedCost(item, gameState.inventory);
-    if (gameState.player.gold >= discountedCost) {
-      const newState = purchaseItem(gameState, item);
-      if (newState) onPurchase(newState);
+    const maxQuantity = Math.floor(gameState.player.gold / discountedCost);
+
+    if (maxQuantity === 0) {
+      alert("Not enough gold to purchase this item!");
+      return;
     }
+
+    const quantityInput = prompt(
+      `How many ${item.name}s would you like to buy? (Max: ${maxQuantity})`
+    );
+    const quantity = parseInt(quantityInput || "0", 10);
+
+    if (isNaN(quantity) || quantity <= 0 || quantity > maxQuantity) {
+      alert("Invalid quantity entered");
+      return;
+    }
+
+    let newState = gameState;
+    for (let i = 0; i < quantity; i++) {
+      const purchaseResult = purchaseItem(newState, item);
+      if (!purchaseResult) {
+        alert(`Purchased ${i} items before encountering an error!`);
+        break;
+      }
+      newState = purchaseResult;
+    }
+
+    onPurchase(newState);
   };
 
   const toggleStatFilter = (stat: string) => {
