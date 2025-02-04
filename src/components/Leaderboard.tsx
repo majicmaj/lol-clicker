@@ -43,7 +43,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
   player,
   setGameState,
 }) => {
-  const [players, setPlayers] = useState<PlayerStats[]>([]);
+  const [players, setPlayers] = useState<PlayerStats[]>([player]);
   const [isConnected, setIsConnected] = useState(false);
   const [usernameInput, setUsernameInput] = useState(player.username || ""); // Track username input
 
@@ -60,25 +60,8 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
       try {
         const message = JSON.parse(event.data);
         if (message.type === "leaderboard") {
-          setPlayers((prevPlayers) => {
-            // Update player stats in the leaderboard
-            const updatedPlayers = prevPlayers.map((prevPlayer) => {
-              const updatedPlayer = message.data.find(
-                (player: PlayerStats) => player.id === prevPlayer.id
-              );
-              return updatedPlayer || prevPlayer;
-            });
-
-            // Add new players to the leaderboard
-            const newPlayers = message.data.filter(
-              (player: PlayerStats) =>
-                !updatedPlayers.some(
-                  (prevPlayer) => prevPlayer.id === player.id
-                )
-            );
-
-            return [...updatedPlayers, ...newPlayers];
-          });
+          setPlayers(message.data);
+          console.log(message.data);
         }
       } catch (error) {
         console.error("Error parsing WebSocket message:", error);
@@ -89,15 +72,10 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
       console.error("WebSocket error:", error);
     };
 
-    ws.onclose = () => {
-      setIsConnected(false);
-      console.log("Disconnected from WebSocket server");
-    };
-
     return () => {
       ws.close();
     };
-  }, []); // ✅ Only run once when the component mounts
+  }, [player]);
 
   const handleSetUsername = () => {
     if (usernameInput.trim() === "") return;
@@ -142,7 +120,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
       <div className="flex flex-col gap-2">
         {players.map((player, index) => (
           <div
-            key={player.id} // Use player.id instead of index
+            key={index}
             className="flex items-center gap-4 border-b border-[#C8AA6E]/20 pb-2"
           >
             <span className="text-lg font-bold text-white">{index + 1}.</span>
@@ -153,7 +131,8 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
             />
             <div className="flex flex-col gap-1">
               <span className="text-lg font-bold text-white">
-                {player.username} — {player.rank.slice(0, 1)} {player.division}
+                {player.username} — {player.rank.slice(0, 1)}
+                {player.division}
               </span>
               <span className="text-sm text-[#C8AA6E]">
                 {formatBigNumbers(player.lp)} LP -{" "}

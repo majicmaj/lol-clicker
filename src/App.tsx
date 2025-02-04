@@ -62,8 +62,7 @@ function App() {
         },
       }));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gameState.player.id]);
+  }, [gameState.player.id, setGameState]);
 
   if (loading) {
     return (
@@ -152,7 +151,10 @@ function App() {
             </div>
           )}
           {activeTab === "leaderboard" && (
-            <Leaderboard player={gameState.player} />
+            <Leaderboard
+              player={gameState.player}
+              setGameState={setGameState}
+            />
           )}
           {activeTab === "shop" && (
             <div className="space-y-6">
