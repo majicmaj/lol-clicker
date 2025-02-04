@@ -51,31 +51,12 @@ export const calculateDiscountedCost = (
   item: Item,
   inventory: Record<string, Item>
 ): number => {
-  const tempInventory = { ...inventory };
-  let componentCost = 0;
+  const discount = Object.values(inventory).reduce(
+    (acc, invItem) => acc + (invItem.discount || 0),
+    0
+  );
 
-  for (const componentId of item.from) {
-    if (componentId in tempInventory) {
-      componentCost += tempInventory[componentId].cost;
-
-      if (
-        tempInventory[componentId].count &&
-        tempInventory[componentId].count > 1
-      ) {
-        tempInventory[componentId].count -= 1;
-      } else {
-        delete tempInventory[componentId];
-      }
-    }
-
-    // If a component is missing, the item cannot be purchased.
-    // else {
-    //   return 0;
-    // }
-  }
-
-  // The discounted cost is the item's cost minus the total component cost.
-  return Math.max(0, item.cost - componentCost);
+  return Math.max(0, item.cost - discount);
 };
 
 export const purchaseItem = (
@@ -84,7 +65,7 @@ export const purchaseItem = (
 ): GameState | null => {
   const cost = calculateDiscountedCost(item, gameState.inventory);
 
-  if (cost === 0) return null;
+  if (gameState.player.gold < cost) return null;
 
   const newInventory = { ...gameState.inventory };
 
@@ -92,15 +73,6 @@ export const purchaseItem = (
     newInventory[item.id].count += 1;
   } else {
     newInventory[item.id] = { ...item, count: 1 };
-  }
-
-  // remove components from inventory
-  for (const componentId of item.from) {
-    if (newInventory[componentId]?.count > 1) {
-      newInventory[componentId].count -= 1;
-    } else {
-      delete newInventory[componentId];
-    }
   }
 
   return {
