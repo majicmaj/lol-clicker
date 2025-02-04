@@ -3,7 +3,7 @@ import { RANK_DIFFICULTY_MULTIPLIER } from "./ranks";
 import { calculateTotalStats } from "./stats";
 
 export const calculateLpGain = (
-  inventory: Item[],
+  inventory: Record<string, Item>,
   rank: Rank,
   lp: number
 ): number => {
@@ -27,7 +27,7 @@ export const calculateLpGain = (
   //   totalStats.ap > 0 ? totalStats.abilityHaste * 0.6 : 0;
 
   const rankMultiplier = RANK_DIFFICULTY_MULTIPLIER[rank];
-  const lpScaling = (lp / 100) * 0.2;
+  const lpScaling = (lp / 100) * 0.3;
 
   return Math.max(
     1,
@@ -41,13 +41,13 @@ export const calculateLpGain = (
         // + apBonus +
         // magicPenBonus +
         // abilityHasteBonus
-        (rankMultiplier + lpScaling) ** 1.3
+        (rankMultiplier + lpScaling) ** 1.1
     )
   );
 };
 
 export const calculateLpLoss = (
-  inventory: Item[],
+  inventory: Record<string, Item>,
   rank: Rank,
   lp: number
 ): number => {
@@ -59,13 +59,13 @@ export const calculateLpLoss = (
   const healthReduction = totalStats.health * 0.02;
 
   const rankMultiplier = RANK_DIFFICULTY_MULTIPLIER[rank];
-  const lpScaling = (lp / 100) * 0.2;
+  const lpScaling = (lp / 100) * 0.3;
 
   return Math.round(
     Math.max(
       1,
       baseLoss +
-        (rankMultiplier + lpScaling) ** 1.3 -
+        (rankMultiplier + lpScaling) ** 1.1 -
         armorReduction -
         mrReduction -
         healthReduction

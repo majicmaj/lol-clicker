@@ -9,7 +9,7 @@ import { calculateLpGain, calculateLpLoss } from "../utils/lpCalculations";
 import { calculateGoldGain } from "../utils/goldGain";
 
 interface ItemStatsProps {
-  inventory: Item[];
+  inventory: Record<string, Item>;
   champions: Champion[];
   rank: Rank;
   lp: number;
@@ -109,7 +109,7 @@ export const ItemStats: React.FC<ItemStatsProps> = ({
         {
           icon: statIconMap.ManaRegen,
           name: "Mana Regen",
-          value: totalStats.manaRegen.toFixed(0),
+          value: totalStats.manaRegen?.toFixed(0),
           color: "text-sky-400",
           suffix: "",
         },
@@ -144,7 +144,7 @@ export const ItemStats: React.FC<ItemStatsProps> = ({
         {
           icon: statIconMap.HealthRegen,
           name: "Health Regen",
-          value: totalStats.healthRegen.toFixed(1),
+          value: totalStats.healthRegen?.toFixed(1),
           color: "text-green-500",
           suffix: "",
         },
@@ -158,14 +158,14 @@ export const ItemStats: React.FC<ItemStatsProps> = ({
         {
           icon: statIconMap.Boots,
           name: "MS",
-          value: totalStats.moveSpeed.toFixed(0),
+          value: totalStats.moveSpeed?.toFixed(0),
           color: "text-yellow-100",
           suffix: "",
         },
         {
           icon: statIconMap.Boots,
           name: "% MS",
-          value: (totalStats.moveSpeedPercent * 100).toFixed(0),
+          value: (totalStats.moveSpeedPercent * 100)?.toFixed(0),
           color: "text-yellow-100",
           suffix: "%",
         },

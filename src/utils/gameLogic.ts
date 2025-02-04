@@ -1,7 +1,6 @@
 import { GameState, Rank, Division } from "../types";
 import { RANKS, DIVISIONS } from "./ranks";
 import { calculateTotalStats } from "./stats";
-import { calculateCritChance } from "./stats";
 import { calculateLpGain, calculateLpLoss } from "./lpCalculations";
 import { calculateWinChance } from "./winChance";
 import { calculateGoldGain } from "./goldGain";
@@ -15,14 +14,9 @@ export const handleGameClick = (gameState: GameState): GameState => {
   );
 
   const totalStats = calculateTotalStats(gameState.inventory);
-
-  // AD-dependent crit chance
-  const critChance =
-    totalStats.ad > 0 ? calculateCritChance(gameState.inventory) : 0;
-  const isCrit = Math.random() < critChance;
   const isWin = Math.random() < winChance;
 
-  let lpChange = isWin
+  const lpChange = isWin
     ? calculateLpGain(
         gameState.inventory,
         gameState.player.rank,
@@ -33,10 +27,6 @@ export const handleGameClick = (gameState: GameState): GameState => {
         gameState.player.rank,
         gameState.player.lp
       );
-
-  if (isCrit && isWin) {
-    lpChange *= 2;
-  }
 
   // Movement speed affects gold gain
   const goldGain = isWin

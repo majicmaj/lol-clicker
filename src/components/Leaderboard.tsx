@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { GameState, PlayerStats } from "../types";
+import { PlayerStats } from "../types";
 import { throttle } from "lodash"; // Import Lodash throttle
 
 // Import all rank images
@@ -16,10 +16,10 @@ import silverRank from "../assets/ranks/silver.webp";
 import { formatBigNumbers } from "../utils/formatBigNumbers";
 import { GOLD_ICON } from "../constants/goldIcon";
 import { Divider } from "./dividers/Divider";
+import { useGameState } from "../hooks/useGameState";
 
 interface LeaderboardProps {
   player: PlayerStats;
-  setGameState: React.Dispatch<React.SetStateAction<GameState>>;
 }
 
 // Sorting order for ranks (higher rank = higher index)
@@ -36,7 +36,6 @@ const rankOrder = [
   "CHALLENGER",
 ];
 
-// Convert Roman numerals to numbers for sorting (I = 1, II = 2, etc.)
 const romanToNumber: Record<string, number> = {
   I: 1,
   II: 2,
@@ -62,16 +61,15 @@ const getRankImage = (rank: string): string => {
 
 const wsUrl = "wss://clicker.hobbyhood.app";
 
-export const Leaderboard: React.FC<LeaderboardProps> = ({
-  player,
-  setGameState,
-}) => {
+export const Leaderboard: React.FC<LeaderboardProps> = ({ player }) => {
   const [players, setPlayers] = useState<PlayerStats[]>([]);
   const [isConnected, setIsConnected] = useState(false);
   const [usernameInput, setUsernameInput] = useState(player.username || "");
   const [sortOption, setSortOption] = useState<
     "lp" | "gold" | "wins" | "losses" | "games"
   >("lp");
+
+  const { setGameState, gameState } = useGameState();
 
   const wsRef = React.useRef<WebSocket | null>(null);
 
@@ -130,10 +128,10 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
   const handleSetUsername = () => {
     if (usernameInput.trim() === "") return;
 
-    setGameState((prevState) => ({
-      ...prevState,
-      player: { ...prevState.player, username: usernameInput },
-    }));
+    setGameState({
+      ...gameState,
+      player: { ...gameState.player, username: usernameInput },
+    });
   };
 
   // Sort players based on the selected sorting option
@@ -224,42 +222,59 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
         {sortedPlayers.map((player, index) => (
           <div
             key={player.id}
-            className="flex items-center gap-4 border-b border-[#C8AA6E]/20 pb-2"
+            className="flex flex-col gap-2 border-b border-[#C8AA6E]/20 pb-2"
           >
-            <span className="text-lg font-bold text-white w-4">
-              {index + 1}.
-            </span>
-            <div className="relative">
-              <img
-                src={getRankImage(player.rank)}
-                alt={player.rank}
-                className="w-8 h-8 object-cover"
-              />
-              {player.division && (
-                <span className="absolute top-0 right-0 bg-[#C8AA6E] text-black text-xs font-bold px-1">
-                  {player.division}
+            <div className="flex items-center justify-start gap-2">
+              <span className="text-lg font-bold text-white w-4">
+                {index + 1}.
+              </span>
+
+              <div className="relative">
+                <img
+                  src={getRankImage(player.rank)}
+                  alt={player.rank}
+                  className="w-8 h-8 object-cover"
+                />
+                {player.division && (
+                  <span className="absolute top-0 right-0 bg-[#C8AA6E] text-black text-xs font-bold px-0.5">
+                    {player.division}
+                  </span>
+                )}
+              </div>
+              <span className="text-sm font-bold text-white truncate">
+                {player.username || "_"}
+              </span>
+            </div>
+
+            <div className="w-full grid grid-cols-4 place-items-center gap-2">
+              <div className="flex flex-col items-center">
+                <span className="text-white">
+                  {formatBigNumbers(player.lp)}
                 </span>
-              )}
-            </div>
-            <div className="flex flex-col gap-1">
-              <span className="text-lg font-bold text-white">
-                {player.username}
-              </span>
-              <span className="text-sm text-[#C8AA6E]">
-                {formatBigNumbers(player.lp)} LP -{" "}
-                {formatBigNumbers(player.wins)} W{" "}
-                {formatBigNumbers(player.losses)} L
-              </span>
-            </div>
-            <div className="flex items-center gap-1">
-              <img
-                src={GOLD_ICON}
-                alt="Gold"
-                className="w-6 h-6 object-cover"
-              />
-              <span className="text-lg font-bold text-white">
-                {formatBigNumbers(player.gold)}
-              </span>
+                <span className="text-sm text-[#C8AA6E]">LP</span>
+              </div>
+              <div className="flex flex-col items-center">
+                <span className="text-white">
+                  {formatBigNumbers(player.wins)}
+                </span>
+                <span className="text-sm text-[#C8AA6E]">W</span>
+              </div>
+              <div className="flex flex-col items-center">
+                <span className="text-white">
+                  {formatBigNumbers(player.losses)}
+                </span>
+                <span className="text-sm text-[#C8AA6E]">L</span>
+              </div>
+              <div className="flex flex-col items-center">
+                <span className="text-white">
+                  {formatBigNumbers(player.gold)}
+                </span>
+                <img
+                  src={GOLD_ICON}
+                  alt="Gold"
+                  className="w-5 h-5 object-cover"
+                />
+              </div>
             </div>
           </div>
         ))}

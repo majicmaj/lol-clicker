@@ -102,7 +102,7 @@ export interface Item {
 
 export interface GameState {
   player: PlayerStats;
-  inventory: Item[];
+  inventory: Record<string, Item>;
   baseGoldPerClick: number;
   baseLpPerClick: number;
 }

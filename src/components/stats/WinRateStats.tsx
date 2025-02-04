@@ -4,7 +4,7 @@ import { PlayerStats, Item } from "../../types";
 
 interface WinRateStatsProps {
   player: PlayerStats;
-  inventory: Item[];
+  inventory: Record<string, Item>;
 }
 
 export const WinRateStats: React.FC<WinRateStatsProps> = ({

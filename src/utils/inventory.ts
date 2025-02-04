@@ -2,18 +2,19 @@ import { GameState, Item } from "../types";
 
 export const sellItem = (
   gameState: GameState,
-  itemIndex: number
+  id: string,
+  count: number
 ): GameState => {
-  const item = gameState.inventory[itemIndex];
+  const item = gameState.inventory[id];
   if (!item) return gameState;
 
   const sellValue = Math.floor(item.cost * 0.7);
-  const newInventory = [...gameState.inventory];
+  const newInventory = { ...gameState.inventory };
 
-  if (item.count && item.count > 1) {
-    newInventory[itemIndex] = { ...item, count: item.count - 1 };
+  if (item.count && item.count > count) {
+    newInventory[id].count -= count;
   } else {
-    newInventory.splice(itemIndex, 1);
+    delete newInventory[id];
   }
 
   return {
@@ -29,42 +30,69 @@ export const sellItem = (
 
 export const getAvailableUpgrades = (
   items: Item[],
-  inventory: Item[]
-): Item[] => {
-  const inventoryIds = inventory?.map((item) => item.id);
+  inventory: Record<string, Item>
+): Record<string, Item> => {
+  const inventoryIds = Object.keys(inventory);
 
-  return items.filter(
+  const upgrades = items.filter(
     (item) =>
       item.from.length > 0 &&
       item.from.some((componentId) => inventoryIds.includes(componentId)) &&
       !inventoryIds.includes(item.id)
   );
+
+  return upgrades.reduce((acc, item) => {
+    acc[item.id] = item;
+    return acc;
+  }, {} as Record<string, Item>);
 };
 
 export const calculateDiscountedCost = (
   item: Item,
-  inventory: Item[]
+  inventory: Record<string, Item>
 ): number => {
   // Create a temporary copy of the inventory so we can remove components as they’re used.
-  const tempInventory = [...inventory];
+  // const tempInventory =
+  // let componentCost = 0;
+
+  // // Loop through each required component in the recipe.
+  // for (const componentId of item.from) {
+  //   // Find the index of a matching component in the temporary inventory.
+  //   const index = tempInventory.findIndex(
+  //     (invItem) => invItem.id === componentId
+  //   );
+  //   if (index !== -1) {
+  //     // Add its cost and remove it so it can't be used again.
+  //     componentCost += tempInventory[index].cost;
+
+  //     // If its count > 1, decrement the count. Otherwise, remove it from the inventory.
+  //     if (tempInventory[index].count && tempInventory[index].count > 1) {
+  //       tempInventory[index].count -= 1;
+  //     } else {
+  //       tempInventory.splice(index, 1);
+  //     }
+  //   }
+
+  const tempInventory = { ...inventory };
   let componentCost = 0;
 
-  // Loop through each required component in the recipe.
   for (const componentId of item.from) {
-    // Find the index of a matching component in the temporary inventory.
-    const index = tempInventory.findIndex(
-      (invItem) => invItem.id === componentId
-    );
-    if (index !== -1) {
-      // Add its cost and remove it so it can't be used again.
-      componentCost += tempInventory[index].cost;
+    if (componentId in tempInventory) {
+      componentCost += tempInventory[componentId].cost;
 
-      // If its count > 1, decrement the count. Otherwise, remove it from the inventory.
-      if (tempInventory[index].count && tempInventory[index].count > 1) {
-        tempInventory[index].count -= 1;
+      if (
+        tempInventory[componentId].count &&
+        tempInventory[componentId].count > 1
+      ) {
+        tempInventory[componentId].count -= 1;
       } else {
-        tempInventory.splice(index, 1);
+        delete tempInventory[componentId];
       }
+    }
+
+    // If a component is missing, the item cannot be purchased.
+    else {
+      return 0;
     }
   }
 
@@ -74,50 +102,33 @@ export const calculateDiscountedCost = (
 
 export const purchaseItem = (
   gameState: GameState,
-  item: Item
+  item: Item,
+  quantity: number
 ): GameState | null => {
-  const discountedCost = calculateDiscountedCost(item, gameState.inventory);
+  const cost = item.cost * quantity;
 
-  if (gameState.player.gold < discountedCost) {
-    return null;
+  if (gameState.player.gold < cost) {
+    return null; // Not enough gold
   }
 
-  const newInventory = [...gameState.inventory];
+  // Ensure deep copy of inventory
+  const newInventory = { ...gameState.inventory };
 
-  // Find the item's components in the inventory and decrement their counts / remove them if they become 0.
-  for (const componentId of item.from) {
-    const index = newInventory.findIndex(
-      (invItem) => invItem.id === componentId
-    );
-    if (index !== -1) {
-      if (newInventory[index].count && newInventory[index].count > 1) {
-        newInventory[index].count -= 1;
-      } else {
-        newInventory.splice(index, 1);
-      }
-    }
-  }
-
-  // Find the index of the item in the inventory.
-  const index = newInventory.findIndex((invItem) => invItem.id === item.id);
-
-  if (index !== -1) {
-    // If the item is already in the inventory, increment its count.
-    newInventory[index] = {
-      ...newInventory[index],
-      count: newInventory[index].count + 1,
+  if (newInventory[item.id]) {
+    newInventory[item.id] = {
+      ...newInventory[item.id], // Ensure new reference
+      count: newInventory[item.id].count + quantity, // Correctly increment count
     };
   } else {
-    // Otherwise, add the item to the inventory.
-    newInventory.push({ ...item, count: 1 });
+    newInventory[item.id] = { ...item, count: quantity }; // Create new entry
   }
 
   return {
     ...gameState,
     player: {
       ...gameState.player,
-      gold: gameState.player.gold - discountedCost,
-      lastGoldChange: -discountedCost,
+      gold: gameState.player.gold - cost,
+      lastGoldChange: -cost,
     },
     inventory: newInventory,
   };

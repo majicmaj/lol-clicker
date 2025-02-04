@@ -8,7 +8,7 @@ import { WinRateStats } from "./stats/WinRateStats";
 
 interface GameStatsProps {
   player: PlayerStats;
-  inventory: Item[];
+  inventory: Record<string, Item>;
 }
 
 const RANK_VALUES = {

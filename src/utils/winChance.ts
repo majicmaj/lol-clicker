@@ -6,14 +6,13 @@ const clamp = (value: number, min: number, max: number): number =>
   Math.min(Math.max(value, min), max);
 
 export const calculateWinChance = (
-  inventory: Item[],
+  inventory: Record<string, Item>,
   rank: Rank,
   lp: number,
   champions: Champion[]
 ): number => {
   const baseWinChance = 0.5;
   const totalStats = calculateTotalStats(inventory);
-  const totalGoldValue = inventory.reduce((sum, item) => sum + item.cost, 0);
 
   const statBonus =
     // totalStats.ad * 35 +
@@ -34,19 +33,11 @@ export const calculateWinChance = (
   const rankMultiplier = RANK_DIFFICULTY_MULTIPLIER[rank];
   const lpScaling = (lp / 100) * 0.2;
 
-  const maxRequiredGold =
-    15000 * (rankMultiplier / RANK_DIFFICULTY_MULTIPLIER.CHALLENGER);
-
-  const goldValueContribution = Math.min(
-    0.25,
-    (totalGoldValue / maxRequiredGold) * 0.25
-  );
-
   // having 150 champions gives you +0.25 win chance
   const perChampionBonus = champions.length / 150;
 
   return clamp(
-    (baseWinChance + statBonus + goldValueContribution + perChampionBonus) /
+    (baseWinChance + statBonus + perChampionBonus) /
       (rankMultiplier + lpScaling),
     0.05,
     0.95

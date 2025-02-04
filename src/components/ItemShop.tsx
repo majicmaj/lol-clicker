@@ -1,35 +1,33 @@
 import React, { useEffect } from "react";
 import { Item, GameState } from "../types";
-import {
-  purchaseItem,
-  calculateDiscountedCost,
-  getAvailableUpgrades,
-} from "../utils/inventory";
+import { purchaseItem } from "../utils/inventory";
 import { STAT_LABELS } from "../constants/statLabels";
 import ShopItemCard from "./ShopItemCard";
+import { useGameState } from "../hooks/useGameState";
 
 interface ItemShopProps {
   items: Item[];
   gameState: GameState;
-  onPurchase: (newState: GameState) => void;
 }
 
-export const ItemShop: React.FC<ItemShopProps> = ({
-  items,
-  gameState,
-  onPurchase,
-}) => {
+export const ItemShop: React.FC<ItemShopProps> = ({ items, gameState }) => {
   const [searchQuery, setSearchQuery] = React.useState("");
   const [selectedStats, setSelectedStats] = React.useState<string[]>([]);
   const [showFilters, setShowFilters] = React.useState(false);
   const [showSuggestions, setShowSuggestions] = React.useState(false);
   const searchRef = React.useRef<HTMLDivElement>(null);
 
-  const handlePurchase = (item: Item) => {
-    const discountedCost = calculateDiscountedCost(item, gameState.inventory);
-    const maxQuantity = Math.floor(gameState.player.gold / discountedCost);
+  const { setGameState } = useGameState();
 
-    if (maxQuantity === 0) {
+  const handlePurchase = (item: Item) => {
+    if (item.cost <= 0 || isNaN(item.cost)) {
+      alert("Invalid item cost!");
+      return;
+    }
+
+    const maxQuantity = Math.floor(gameState.player.gold / item.cost);
+
+    if (maxQuantity <= 0) {
       alert("Not enough gold to purchase this item!");
       return;
     }
@@ -37,24 +35,24 @@ export const ItemShop: React.FC<ItemShopProps> = ({
     const quantityInput = prompt(
       `How many ${item.name}s would you like to buy? (Max: ${maxQuantity})`
     );
-    const quantity = parseInt(quantityInput || "0", 10);
+
+    if (quantityInput === null) return; // User canceled prompt
+
+    const quantity = Number(quantityInput);
 
     if (isNaN(quantity) || quantity <= 0 || quantity > maxQuantity) {
-      alert("Invalid quantity entered");
+      alert("Invalid quantity!");
       return;
     }
 
-    let newState = gameState;
-    for (let i = 0; i < quantity; i++) {
-      const purchaseResult = purchaseItem(newState, item);
-      if (!purchaseResult) {
-        alert(`Purchased ${i} items before encountering an error!`);
-        break;
-      }
-      newState = purchaseResult;
+    const newState = purchaseItem(gameState, item, quantity);
+
+    if (!newState) {
+      alert("Not enough gold to purchase this item!");
+      return;
     }
 
-    onPurchase(newState);
+    setGameState(newState);
   };
 
   const toggleStatFilter = (stat: string) => {
@@ -75,7 +73,7 @@ export const ItemShop: React.FC<ItemShopProps> = ({
     return matchesSearch && hasStats;
   });
 
-  const availableUpgrades = getAvailableUpgrades(items, gameState.inventory);
+  // const availableUpgrades = getAvailableUpgrades(items, gameState.inventory);
 
   const filteredSuggestions = items.filter((item) =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -184,8 +182,8 @@ export const ItemShop: React.FC<ItemShopProps> = ({
           )}
         </div>
 
-        {/* Available Upgrades */}
-        {availableUpgrades.length > 0 && (
+        {/* Available Upgrades
+        {Object.keys(availableUpgrades).length > 0 && (
           <section className="mb-8 max-h-96 overflow-auto border border-[#C8AA6E] p-4">
             <h3 className="text-xl font-bold mb-4 bg-gradient-to-r from-[#C8AA6E] to-[#C8AA6E]/80 text-transparent bg-clip-text">
               Available Upgrades
@@ -202,7 +200,7 @@ export const ItemShop: React.FC<ItemShopProps> = ({
               ))}
             </div>
           </section>
-        )}
+        )} */}
 
         {/* Main Item Grid */}
         <section>
@@ -216,9 +214,6 @@ export const ItemShop: React.FC<ItemShopProps> = ({
                 item={item}
                 gameState={gameState}
                 onPurchase={handlePurchase}
-                hasComponents={item.from.some((id) =>
-                  gameState.inventory.some((invItem) => invItem.id === id)
-                )}
               />
             ))}
           </div>

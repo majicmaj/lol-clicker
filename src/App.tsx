@@ -15,7 +15,13 @@ import { Champion } from "./types";
 import { Leaderboard } from "./components/Leaderboard";
 
 function App() {
-  const { gameState, setGameState, items, loading, resetGame } = useGameState();
+  const {
+    gameState,
+    setGameState,
+    items,
+    itemsLoading: loading,
+    resetGame,
+  } = useGameState();
   const [activeTab, setActiveTab] = useState("overview");
   const [showResetConfirm, setShowResetConfirm] = useState(false);
 
@@ -24,21 +30,20 @@ function App() {
     setGameState(newState);
   };
 
-  const handleSellItem = (index: number) => {
-    const newState = sellItem(gameState, index);
+  const handleSellItem = (id: string, count: number) => {
+    const newState = sellItem(gameState, id, count);
     setGameState(newState);
   };
 
-  const handlePurchaseChampion = (champion: Champion) => {
-    setGameState((prev) => ({
-      ...prev,
+  const handlePurchaseChampion = (champion: Champion) =>
+    setGameState({
+      ...gameState,
       player: {
-        ...prev.player,
-        lp: prev.player.lp - 6300,
-        champions: [...prev.player.champions, champion],
+        ...gameState.player,
+        lp: gameState.player.lp - 6300,
+        champions: [...gameState.player.champions, champion],
       },
-    }));
-  };
+    });
 
   const handleReset = () => {
     if (showResetConfirm) {
@@ -54,15 +59,31 @@ function App() {
   // Give the player a random UUID if they don't have one
   useEffect(() => {
     if (!gameState.player.id) {
-      setGameState((prev) => ({
-        ...prev,
+      setGameState({
+        ...gameState,
         player: {
-          ...prev.player,
+          ...gameState.player,
           id: Math.random().toString(36).substr(2, 9),
         },
-      }));
+      });
     }
-  }, [gameState.player.id, setGameState]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gameState.player.id]);
+
+  // If player's inventory is an array, turn it into an object
+  useEffect(() => {
+    if (Array.isArray(gameState.inventory)) {
+      const oldInv = gameState.inventory as any[];
+      setGameState({
+        ...gameState,
+        inventory: oldInv.reduce((acc, item) => {
+          acc[item.id] = item;
+          return acc;
+        }, {} as Record<string, any>),
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gameState.inventory]);
 
   if (loading) {
     return (
@@ -108,7 +129,7 @@ function App() {
             />
           </div>
           <RankDisplay player={gameState.player} />
-          <Leaderboard player={gameState.player} setGameState={setGameState} />
+          <Leaderboard player={gameState.player} />
         </div>
 
         {/* Mobile Layout */}
@@ -151,18 +172,11 @@ function App() {
             </div>
           )}
           {activeTab === "leaderboard" && (
-            <Leaderboard
-              player={gameState.player}
-              setGameState={setGameState}
-            />
+            <Leaderboard player={gameState.player} />
           )}
           {activeTab === "shop" && (
             <div className="space-y-6">
-              <ItemShop
-                items={items}
-                gameState={gameState}
-                onPurchase={setGameState}
-              />
+              <ItemShop items={items} gameState={gameState} />
               <ChampionShop
                 gameState={gameState}
                 onPurchase={handlePurchaseChampion}
@@ -171,11 +185,7 @@ function App() {
           )}
           {activeTab === "inventory" && (
             <div className="space-y-6">
-              <Inventory
-                items={gameState.inventory}
-                onSell={handleSellItem}
-                setGameState={setGameState}
-              />
+              <Inventory items={gameState.inventory} onSell={handleSellItem} />
               <ChampionInventory champions={gameState.player.champions} />
             </div>
           )}
@@ -203,17 +213,9 @@ function App() {
           </button>
 
           <div className="grid grid-cols-2 gap-8">
-            <Inventory
-              items={gameState.inventory}
-              onSell={handleSellItem}
-              setGameState={setGameState}
-            />
+            <Inventory items={gameState.inventory} onSell={handleSellItem} />
             <ChampionInventory champions={gameState.player.champions} />
-            <ItemShop
-              items={items}
-              gameState={gameState}
-              onPurchase={setGameState}
-            />
+            <ItemShop items={items} gameState={gameState} />
 
             <ChampionShop
               gameState={gameState}
