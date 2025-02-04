@@ -43,7 +43,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
   player,
   setGameState,
 }) => {
-  const [players, setPlayers] = useState<PlayerStats[]>([player]);
+  const [players, setPlayers] = useState<PlayerStats[]>([]);
   const [isConnected, setIsConnected] = useState(false);
   const [usernameInput, setUsernameInput] = useState(player.username || ""); // Track username input
 
@@ -60,8 +60,25 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
       try {
         const message = JSON.parse(event.data);
         if (message.type === "leaderboard") {
-          setPlayers(message.data);
-          console.log(message.data);
+          setPlayers((prevPlayers) => {
+            // Update player stats in the leaderboard
+            const updatedPlayers = prevPlayers.map((prevPlayer) => {
+              const updatedPlayer = message.data.find(
+                (player: PlayerStats) => player.id === prevPlayer.id
+              );
+              return updatedPlayer || prevPlayer;
+            });
+
+            // Add new players to the leaderboard
+            const newPlayers = message.data.filter(
+              (player: PlayerStats) =>
+                !updatedPlayers.some(
+                  (prevPlayer) => prevPlayer.id === player.id
+                )
+            );
+
+            return [...updatedPlayers, ...newPlayers];
+          });
         }
       } catch (error) {
         console.error("Error parsing WebSocket message:", error);
@@ -72,10 +89,15 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
       console.error("WebSocket error:", error);
     };
 
+    ws.onclose = () => {
+      setIsConnected(false);
+      console.log("Disconnected from WebSocket server");
+    };
+
     return () => {
       ws.close();
     };
-  }, [player]);
+  }, []); // ✅ Only run once when the component mounts
 
   const handleSetUsername = () => {
     if (usernameInput.trim() === "") return;
@@ -120,7 +142,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
       <div className="flex flex-col gap-2">
         {players.map((player, index) => (
           <div
-            key={index}
+            key={player.id} // Use player.id instead of index
             className="flex items-center gap-4 border-b border-[#C8AA6E]/20 pb-2"
           >
             <span className="text-lg font-bold text-white">{index + 1}.</span>

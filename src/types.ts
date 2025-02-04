@@ -49,6 +49,7 @@ export interface Champion {
 }
 
 export interface PlayerStats {
+  id: string;
   username: string;
   rank: Rank;
   division: Division;

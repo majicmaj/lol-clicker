@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { handleGameClick } from "./utils/gameLogic";
 import { sellItem } from "./utils/inventory";
 import { useGameState } from "./hooks/useGameState";
@@ -50,6 +50,20 @@ function App() {
       setTimeout(() => setShowResetConfirm(false), 3000);
     }
   };
+
+  // Give the player a random UUID if they don't have one
+  useEffect(() => {
+    if (!gameState.player.id) {
+      setGameState((prev) => ({
+        ...prev,
+        player: {
+          ...prev.player,
+          id: Math.random().toString(36).substr(2, 9),
+        },
+      }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gameState.player.id]);
 
   if (loading) {
     return (
