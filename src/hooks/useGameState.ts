@@ -34,15 +34,7 @@ const INITIAL_STATE: GameState = {
 // Function to get game state from Local Storage
 const getGameState = (): GameState => {
   const saved = localStorage.getItem(STORAGE_KEY);
-  return saved
-    ? {
-        ...JSON.parse(saved),
-        player: {
-          ...JSON.parse(saved).player,
-          lastGameTime: Number(JSON.parse(saved).player.lastGameTime),
-        },
-      }
-    : INITIAL_STATE;
+  return saved ? JSON.parse(saved) : INITIAL_STATE;
 };
 
 // Function to save game state to Local Storage
@@ -51,7 +43,7 @@ const saveGameState = (state: GameState) => {
 };
 
 // Function to reset game state
-const resetGameState = async () => {
+const resetGameState = (): GameState => {
   localStorage.removeItem(STORAGE_KEY);
   return INITIAL_STATE;
 };
@@ -144,14 +136,15 @@ export const useGameState = () => {
   // Get game state from Local Storage
   const { data: gameState } = useQuery({
     queryKey: ["gameState"],
-    queryFn: getGameState,
-    staleTime: Infinity, // Prevents refetching on every render
-    initialData: INITIAL_STATE,
+    queryFn: () => getGameState(), // Ensure function is synchronous
+    staleTime: Infinity, // Prevents refetching unnecessarily
+    cacheTime: Infinity, // Ensures data persists across sessions
+    initialData: getGameState(), // Ensure Local Storage loads initially
   });
 
   // Update game state mutation
   const updateGameState = useMutation({
-    mutationFn: async (newState: GameState) => {
+    mutationFn: (newState: GameState) => {
       saveGameState(newState);
       return newState;
     },
