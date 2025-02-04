@@ -138,7 +138,7 @@ export const useGameState = () => {
     queryKey: ["gameState"],
     queryFn: () => getGameState(), // Ensure function is synchronous
     staleTime: Infinity, // Prevents refetching unnecessarily
-    cacheTime: Infinity, // Ensures data persists across sessions
+    gcTime: Infinity, // Prevents garbage collection
     initialData: getGameState(), // Ensure Local Storage loads initially
   });
 

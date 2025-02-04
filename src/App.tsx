@@ -15,7 +15,13 @@ import { Champion } from "./types";
 import { Leaderboard } from "./components/Leaderboard";
 
 function App() {
-  const { gameState, setGameState, items, loading, resetGame } = useGameState();
+  const {
+    gameState,
+    setGameState,
+    items,
+    itemsLoading: loading,
+    resetGame,
+  } = useGameState();
 
   const [activeTab, setActiveTab] = useState("overview");
   const [showResetConfirm, setShowResetConfirm] = useState(false);
