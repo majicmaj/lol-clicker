@@ -14,8 +14,11 @@ export const calculateGoldGain = (
 
   const lpScaling = lp / 100;
 
-  return Math.round(
-    10 * (1 + (moveSpeed * 0.1 + (moveSpeedPercent * moveSpeed) / 100) / 10) -
-      (rankMultiplier + lpScaling)
+  return Math.max(
+    10,
+    Math.round(
+      10 * (1 + (moveSpeed * 0.1 + (moveSpeedPercent * moveSpeed) / 100) / 10) -
+        (rankMultiplier + lpScaling)
+    )
   );
 };
