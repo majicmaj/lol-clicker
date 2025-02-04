@@ -25,7 +25,7 @@ export const WinLossChart: React.FC<WinLossChartProps> = ({ wins, losses }) => {
       <div className="text-[#C8AA6E] text-sm font-bold mb-1">
         Win/Loss Distribution
       </div>
-      <div className="h-16">
+      <div className="h-24">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={distributionData}

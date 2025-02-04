@@ -84,13 +84,15 @@ export const GameStats: React.FC<GameStatsProps> = ({ player, inventory }) => {
 
       <AverageStats lpGains={lpGains} lpLosses={lpLosses} />
       <WinRateStats player={player} inventory={inventory} />
-      <LPChart
-        lpHistory={lpChartFilteredProps?.map((data) => data.lp)}
-        rankHistory={lpChartFilteredProps?.map((data) => data.rank)}
-        divisionHistory={lpChartFilteredProps?.map((data) => data.division)}
-      />
 
-      <WinLossChart wins={player.wins} losses={player.losses} />
+      <div className="grid grid-cols-2 gap-2 mt-2">
+        <LPChart
+          lpHistory={lpChartFilteredProps?.map((data) => data.lp)}
+          rankHistory={lpChartFilteredProps?.map((data) => data.rank)}
+          divisionHistory={lpChartFilteredProps?.map((data) => data.division)}
+        />
+        <WinLossChart wins={player.wins} losses={player.losses} />
+      </div>
     </div>
   );
 };

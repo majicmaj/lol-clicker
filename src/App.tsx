@@ -12,6 +12,7 @@ import { RotateCcw } from "lucide-react";
 import { ChampionShop } from "./components/ChampionShop";
 import { ChampionInventory } from "./components/ChampionInventory";
 import { Champion } from "./types";
+import { Leaderboard } from "./components/Leaderboard";
 
 function App() {
   const { gameState, setGameState, items, loading, resetGame } = useGameState();
@@ -61,19 +62,18 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 bg-[radial-gradient(circle_at_center,rgba(0,168,255,0.15),rgba(9,20,40,0))] p-6 pb-24 lg:pb-6">
+    <div className="min-h-screen bg-[#10A13] bg-[radial-gradient(circle_at_center,rgba(0,168,255,0.15),rgba(9,20,40,0))] p-6 pb-24 lg:pb-6">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Reset Button */}
         <div className="absolute top-2 right-6">
           <button
             onClick={handleReset}
-            className={`flex items-center gap-2 px-4 py-1 text-sm transition-all duration-300
+            className={`flex items-center gap-2 px-4 py-1 text-sm transition-all duration-300 border border-[#0397AB]/80 shadow-lg shadow-[#0397AB]/20 text-white font-bold 
               ${
                 showResetConfirm
                   ? "bg-red-500 hover:bg-red-600"
                   : "bg-[#0A1428] hover:bg-[#0A1428]/80"
-              } 
-              border border-[#C8AA6E]/30`}
+              }`}
           >
             <RotateCcw size={12} />
             <span>{showResetConfirm ? "Confirm" : "Reset"}</span>
@@ -82,17 +82,20 @@ function App() {
 
         {/* Desktop Layout */}
         <div className="hidden lg:grid lg:grid-cols-3 gap-6">
-          <GameStats
-            player={gameState.player}
-            inventory={gameState.inventory}
-          />
+          <div className="flex flex-col gap-6">
+            <GameStats
+              player={gameState.player}
+              inventory={gameState.inventory}
+            />
+            <ItemStats
+              inventory={gameState.inventory}
+              champions={gameState.player.champions}
+              rank={gameState.player.rank}
+              lp={gameState.player.lp}
+            />
+          </div>
           <RankDisplay player={gameState.player} />
-          <ItemStats
-            inventory={gameState.inventory}
-            champions={gameState.player.champions}
-            rank={gameState.player.rank}
-            lp={gameState.player.lp}
-          />
+          <Leaderboard player={gameState.player} />
         </div>
 
         {/* Mobile Layout */}
@@ -133,6 +136,9 @@ function App() {
                 lp={gameState.player.lp}
               />
             </div>
+          )}
+          {activeTab === "leaderboard" && (
+            <Leaderboard player={gameState.player} />
           )}
           {activeTab === "shop" && (
             <div className="space-y-6">

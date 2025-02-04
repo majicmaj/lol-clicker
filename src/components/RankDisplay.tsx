@@ -119,8 +119,10 @@ export const RankDisplay: React.FC<RankDisplayProps> = ({ player }) => {
             </div>
             <div className="h-6 w-full p-1 border border-[#C8AA6E] rounded-full bg-[#0A1428]">
               <div
-                className={`h-full rounded-full transition-all bg-gradient-to-r from-slate-900 ${
-                  player.lastLpChange > 0 ? "to-[#0AC8B9]" : "to-[#CD7F32]"
+                className={`h-full rounded-full transition-all bg-gradient-to-r from-[#005A82] ${
+                  player.lastLpChange > 0
+                    ? "from-[#005A82] to-[#0AC8B9]"
+                    : "from-[#5c1d1d] to-[#d80707]"
                 } `}
                 style={{
                   width: `${

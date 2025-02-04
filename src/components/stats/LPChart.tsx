@@ -58,7 +58,7 @@ export const LPChart: React.FC<LPChartProps> = ({
   // };
 
   return (
-    <div className="bg-[#0A1428] p-2 border border-[#0397AB]/30 mb-2">
+    <div className="bg-[#0A1428] p-2 border border-[#0397AB]/30">
       <div className="text-[#C8AA6E] text-sm font-bold mb-1">LP History</div>
       <div className="h-24">
         <ResponsiveContainer width="100%" height="100%">

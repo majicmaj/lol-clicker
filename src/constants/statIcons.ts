@@ -6,12 +6,12 @@ export const statIconMap = {
   HealthRegen:
     "https://static.wikia.nocookie.net/leagueoflegends/images/a/a9/Health_regeneration_colored_icon.png",
   Health:
-    "https://static.wikia.nocookie.net/leagueoflegends/images/1/17/Health_icon.png",
+    "https://static.wikia.nocookie.net/leagueoflegends/images/2/22/Health_colored_icon.png",
   CriticalStrike:
     "https://static.wikia.nocookie.net/leagueoflegends/images/3/3e/Critical_strike_chance_colored_icon.png",
   SpellDamage:
     "https://static.wikia.nocookie.net/leagueoflegends/images/0/0a/Ability_power_colored_icon.png",
-  Mana: "https://static.wikia.nocookie.net/leagueoflegends/images/8/8b/Mana_icon.png",
+  Mana: "https://static.wikia.nocookie.net/leagueoflegends/images/d/d1/Mana_colored_icon.png",
   Armor:
     "https://static.wikia.nocookie.net/leagueoflegends/images/d/d5/Armor_colored_icon.png",
   SpellBlock:
@@ -23,7 +23,7 @@ export const statIconMap = {
   Jungle:
     "https://static.wikia.nocookie.net/leagueoflegends/images/1/1b/Jungle_icon.png",
   Damage:
-    "https://static.wikia.nocookie.net/leagueoflegends/images/7/75/Attack_damage_icon.png",
+    "https://static.wikia.nocookie.net/leagueoflegends/images/7/7e/Attack_damage_colored_icon.png",
   Lane: "https://static.wikia.nocookie.net/leagueoflegends/images/9/98/Middle_icon.png",
   AttackSpeed:
     "https://static.wikia.nocookie.net/leagueoflegends/images/9/91/Attack_speed_icon.png",

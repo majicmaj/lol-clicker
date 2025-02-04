@@ -1,7 +1,7 @@
 import React from "react";
 import { Champion, Item, Rank } from "../types";
 import { calculateTotalStats } from "../utils/stats";
-import { STAT_ICON_MAP } from "../constants/statIcons";
+import { statIconMap } from "../constants/statIcons";
 import { formatBigNumbers } from "../utils/formatBigNumbers";
 import gold_divider_sm from "../assets/dividers/gold_divider_sm.png";
 import { calculateWinChance } from "../utils/winChance";
@@ -26,123 +26,123 @@ export const ItemStats: React.FC<ItemStatsProps> = ({
   const statGroups = [
     {
       title: "Attack Damage",
-      description: "Increases LP Gain",
+      description: "LP Gain",
       value: calculateLpGain(inventory, rank, lp),
       stats: [
         {
-          icon: STAT_ICON_MAP.FlatPhysicalDamageMod,
+          icon: statIconMap.Damage,
           name: "AD",
           value: totalStats.ad,
+          color: "text-orange-500",
+          suffix: "",
+        },
+        {
+          icon: statIconMap.AttackSpeed,
+          name: "AS",
+          value: (totalStats.attackSpeed * 100).toFixed(0),
+          color: "text-yellow-100",
+          suffix: "/s",
+        },
+        {
+          icon: statIconMap.ArmorPenetration,
+          name: "Lethality",
+          value: totalStats.lethality,
           color: "text-red-500",
           suffix: "",
         },
         {
-          icon: STAT_ICON_MAP.FlatArmorMod,
-          name: "Armor Pen",
+          icon: statIconMap.ArmorPenetration,
+          name: "Pen",
           value: totalStats.armorPen,
-          color: "text-red-600",
+          color: "text-red-500",
           suffix: "",
         },
         {
-          icon: STAT_ICON_MAP.FlatCritChanceMod,
-          name: "Lethality",
-          value: totalStats.lethality,
-          color: "text-red-800",
-          suffix: "",
-        },
-        {
-          icon: STAT_ICON_MAP.FlatCritChanceMod,
-          name: "Crit Chance",
+          icon: statIconMap.CriticalStrike,
+          name: "Crit",
           value: totalStats.critChance * 100,
-          color: "text-amber-400",
+          color: "text-orange-600",
           suffix: "%",
-        },
-        {
-          icon: STAT_ICON_MAP.PercentLifeStealMod,
-          name: "AS",
-          value: (totalStats.attackSpeed * 100).toFixed(0),
-          color: "text-amber-300",
-          suffix: "/s",
         },
       ],
     },
     {
       title: "Ability Power",
-      description: "Increases Win Chance",
+      description: "Win Chance",
       value: calculateWinChance(inventory, rank, lp, champions) * 100,
       stats: [
         {
-          icon: STAT_ICON_MAP.FlatMagicDamageMod,
+          icon: statIconMap.SpellDamage,
           name: "AP",
           value: totalStats.ap,
-          color: "text-[#0397AB]",
+          color: "text-purple-500",
           suffix: "",
         },
         {
-          icon: STAT_ICON_MAP.FlatSpellBlockMod,
+          icon: statIconMap.MagicPenetration,
           name: "AP Pen",
           value: totalStats.magicPen,
           color: "text-purple-400",
           suffix: "",
         },
         {
-          icon: STAT_ICON_MAP.PercentMagicPenetrationMod,
+          icon: statIconMap.MagicPenetration,
           name: "AP Pen %",
           value: (totalStats.magicPenPercent * 100).toFixed(1),
-          color: "text-purple-500",
+          color: "text-purple-400",
           suffix: "%",
         },
         {
-          icon: STAT_ICON_MAP.rPercentCooldownMod,
+          icon: statIconMap.AbilityHaste,
           name: "Ability Haste",
           value: totalStats.abilityHaste,
-          color: "text-blue-300",
+          color: "text-yellow-100",
           suffix: "",
         },
         {
-          icon: STAT_ICON_MAP.Mana,
+          icon: statIconMap.Mana,
           name: "Mana",
           value: totalStats.mana,
-          color: "text-blue-400",
+          color: "text-sky-400",
           suffix: "",
         },
         {
-          icon: STAT_ICON_MAP.ManaRegen,
+          icon: statIconMap.ManaRegen,
           name: "Mana Regen",
           value: totalStats.manaRegen.toFixed(0),
-          color: "text-blue-500",
+          color: "text-sky-400",
           suffix: "",
         },
       ],
     },
     {
       title: "Defensive",
-      description: "Reduces LP Loss",
+      description: "LP Loss",
       value: calculateLpLoss(inventory, rank, lp),
       stats: [
         {
-          icon: STAT_ICON_MAP.FlatArmorMod,
+          icon: statIconMap.Armor,
           name: "Armor",
           value: totalStats.armor,
           color: "text-[#C8AA6E]",
           suffix: "",
         },
         {
-          icon: STAT_ICON_MAP.FlatSpellBlockMod,
+          icon: statIconMap.SpellBlock,
           name: "Magic Resist",
           value: totalStats.magicResist,
-          color: "text-purple-300",
+          color: "text-sky-300",
           suffix: "",
         },
         {
-          icon: STAT_ICON_MAP.FlatHPPoolMod,
+          icon: statIconMap.Health,
           name: "Health",
           value: totalStats.health,
           color: "text-green-400",
           suffix: "",
         },
         {
-          icon: STAT_ICON_MAP.FlatHPRegenMod,
+          icon: statIconMap.HealthRegen,
           name: "Health Regen",
           value: totalStats.healthRegen.toFixed(1),
           color: "text-green-500",
@@ -152,21 +152,21 @@ export const ItemStats: React.FC<ItemStatsProps> = ({
     },
     {
       title: "Movement",
-      description: "Increases Gold Gain",
+      description: "Gold Gain",
       value: calculateGoldGain(totalStats, rank, lp),
       stats: [
         {
-          icon: STAT_ICON_MAP.FlatMovementSpeedMod,
+          icon: statIconMap.Boots,
           name: "MS",
           value: totalStats.moveSpeed.toFixed(0),
-          color: "text-cyan-300",
+          color: "text-yellow-100",
           suffix: "",
         },
         {
-          icon: STAT_ICON_MAP.PercentMovementSpeedMod,
+          icon: statIconMap.Boots,
           name: "% MS",
           value: (totalStats.moveSpeedPercent * 100).toFixed(0),
-          color: "text-cyan-400",
+          color: "text-yellow-100",
           suffix: "%",
         },
       ],
@@ -175,10 +175,10 @@ export const ItemStats: React.FC<ItemStatsProps> = ({
 
   return (
     <div className="bg-[#091428] p-4 pb-6 border-2 border-[#C8AA6E] shadow-lg shadow-[#C8AA6E]/20">
-      <div className="grid grid-cols-1 gap-2">
+      <div className="grid grid-cols-2 gap-2">
         {statGroups?.map((group, index) => (
           <div key={index} className="flex flex-col items-center">
-            <h3 className="text-lg font-beaufort text-[#C8AA6E]">
+            <h3 className="text-sm font-beaufort text-[#C8AA6E]">
               {group.title}
             </h3>
             <p className="text-sm font-spiegel italic text-white/75 mb-1">
@@ -186,13 +186,13 @@ export const ItemStats: React.FC<ItemStatsProps> = ({
               <span className="font-bold">({group.value.toFixed(1)})</span>
             </p>
             <img src={gold_divider_sm} className="w-full mb-2" />
-            <div className="grid grid-cols-2 gap-1 w-full">
+            <div className="grid grid-cols-1 gap-1 w-full">
               {group.stats?.map((stat, statIndex) => (
                 <div
                   key={statIndex}
-                  className="w-full flex items-center justify-between bg-[#0A1428] px-1 py-0.5 border border-[#0397AB]/30 rounded-none"
+                  className="w-full flex items-center justify-between px-1 pb-0.5 rounded-none"
                 >
-                  <div className={`${stat.color} text-sm font-bold`}>
+                  <div className={`${stat.color} text-xs font-bold`}>
                     <img
                       src={stat.icon}
                       alt={stat.name}
@@ -202,7 +202,7 @@ export const ItemStats: React.FC<ItemStatsProps> = ({
                   </div>
 
                   <div className="text-sm font-bold text-white">
-                    +{formatBigNumbers(stat?.value || 0)}
+                    {formatBigNumbers(stat?.value || 0)}
                     {stat.suffix}
                   </div>
                 </div>

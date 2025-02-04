@@ -21,20 +21,21 @@ export const AverageStats: React.FC<AverageStatsProps> = ({
       : 0;
 
   return (
-    <div className="grid grid-cols-2 gap-2 mb-3">
-      <div className="bg-[#0A1428] p-2 border border-[#0397AB]/30">
+    <div className="grid grid-cols-2 gap-2 mb-1">
+      <div className="flex justify-between items-center">
         <div className="flex items-center gap-1">
           <TrendingUp className="w-4 h-4 text-green-400" />
-          <div className="text-green-400 text-sm font-bold">Avg. LP Gain</div>
+          <div className="text-green-400 text-sm font-bold">LP Gain</div>
         </div>
         <div className="text-lg font-bold text-white">
           +{avgLpGain.toFixed(1)}
         </div>
       </div>
-      <div className="bg-[#0A1428] p-2 border border-[#0397AB]/30">
+
+      <div className="flex justify-between items-center">
         <div className="flex items-center gap-1">
           <TrendingDown className="w-4 h-4 text-red-400" />
-          <div className="text-red-400 text-sm font-bold">Avg. LP Loss</div>
+          <div className="text-red-400 text-sm font-bold">LP Loss</div>
         </div>
         <div className="text-lg font-bold text-white">
           -{avgLpLoss.toFixed(1)}
