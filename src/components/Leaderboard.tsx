@@ -226,16 +226,24 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
             key={player.id}
             className="flex items-center gap-4 border-b border-[#C8AA6E]/20 pb-2"
           >
-            <span className="text-lg font-bold text-white">{index + 1}.</span>
-            <img
-              src={getRankImage(player.rank)}
-              alt={player.rank}
-              className="w-8 h-8 object-cover"
-            />
+            <span className="text-lg font-bold text-white w-4">
+              {index + 1}.
+            </span>
+            <div className="relative">
+              <img
+                src={getRankImage(player.rank)}
+                alt={player.rank}
+                className="w-8 h-8 object-cover"
+              />
+              {player.division && (
+                <span className="absolute top-0 right-0 bg-[#C8AA6E] text-black text-xs font-bold px-1">
+                  {player.division}
+                </span>
+              )}
+            </div>
             <div className="flex flex-col gap-1">
               <span className="text-lg font-bold text-white">
-                {player.username} — {player.rank.slice(0, 1)}
-                {player.division}
+                {player.username}
               </span>
               <span className="text-sm text-[#C8AA6E]">
                 {formatBigNumbers(player.lp)} LP -{" "}
