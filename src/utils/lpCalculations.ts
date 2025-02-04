@@ -22,7 +22,7 @@ export const calculateLpGain = (
   const armorPenBonus = getStatBonus("armorPen", totalStats?.armorPen);
   const attackSpeedBonus = getStatBonus("magicPen", totalStats?.attackSpeed);
   const critBonus = getStatBonus("critChance", totalStats?.critChance);
-  const lifeStealBonus = getStatBonus("lifeSteal", totalStats?.lifeSteal);
+  const lifeStealBonus = getStatBonus("lifesteal", totalStats?.lifeSteal);
 
   const statsBonus =
     (adBonus +
