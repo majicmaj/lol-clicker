@@ -1,6 +1,5 @@
-// Leaderboard.tsx
 import React, { useEffect, useState } from "react";
-import { PlayerStats } from "../types";
+import { GameState, PlayerStats } from "../types";
 
 // Import all rank images
 import bronzeRank from "../assets/ranks/bronze.webp";
@@ -19,6 +18,7 @@ import { Divider } from "./dividers/Divider";
 
 interface LeaderboardProps {
   player: PlayerStats;
+  setGameState: React.Dispatch<React.SetStateAction<GameState>>;
 }
 
 const getRankImage = (rank: string): string => {
@@ -39,17 +39,19 @@ const getRankImage = (rank: string): string => {
 
 const wsUrl = "https://clicker.hobbyhood.app/";
 
-export const Leaderboard: React.FC<LeaderboardProps> = ({ player }) => {
-  // The leaderboard state. Initially, we include the current player.
+export const Leaderboard: React.FC<LeaderboardProps> = ({
+  player,
+  setGameState,
+}) => {
   const [players, setPlayers] = useState<PlayerStats[]>([player]);
   const [isConnected, setIsConnected] = useState(false);
+  const [usernameInput, setUsernameInput] = useState(player.username || ""); // Track username input
 
   useEffect(() => {
     const ws = new WebSocket(wsUrl);
 
     ws.onopen = () => {
       console.log("Connected to WebSocket server");
-      // Send the current player's data to the server.
       ws.send(JSON.stringify({ type: "updatePlayer", data: player }));
       setIsConnected(true);
     };
@@ -58,8 +60,8 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ player }) => {
       try {
         const message = JSON.parse(event.data);
         if (message.type === "leaderboard") {
-          // Update the leaderboard state with the data received from the server.
           setPlayers(message.data);
+          console.log(message.data);
         }
       } catch (error) {
         console.error("Error parsing WebSocket message:", error);
@@ -70,11 +72,20 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ player }) => {
       console.error("WebSocket error:", error);
     };
 
-    // Clean up the connection when the component unmounts or dependencies change.
     return () => {
       ws.close();
     };
   }, [player]);
+
+  const handleSetUsername = () => {
+    if (usernameInput.trim() === "") return;
+
+    // Update game state with new username
+    setGameState((prevState) => ({
+      ...prevState,
+      player: { ...prevState.player, username: usernameInput },
+    }));
+  };
 
   return (
     <div className="bg-[#091428] p-4 border-2 border-[#C8AA6E] shadow-lg shadow-[#C8AA6E]/20">
@@ -88,6 +99,24 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ player }) => {
       </h2>
 
       <Divider />
+
+      {/* Username input field */}
+      <div className="flex items-center gap-2 mb-4">
+        <input
+          type="text"
+          placeholder="Enter your name"
+          value={usernameInput}
+          onChange={(e) => setUsernameInput(e.target.value)}
+          className="p-2 border border-[#a58a5d] bg-slate-900 text-white w-full"
+        />
+        <button
+          onClick={handleSetUsername}
+          className="bg-[#C8AA6E] min-w-max text-black font-bold px-4 py-2 hover:bg-[#a58a5d]"
+        >
+          Set Name
+        </button>
+      </div>
+
       <div className="flex flex-col gap-2">
         {players.map((player, index) => (
           <div
@@ -101,7 +130,6 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ player }) => {
               className="w-8 h-8 object-cover"
             />
             <div className="flex flex-col gap-1">
-              {/* Display the player's username and rank/division */}
               <span className="text-lg font-bold text-white">
                 {player.username} — {player.rank.slice(0, 1)} {player.division}
               </span>

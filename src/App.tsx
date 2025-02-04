@@ -95,7 +95,7 @@ function App() {
             />
           </div>
           <RankDisplay player={gameState.player} />
-          <Leaderboard player={gameState.player} />
+          <Leaderboard player={gameState.player} setGameState={setGameState} />
         </div>
 
         {/* Mobile Layout */}
