@@ -1,3 +1,5 @@
+// Leaderboard.tsx
+import React, { useEffect, useState } from "react";
 import { PlayerStats } from "../types";
 
 // Import all rank images
@@ -35,15 +37,56 @@ const getRankImage = (rank: string): string => {
   return images[rank] || ironRank;
 };
 
-// Show one row for the current player for now, more players will be added later via api
+const wsUrl = "ws://localhost:8080";
+
 export const Leaderboard: React.FC<LeaderboardProps> = ({ player }) => {
-  const players = [player];
+  // The leaderboard state. Initially, we include the current player.
+  const [players, setPlayers] = useState<PlayerStats[]>([player]);
+  const [isConnected, setIsConnected] = useState(false);
+
+  useEffect(() => {
+    const ws = new WebSocket(wsUrl);
+
+    ws.onopen = () => {
+      console.log("Connected to WebSocket server");
+      // Send the current player's data to the server.
+      ws.send(JSON.stringify({ type: "updatePlayer", data: player }));
+      setIsConnected(true);
+    };
+
+    ws.onmessage = (event) => {
+      try {
+        const message = JSON.parse(event.data);
+        if (message.type === "leaderboard") {
+          // Update the leaderboard state with the data received from the server.
+          setPlayers(message.data);
+        }
+      } catch (error) {
+        console.error("Error parsing WebSocket message:", error);
+      }
+    };
+
+    ws.onerror = (error) => {
+      console.error("WebSocket error:", error);
+    };
+
+    // Clean up the connection when the component unmounts or dependencies change.
+    return () => {
+      ws.close();
+    };
+  }, [player, wsUrl]);
 
   return (
     <div className="bg-[#091428] p-4 border-2 border-[#C8AA6E] shadow-lg shadow-[#C8AA6E]/20">
       <h2 className="text-center text-xl font-bold text-[#C8AA6E]">
         Leaderboard
+        {isConnected ? (
+          <span className="h-2 w-2 mb-1 bg-green-500 rounded-full inline-block ml-2" />
+        ) : (
+          <span className="h-2 w-2 mb-1 bg-red-500 rounded-full inline-block ml-2" />
+        )}
       </h2>
+
       <Divider />
       <div className="flex flex-col gap-2">
         {players.map((player, index) => (
