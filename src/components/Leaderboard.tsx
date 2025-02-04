@@ -61,12 +61,21 @@ const getRankImage = (rank: string): string => {
 
 const wsUrl = "wss://lol-clicker.hobbyhood.app";
 
+const lastSeen = (time: number | undefined) => {
+  if (!time) return "Offline";
+  const seconds = Math.floor((Date.now() - time) / 1000);
+  if (seconds < 60) return "Online";
+  if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+  if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
+  return `${Math.floor(seconds / 86400)}d ago`;
+};
+
 export const Leaderboard: React.FC<LeaderboardProps> = ({ player }) => {
   const [players, setPlayers] = useState<PlayerStats[]>([]);
   const [isConnected, setIsConnected] = useState(false);
   const [usernameInput, setUsernameInput] = useState(player.username || "");
   const [sortOption, setSortOption] = useState<
-    "lp" | "gold" | "wins" | "losses" | "games"
+    "lp" | "gold" | "wins" | "losses" | "games" | "lastGameTime"
   >("lp");
 
   const { setGameState, gameState } = useGameState();
@@ -162,6 +171,8 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ player }) => {
         return b.losses - a.losses;
       case "games":
         return b.wins + b.losses - (a.wins + a.losses);
+      case "lastGameTime":
+        return b.lastGameTime - a.lastGameTime;
       default:
         return 0;
     }
@@ -186,7 +197,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ player }) => {
 
       {/* Sorting Tabs */}
       <div className="flex justify-center mb-4">
-        {["lp", "gold", "wins", "losses", "games"].map((option) => (
+        {["lp", "gold", "wins", "losses", "games", "activity"].map((option) => (
           <button
             key={option}
             onClick={() =>
@@ -245,15 +256,19 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ player }) => {
                   </span>
                 )}
               </div>
-              <span className="flex items-center gap-2">
-                <span className="text-sm font-bold text-white truncate">
-                  {player.username || "_"}
-                </span>
+              <span className="flex flex-1 items-center gap-2">
                 <span
                   className={`w-2 h-2 rounded-full ${
                     isOnline(player) ? "bg-green-500" : "bg-gray-500"
                   }`}
                 />
+                <span className="text-sm font-bold text-white truncate">
+                  {player.username || "_"}
+                </span>
+                <div className="flex-1 w-full" />
+                <span className="text-sm text-[#C8AA6E]">
+                  {lastSeen(player.lastGameTime)}
+                </span>
               </span>
             </div>
 

@@ -36,11 +36,6 @@ export const calculateLpGain = (
   const lpScaling = (lp / 10000) * 0.3;
   const rankMultiplier = (RANK_DIFFICULTY_MULTIPLIER[rank] + lpScaling) ** 1.1;
 
-  console.log({
-    baseGain,
-    statsBonus,
-    rankMultiplier,
-  });
   return Math.max(1, Math.round((baseGain + statsBonus) / rankMultiplier));
 };
 

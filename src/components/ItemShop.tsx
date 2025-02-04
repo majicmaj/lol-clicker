@@ -1,22 +1,21 @@
-import React, { useEffect } from "react";
 import { Item } from "../types";
 import { getAvailableUpgrades, purchaseItem } from "../utils/inventory";
 import { STAT_LABELS, STATS_LABELS_ICON_MAP } from "../constants/statLabels";
 import ShopItemCard from "./ShopItemCard";
 import { useGameState } from "../hooks/useGameState";
-import { STAT_ICON_MAP } from "../constants/statIcons";
 import { X } from "lucide-react";
+import { useRef, useState } from "react";
 
 interface ItemShopProps {
   items: Item[];
 }
 
 export const ItemShop: React.FC<ItemShopProps> = ({ items }) => {
-  const [searchQuery, setSearchQuery] = React.useState("");
-  const [selectedStats, setSelectedStats] = React.useState<string[]>([]);
-  const [showFilters, setShowFilters] = React.useState(false);
-  const [showSuggestions, setShowSuggestions] = React.useState(false);
-  const searchRef = React.useRef<HTMLDivElement>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedStats, setSelectedStats] = useState<string[]>([]);
+  const [showFilters, setShowFilters] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
 
   const { gameState, setGameState } = useGameState();
 
@@ -138,7 +137,7 @@ export const ItemShop: React.FC<ItemShopProps> = ({ items }) => {
                   >
                     <X className="h-4 w-4" />
                   </button>
-                  {Object.entries(STAT_LABELS || {})?.map(([key, label]) => (
+                  {Object.entries(STAT_LABELS || {})?.map(([key]) => (
                     <button
                       key={key}
                       onClick={() => toggleStatFilter(key)}

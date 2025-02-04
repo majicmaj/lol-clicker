@@ -23,8 +23,6 @@ export const ItemStats: React.FC<ItemStatsProps> = ({
 }) => {
   const totalStats = calculateTotalStats(inventory);
 
-  console.log(totalStats);
-
   const statGroups = [
     {
       title: "Attack Damage",

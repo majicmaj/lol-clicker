@@ -1,5 +1,5 @@
 import { GOLD_ICON } from "../constants/goldIcon";
-import { STAT_LABELS, STATS_LABELS_ICON_MAP } from "../constants/statLabels";
+import { STATS_LABELS_ICON_MAP } from "../constants/statLabels";
 import { useGameState } from "../hooks/useGameState";
 import { Item } from "../types";
 import { calculateDiscountedCost } from "../utils/inventory";
@@ -93,7 +93,6 @@ const ShopItemCard: React.FC<{
                   }
                   className="h-3 w-3"
                 />
-                {console.log(stat)}
               </span>
             </div>
           );
