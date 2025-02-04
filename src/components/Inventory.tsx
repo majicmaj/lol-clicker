@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { GOLD_ICON } from "../constants/goldIcon";
 import { Item } from "../types";
 import { Divider } from "./dividers/Divider";
-import { X } from "lucide-react";
 
 interface InventoryProps {
   items: Item[];
