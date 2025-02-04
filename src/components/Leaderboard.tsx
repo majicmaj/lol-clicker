@@ -170,7 +170,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
   });
 
   return (
-    <div className="bg-[#091428] p-4 border-2 border-[#C8AA6E] shadow-lg shadow-[#C8AA6E]/20">
+    <div className="flex flex-col bg-[#091428] p-4 border-2 border-[#C8AA6E] shadow-lg shadow-[#C8AA6E]/20">
       <h2 className="text-center text-xl font-bold text-[#C8AA6E]">
         Leaderboard
         {isConnected ? (
@@ -220,7 +220,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
         </button>
       </div>
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 max-h-96 overflow-auto scrollbar-thin scrollbar-thumb-[#C8AA6E] scrollbar-track-[#091428] border p-2 border-[#C8AA6E]/20">
         {sortedPlayers.map((player, index) => (
           <div
             key={player.id}
