@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { GameState, PlayerStats } from "../types";
+import { throttle } from "lodash"; // Import Lodash throttle
 
 // Import all rank images
 import bronzeRank from "../assets/ranks/bronze.webp";
@@ -20,6 +21,28 @@ interface LeaderboardProps {
   player: PlayerStats;
   setGameState: React.Dispatch<React.SetStateAction<GameState>>;
 }
+
+// Sorting order for ranks (higher rank = higher index)
+const rankOrder = [
+  "IRON",
+  "BRONZE",
+  "SILVER",
+  "GOLD",
+  "PLATINUM",
+  "EMERALD",
+  "DIAMOND",
+  "MASTER",
+  "GRANDMASTER",
+  "CHALLENGER",
+];
+
+// Convert Roman numerals to numbers for sorting (I = 1, II = 2, etc.)
+const romanToNumber: Record<string, number> = {
+  I: 1,
+  II: 2,
+  III: 3,
+  IV: 4,
+};
 
 const getRankImage = (rank: string): string => {
   const images: Record<string, string> = {
@@ -43,17 +66,23 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
   player,
   setGameState,
 }) => {
-  const [players, setPlayers] = useState<PlayerStats[]>([player]);
+  const [players, setPlayers] = useState<PlayerStats[]>([]);
   const [isConnected, setIsConnected] = useState(false);
-  const [usernameInput, setUsernameInput] = useState(player.username || ""); // Track username input
+  const [usernameInput, setUsernameInput] = useState(player.username || "");
+  const [sortOption, setSortOption] = useState<
+    "lp" | "gold" | "wins" | "losses" | "games"
+  >("lp");
+
+  const wsRef = React.useRef<WebSocket | null>(null);
 
   useEffect(() => {
     const ws = new WebSocket(wsUrl);
+    wsRef.current = ws;
 
     ws.onopen = () => {
       console.log("Connected to WebSocket server");
-      ws.send(JSON.stringify({ type: "updatePlayer", data: player }));
       setIsConnected(true);
+      sendPlayerUpdateThrottled(player); // Send initial update when connected
     };
 
     ws.onmessage = (event) => {
@@ -61,7 +90,6 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
         const message = JSON.parse(event.data);
         if (message.type === "leaderboard") {
           setPlayers(message.data);
-          console.log(message.data);
         }
       } catch (error) {
         console.error("Error parsing WebSocket message:", error);
@@ -72,20 +100,74 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
       console.error("WebSocket error:", error);
     };
 
+    ws.onclose = () => {
+      setIsConnected(false);
+      console.log("Disconnected from WebSocket server");
+    };
+
     return () => {
       ws.close();
     };
-  }, [player]);
+  }, []);
+
+  // Throttled function to send player updates
+  const sendPlayerUpdateThrottled = useCallback(
+    throttle((updatedPlayer: PlayerStats) => {
+      if (wsRef.current?.readyState === WebSocket.OPEN) {
+        wsRef.current.send(
+          JSON.stringify({ type: "updatePlayer", data: updatedPlayer })
+        );
+      }
+    }, 500), // Adjust throttle rate here (500ms)
+    []
+  );
+
+  // When player state changes (frequent in clicker games), throttle the updates
+  useEffect(() => {
+    sendPlayerUpdateThrottled(player);
+  }, [player, sendPlayerUpdateThrottled]);
 
   const handleSetUsername = () => {
     if (usernameInput.trim() === "") return;
 
-    // Update game state with new username
     setGameState((prevState) => ({
       ...prevState,
       player: { ...prevState.player, username: usernameInput },
     }));
   };
+
+  // Sort players based on the selected sorting option
+  const sortedPlayers = [...players].sort((a, b) => {
+    if (sortOption === "lp") {
+      // Compare ranks first
+      const rankA = rankOrder.indexOf(a.rank.toUpperCase());
+      const rankB = rankOrder.indexOf(b.rank.toUpperCase());
+
+      if (rankA !== rankB) return rankB - rankA; // Higher rank first
+
+      // Compare divisions if they exist
+      const divisionA = a.division ? romanToNumber[a.division] || 0 : 0;
+      const divisionB = b.division ? romanToNumber[b.division] || 0 : 0;
+
+      if (divisionA !== divisionB) return divisionA - divisionB; // Lower division first (I < II)
+
+      // Compare LP last
+      return b.lp - a.lp;
+    }
+
+    switch (sortOption) {
+      case "gold":
+        return b.gold - a.gold;
+      case "wins":
+        return b.wins - a.wins;
+      case "losses":
+        return b.losses - a.losses;
+      case "games":
+        return b.wins + b.losses - (a.wins + a.losses);
+      default:
+        return 0;
+    }
+  });
 
   return (
     <div className="bg-[#091428] p-4 border-2 border-[#C8AA6E] shadow-lg shadow-[#C8AA6E]/20">
@@ -99,6 +181,27 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
       </h2>
 
       <Divider />
+
+      {/* Sorting Tabs */}
+      <div className="flex justify-center mb-4">
+        {["lp", "gold", "wins", "losses", "games"].map((option) => (
+          <button
+            key={option}
+            onClick={() =>
+              setSortOption(
+                option as "lp" | "gold" | "wins" | "losses" | "games"
+              )
+            }
+            className={`px-2 py-1 text-white font-bold text-sm font-beaufort ${
+              sortOption === option
+                ? "bg-[#C8AA6E] text-black"
+                : "bg-slate-700 hover:bg-slate-600"
+            }`}
+          >
+            {option.toUpperCase()}
+          </button>
+        ))}
+      </div>
 
       {/* Username input field */}
       <div className="flex items-center gap-2 mb-4">
@@ -118,9 +221,9 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
       </div>
 
       <div className="flex flex-col gap-2">
-        {players.map((player, index) => (
+        {sortedPlayers.map((player, index) => (
           <div
-            key={index}
+            key={player.id}
             className="flex items-center gap-4 border-b border-[#C8AA6E]/20 pb-2"
           >
             <span className="text-lg font-bold text-white">{index + 1}.</span>
