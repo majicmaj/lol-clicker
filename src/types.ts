@@ -49,6 +49,7 @@ export interface Champion {
 }
 
 export interface PlayerStats {
+  username: string;
   rank: Rank;
   division: Division;
   lp: number;

@@ -37,7 +37,7 @@ const getRankImage = (rank: string): string => {
   return images[rank] || ironRank;
 };
 
-const wsUrl = "ws://localhost:8080";
+const wsUrl = "https://clicker.hobbyhood.app/";
 
 export const Leaderboard: React.FC<LeaderboardProps> = ({ player }) => {
   // The leaderboard state. Initially, we include the current player.
@@ -74,7 +74,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ player }) => {
     return () => {
       ws.close();
     };
-  }, [player, wsUrl]);
+  }, [player]);
 
   return (
     <div className="bg-[#091428] p-4 border-2 border-[#C8AA6E] shadow-lg shadow-[#C8AA6E]/20">
@@ -101,8 +101,9 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ player }) => {
               className="w-8 h-8 object-cover"
             />
             <div className="flex flex-col gap-1">
+              {/* Display the player's username and rank/division */}
               <span className="text-lg font-bold text-white">
-                {player.rank} {player.division}
+                {player.username} — {player.rank.slice(0, 1)} {player.division}
               </span>
               <span className="text-sm text-[#C8AA6E]">
                 {formatBigNumbers(player.lp)} LP -{" "}
