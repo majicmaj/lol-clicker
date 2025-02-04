@@ -37,7 +37,7 @@ const getRankImage = (rank: string): string => {
   return images[rank] || ironRank;
 };
 
-const wsUrl = "https://clicker.hobbyhood.app/";
+const wsUrl = "ws://clicker.hobbyhood.app";
 
 export const Leaderboard: React.FC<LeaderboardProps> = ({
   player,
