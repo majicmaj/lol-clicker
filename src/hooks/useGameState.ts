@@ -124,7 +124,7 @@ const fetchItems = async (): Promise<Item[]> => {
             0,
         },
         count: 1,
-        from: item.from || [],
+        from: [],
       };
     });
 };

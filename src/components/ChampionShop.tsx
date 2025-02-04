@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Champion, GameState } from "../types";
+import { Champion } from "../types";
 import { RANK_VALUES } from "../utils/ranks";
+import { useGameState } from "../hooks/useGameState";
 
 interface ChampionShopProps {
-  gameState: GameState;
   onPurchase: (champion: Champion) => void;
 }
 
-export const ChampionShop: React.FC<ChampionShopProps> = ({
-  gameState,
-  onPurchase,
-}) => {
+export const ChampionShop: React.FC<ChampionShopProps> = ({ onPurchase }) => {
   const [champions, setChampions] = useState<Champion[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
+
+  const { gameState } = useGameState();
 
   useEffect(() => {
     const fetchChampions = async () => {

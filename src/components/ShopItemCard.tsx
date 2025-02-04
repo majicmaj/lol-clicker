@@ -1,20 +1,15 @@
 import { STAT_LABELS } from "../constants/statLabels";
-import { Item, GameState } from "../types";
+import { useGameState } from "../hooks/useGameState";
+import { Item } from "../types";
 import { calculateDiscountedCost } from "../utils/inventory";
 
 const ShopItemCard: React.FC<{
   item: Item;
-  gameState: GameState;
   onPurchase: (item: Item) => void;
   isUpgrade?: boolean;
   hasComponents?: boolean;
-}> = ({
-  item,
-  gameState,
-  onPurchase,
-  isUpgrade = false,
-  hasComponents = false,
-}) => {
+}> = ({ item, onPurchase, isUpgrade = false, hasComponents = false }) => {
+  const { gameState } = useGameState();
   const discountedCost = calculateDiscountedCost(item, gameState.inventory);
   const canAfford = gameState.player.gold >= discountedCost;
 

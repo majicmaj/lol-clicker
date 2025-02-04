@@ -1,58 +1,28 @@
 import React, { useEffect } from "react";
-import { Item, GameState } from "../types";
-import { purchaseItem } from "../utils/inventory";
+import { Item } from "../types";
+import { getAvailableUpgrades, purchaseItem } from "../utils/inventory";
 import { STAT_LABELS } from "../constants/statLabels";
 import ShopItemCard from "./ShopItemCard";
 import { useGameState } from "../hooks/useGameState";
 
 interface ItemShopProps {
   items: Item[];
-  gameState: GameState;
 }
 
-export const ItemShop: React.FC<ItemShopProps> = ({ items, gameState }) => {
+export const ItemShop: React.FC<ItemShopProps> = ({ items }) => {
   const [searchQuery, setSearchQuery] = React.useState("");
   const [selectedStats, setSelectedStats] = React.useState<string[]>([]);
   const [showFilters, setShowFilters] = React.useState(false);
   const [showSuggestions, setShowSuggestions] = React.useState(false);
   const searchRef = React.useRef<HTMLDivElement>(null);
 
-  const { setGameState } = useGameState();
+  const { gameState, setGameState } = useGameState();
 
   const handlePurchase = (item: Item) => {
-    if (item.cost <= 0 || isNaN(item.cost)) {
-      alert("Invalid item cost!");
-      return;
+    const newGameState = purchaseItem(gameState, item);
+    if (newGameState) {
+      setGameState(newGameState);
     }
-
-    const maxQuantity = Math.floor(gameState.player.gold / item.cost);
-
-    if (maxQuantity <= 0) {
-      alert("Not enough gold to purchase this item!");
-      return;
-    }
-
-    const quantityInput = prompt(
-      `How many ${item.name}s would you like to buy? (Max: ${maxQuantity})`
-    );
-
-    if (quantityInput === null) return; // User canceled prompt
-
-    const quantity = Number(quantityInput);
-
-    if (isNaN(quantity) || quantity <= 0 || quantity > maxQuantity) {
-      alert("Invalid quantity!");
-      return;
-    }
-
-    const newState = purchaseItem(gameState, item, quantity);
-
-    if (!newState) {
-      alert("Not enough gold to purchase this item!");
-      return;
-    }
-
-    setGameState(newState);
   };
 
   const toggleStatFilter = (stat: string) => {
@@ -73,24 +43,15 @@ export const ItemShop: React.FC<ItemShopProps> = ({ items, gameState }) => {
     return matchesSearch && hasStats;
   });
 
-  // const availableUpgrades = getAvailableUpgrades(items, gameState.inventory);
+  const availableUpgrades = getAvailableUpgrades(items, gameState.inventory);
+
+  const hasComponents = Object.keys(gameState.inventory).some(
+    (id) => availableUpgrades[id]
+  );
 
   const filteredSuggestions = items.filter((item) =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        searchRef.current &&
-        !searchRef.current.contains(event.target as Node)
-      ) {
-        setShowSuggestions(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   return (
     <div className="bg-[#091428] p-6 border-2 border-[#C8AA6E] shadow-lg shadow-[#C8AA6E]/20">
@@ -182,26 +143,6 @@ export const ItemShop: React.FC<ItemShopProps> = ({ items, gameState }) => {
           )}
         </div>
 
-        {/* Available Upgrades
-        {Object.keys(availableUpgrades).length > 0 && (
-          <section className="mb-8 max-h-96 overflow-auto border border-[#C8AA6E] p-4">
-            <h3 className="text-xl font-bold mb-4 bg-gradient-to-r from-[#C8AA6E] to-[#C8AA6E]/80 text-transparent bg-clip-text">
-              Available Upgrades
-            </h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {availableUpgrades?.map((item) => (
-                <ShopItemCard
-                  key={item.id}
-                  item={item}
-                  gameState={gameState}
-                  onPurchase={handlePurchase}
-                  isUpgrade
-                />
-              ))}
-            </div>
-          </section>
-        )} */}
-
         {/* Main Item Grid */}
         <section>
           <h3 className="text-xl font-bold mb-4 bg-gradient-to-r from-[#C8AA6E] to-[#C8AA6E]/80 text-transparent bg-clip-text">
@@ -212,8 +153,8 @@ export const ItemShop: React.FC<ItemShopProps> = ({ items, gameState }) => {
               <ShopItemCard
                 key={item.id}
                 item={item}
-                gameState={gameState}
                 onPurchase={handlePurchase}
+                hasComponents={hasComponents}
               />
             ))}
           </div>

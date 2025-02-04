@@ -51,28 +51,6 @@ export const calculateDiscountedCost = (
   item: Item,
   inventory: Record<string, Item>
 ): number => {
-  // Create a temporary copy of the inventory so we can remove components as they’re used.
-  // const tempInventory =
-  // let componentCost = 0;
-
-  // // Loop through each required component in the recipe.
-  // for (const componentId of item.from) {
-  //   // Find the index of a matching component in the temporary inventory.
-  //   const index = tempInventory.findIndex(
-  //     (invItem) => invItem.id === componentId
-  //   );
-  //   if (index !== -1) {
-  //     // Add its cost and remove it so it can't be used again.
-  //     componentCost += tempInventory[index].cost;
-
-  //     // If its count > 1, decrement the count. Otherwise, remove it from the inventory.
-  //     if (tempInventory[index].count && tempInventory[index].count > 1) {
-  //       tempInventory[index].count -= 1;
-  //     } else {
-  //       tempInventory.splice(index, 1);
-  //     }
-  //   }
-
   const tempInventory = { ...inventory };
   let componentCost = 0;
 
@@ -91,9 +69,9 @@ export const calculateDiscountedCost = (
     }
 
     // If a component is missing, the item cannot be purchased.
-    else {
-      return 0;
-    }
+    // else {
+    //   return 0;
+    // }
   }
 
   // The discounted cost is the item's cost minus the total component cost.
@@ -102,25 +80,27 @@ export const calculateDiscountedCost = (
 
 export const purchaseItem = (
   gameState: GameState,
-  item: Item,
-  quantity: number
+  item: Item
 ): GameState | null => {
-  const cost = item.cost * quantity;
+  const cost = calculateDiscountedCost(item, gameState.inventory);
 
-  if (gameState.player.gold < cost) {
-    return null; // Not enough gold
-  }
+  if (cost === 0) return null;
 
-  // Ensure deep copy of inventory
   const newInventory = { ...gameState.inventory };
 
-  if (newInventory[item.id]) {
-    newInventory[item.id] = {
-      ...newInventory[item.id], // Ensure new reference
-      count: newInventory[item.id].count + quantity, // Correctly increment count
-    };
+  if (item.id in newInventory) {
+    newInventory[item.id].count += 1;
   } else {
-    newInventory[item.id] = { ...item, count: quantity }; // Create new entry
+    newInventory[item.id] = { ...item, count: 1 };
+  }
+
+  // remove components from inventory
+  for (const componentId of item.from) {
+    if (newInventory[componentId]?.count > 1) {
+      newInventory[componentId].count -= 1;
+    } else {
+      delete newInventory[componentId];
+    }
   }
 
   return {

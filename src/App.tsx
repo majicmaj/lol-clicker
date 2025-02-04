@@ -177,11 +177,8 @@ function App() {
           )}
           {activeTab === "shop" && (
             <div className="space-y-6">
-              <ItemShop items={items} gameState={gameState} />
-              <ChampionShop
-                gameState={gameState}
-                onPurchase={handlePurchaseChampion}
-              />
+              <ItemShop items={items} />
+              <ChampionShop onPurchase={handlePurchaseChampion} />
             </div>
           )}
           {activeTab === "inventory" && (
@@ -216,12 +213,8 @@ function App() {
           <div className="grid grid-cols-2 gap-8">
             <Inventory items={gameState.inventory} onSell={handleSellItem} />
             <ChampionInventory champions={gameState.player.champions} />
-            <ItemShop items={items} gameState={gameState} />
-
-            <ChampionShop
-              gameState={gameState}
-              onPurchase={handlePurchaseChampion}
-            />
+            <ItemShop items={items} />
+            <ChampionShop onPurchase={handlePurchaseChampion} />
           </div>
         </div>
       </div>
