@@ -28,4 +28,5 @@ export const GOLD_EFFICIENCY = {
   lethality: 35,
   armorPen: 35,
   magicPen: 35,
+  lifesteal: 55,
 };

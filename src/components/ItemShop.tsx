@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
 import { Item } from "../types";
 import { getAvailableUpgrades, purchaseItem } from "../utils/inventory";
-import { STAT_LABELS } from "../constants/statLabels";
+import { STAT_LABELS, STATS_LABELS_ICON_MAP } from "../constants/statLabels";
 import ShopItemCard from "./ShopItemCard";
 import { useGameState } from "../hooks/useGameState";
+import { STAT_ICON_MAP } from "../constants/statIcons";
+import { X } from "lucide-react";
 
 interface ItemShopProps {
   items: Item[];
@@ -124,41 +126,59 @@ export const ItemShop: React.FC<ItemShopProps> = ({ items }) => {
               <h3 className="text-lg font-semibold text-[#C8AA6E]">
                 Filter by Stats:
               </h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
-                {Object.entries(STAT_LABELS || {})?.map(([key, label]) => (
+              <div className="grid grid-cols-[auto,1fr] gap-2">
+                <div className="grid grid-cols-1">
                   <button
-                    key={key}
-                    onClick={() => toggleStatFilter(key)}
-                    className={`px-3 py-1 text-sm transition-colors ${
-                      selectedStats.includes(key)
+                    onClick={() => setSelectedStats([])}
+                    className={`p-1 text-sm transition-colors ${
+                      selectedStats.length === 0
                         ? "bg-[#C8AA6E] text-[#091428]"
                         : "bg-[#0A1428] text-[#C8AA6E] border border-[#C8AA6E]/50 hover:border-[#C8AA6E]"
                     }`}
                   >
-                    {label}
+                    <X className="h-4 w-4" />
                   </button>
-                ))}
+                  {Object.entries(STAT_LABELS || {})?.map(([key, label]) => (
+                    <button
+                      key={key}
+                      onClick={() => toggleStatFilter(key)}
+                      className={`p-1 text-sm transition-colors ${
+                        selectedStats.includes(key)
+                          ? "bg-[#C8AA6E] text-[#091428]"
+                          : "bg-[#0A1428] text-[#C8AA6E] border border-[#C8AA6E]/50 hover:border-[#C8AA6E]"
+                      }`}
+                    >
+                      <img
+                        src={
+                          STATS_LABELS_ICON_MAP[
+                            key as keyof typeof STATS_LABELS_ICON_MAP
+                          ]
+                        }
+                        className="h-4 w-4"
+                      />
+                    </button>
+                  ))}
+                </div>
+                {/* Main Item Grid */}
+                <section>
+                  <h3 className="text-xl font-bold mb-4 bg-gradient-to-r from-[#C8AA6E] to-[#C8AA6E]/80 text-transparent bg-clip-text">
+                    All Items
+                  </h3>
+                  <div className="max-h-96 overflow-auto border border-[#C8AA6E] p-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {filteredItems?.map((item) => (
+                      <ShopItemCard
+                        key={item.id}
+                        item={item}
+                        onPurchase={handlePurchase}
+                        hasComponents={hasComponents}
+                      />
+                    ))}
+                  </div>
+                </section>
               </div>
             </div>
           )}
         </div>
-
-        {/* Main Item Grid */}
-        <section>
-          <h3 className="text-xl font-bold mb-4 bg-gradient-to-r from-[#C8AA6E] to-[#C8AA6E]/80 text-transparent bg-clip-text">
-            All Items
-          </h3>
-          <div className="max-h-96 overflow-auto border border-[#C8AA6E] p-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {filteredItems?.map((item) => (
-              <ShopItemCard
-                key={item.id}
-                item={item}
-                onPurchase={handlePurchase}
-                hasComponents={hasComponents}
-              />
-            ))}
-          </div>
-        </section>
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
-import { STAT_LABELS } from "../constants/statLabels";
+import { GOLD_ICON } from "../constants/goldIcon";
+import { STAT_LABELS, STATS_LABELS_ICON_MAP } from "../constants/statLabels";
 import { useGameState } from "../hooks/useGameState";
 import { Item } from "../types";
 import { calculateDiscountedCost } from "../utils/inventory";
@@ -16,7 +17,7 @@ const ShopItemCard: React.FC<{
   return (
     <div
       onClick={() => canAfford && onPurchase(item)}
-      className={`relative bg-[#0A1428] p-3 border-2 transition-all duration-300 ${
+      className={`relative bg-[#0A1428] p-1 flex flex-col items-center overflow-hidden border-2 transition-all duration-300 ${
         canAfford
           ? "border-[#C8AA6E]/30 hover:border-[#C8AA6E] cursor-pointer hover:shadow-lg hover:shadow-[#C8AA6E]/20"
           : "border-[#C8AA6E]/10 cursor-not-allowed opacity-50"
@@ -40,30 +41,33 @@ const ShopItemCard: React.FC<{
       <img
         src={item.image}
         alt={item.name}
-        className="w-16 h-16 mx-auto mb-3 border border-[#C8AA6E]/30"
+        className="w-16 h-16 mb-1 mx-auto border border-[#C8AA6E]/30"
       />
 
       {/* Item Name */}
-      <h4 className="text-center font-bold mb-2 text-[#C8AA6E]">{item.name}</h4>
+      <h4 className="text-center text-xs font-bold text-[#C8AA6E]">
+        {item.name}
+      </h4>
 
       {/* Price */}
-      <div className="text-center mb-3">
+      <div className="text-center">
         <span
-          className={`font-bold ${
+          className={`text-xs ${
             canAfford ? "text-[#C8AA6E]" : "text-gray-500"
           }`}
         >
-          {discountedCost}g
+          {discountedCost}
+          <img src={GOLD_ICON} className="h-3 w-3 inline-block" />
         </span>
         {discountedCost !== item.cost && (
-          <span className="ml-2 text-sm text-gray-400 line-through">
+          <span className="text-sm text-gray-400 line-through">
             {item.cost}g
           </span>
         )}
       </div>
 
       {/* Stats Grid */}
-      <div className="grid text-xs">
+      <div className="grid text-xs flex-1 items-end">
         {Object.entries(item.stats || {})?.map(([stat, value]) => {
           if (!value) return null;
           return (
@@ -71,7 +75,7 @@ const ShopItemCard: React.FC<{
               key={stat}
               className="flex items-center justify-center px-2 bg-[#091428]/50"
             >
-              <span className="text-[#C8AA6E]">+</span>
+              <span className="text-amber-400">+</span>
               <span className="ml-1 text-white">
                 {stat === "critChance" ||
                 stat === "attackSpeed" ||
@@ -81,7 +85,15 @@ const ShopItemCard: React.FC<{
               </span>
 
               <span className="ml-1 text-[#C8AA6E]/80 text-xs uppercase">
-                {STAT_LABELS[stat as keyof typeof STAT_LABELS]}
+                <img
+                  src={
+                    STATS_LABELS_ICON_MAP[
+                      stat as keyof typeof STATS_LABELS_ICON_MAP
+                    ]
+                  }
+                  className="h-3 w-3"
+                />
+                {console.log(stat)}
               </span>
             </div>
           );

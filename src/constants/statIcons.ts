@@ -56,20 +56,6 @@ export const statIconMap = {
   GoldPer:
     "https://static.wikia.nocookie.net/leagueoflegends/images/2/2b/Gold_icon.png",
 };
-// [
-//   ('FlatArmorMod',
-//   'FlatCritChanceMod',
-//   'FlatHPPoolMod',
-//   'FlatHPRegenMod',
-//   'FlatMPPoolMod',
-//   'FlatMagicDamageMod',
-//   'FlatMovementSpeedMod',
-//   'FlatPhysicalDamageMod',
-//   'FlatSpellBlockMod',
-//   'PercentAttackSpeedMod',
-//   'PercentLifeStealMod',
-//   'PercentMovementSpeedMod')
-// ]
 
 export const statsNameMap = {
   FlatMovememntSpeed: "Movement Speed",

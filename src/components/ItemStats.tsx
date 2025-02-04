@@ -66,6 +66,13 @@ export const ItemStats: React.FC<ItemStatsProps> = ({
           color: "text-orange-600",
           suffix: "%",
         },
+        {
+          icon: statIconMap.LifeSteal,
+          name: "Life Steal",
+          value: (totalStats.lifesteal || 0).toFixed(1),
+          color: "text-red-400",
+          suffix: "%",
+        },
       ],
     },
     {
