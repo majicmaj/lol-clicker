@@ -9,10 +9,8 @@ import { GameStats } from "./components/GameStats";
 import { ItemStats } from "./components/ItemStats";
 import { Navigation } from "./components/Navigation";
 import { RotateCcw } from "lucide-react";
-// import { ChampionShop } from "./components/ChampionShop";
-// import { ChampionInventory } from "./components/ChampionInventory";
-// import { Champion } from "./types";
 import { Leaderboard } from "./components/Leaderboard";
+import PlayButton from "./components/PlayButton";
 
 function App() {
   const {
@@ -35,16 +33,6 @@ function App() {
     const newState = sellItem(gameState, id, count);
     setGameState(newState);
   };
-
-  // const handlePurchaseChampion = (champion: Champion) =>
-  //   setGameState({
-  //     ...gameState,
-  //     player: {
-  //       ...gameState.player,
-  //       lp: gameState.player.lp - 6300,
-  //       champions: [...gameState.player.champions, champion],
-  //     },
-  //   });
 
   const handleReset = () => {
     if (showResetConfirm) {
@@ -138,24 +126,7 @@ function App() {
           {activeTab === "overview" && (
             <div className="space-y-6">
               <RankDisplay player={gameState.player} />
-              <button
-                onClick={handleClick}
-                className="relative w-full grid place-items-center mb-6 active:brightness-50"
-              >
-                <div
-                  style={{
-                    transform: "perspective(100px) rotateX(20deg)",
-                  }}
-                  className="absolute w-full max-w-32 bg-gradient-to-b from-slate-900 to-[#0397AB]/50
-                           text-white font-bold py-5 px-1 transition-all duration-300
-                           border-2 border-[#0397AB]/80 hover:border-[#0AC8B9]
-                           shadow-lg shadow-[#0397AB]/20 hover:shadow-[#0AC8B9]/40
-                           transform hover:-translate-y-1"
-                />
-                <div className="relative flex items-center justify-center text-md font-beaufort uppercase">
-                  Play Game
-                </div>
-              </button>
+              <PlayButton handleClick={handleClick} />
             </div>
           )}
           {activeTab === "stats" && (
@@ -191,24 +162,7 @@ function App() {
 
         {/* Desktop Play Button and Inventory */}
         <div className="hidden lg:visible lg:flex flex-col gap-8">
-          <button
-            onClick={handleClick}
-            className="relative w-full grid place-items-center mb-6 active:brightness-50"
-          >
-            <div
-              style={{
-                transform: "perspective(100px) rotateX(20deg)",
-              }}
-              className="absolute w-full max-w-[200px] bg-gradient-to-b from-slate-900 to-[#0397AB]/50
-                           text-white font-bold py-6 px-1 transition-all duration-300
-                           border-2 border-[#0397AB]/80 hover:border-[#0AC8B9]
-                           shadow-lg shadow-[#0397AB]/20 hover:shadow-[#0AC8B9]/40
-                           transform hover:-translate-y-1"
-            />
-            <div className="relative flex items-center justify-center text-xl font-beaufort uppercase">
-              Play Game
-            </div>
-          </button>
+          <PlayButton handleClick={handleClick} />
 
           <div className="grid grid-cols-2 gap-8">
             <Inventory items={gameState.inventory} onSell={handleSellItem} />

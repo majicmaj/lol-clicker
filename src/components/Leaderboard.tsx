@@ -82,39 +82,47 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ player }) => {
 
   const wsRef = React.useRef<WebSocket | null>(null);
 
-  useEffect(() => {
-    const ws = new WebSocket(wsUrl);
-    wsRef.current = ws;
+  const handleReconnect = () => {
+    if (!isConnected) {
+      console.log("Attempting to reconnect...");
+      const ws = new WebSocket(wsUrl);
+      wsRef.current = ws;
 
-    ws.onopen = () => {
-      console.log("Connected to WebSocket server");
-      setIsConnected(true);
-      sendPlayerUpdateThrottled(player); // Send initial update when connected
-    };
+      ws.onopen = () => {
+        console.log("Reconnected to WebSocket server");
+        setIsConnected(true);
+        sendPlayerUpdateThrottled(player);
+      };
 
-    ws.onmessage = (event) => {
-      try {
-        const message = JSON.parse(event.data);
-        if (message.type === "leaderboard") {
-          setPlayers(message.data);
+      ws.onmessage = (event) => {
+        try {
+          const message = JSON.parse(event.data);
+          if (message.type === "leaderboard") {
+            setPlayers(message.data);
+          }
+        } catch (error) {
+          console.error("Error parsing WebSocket message:", error);
         }
-      } catch (error) {
-        console.error("Error parsing WebSocket message:", error);
-      }
-    };
+      };
 
-    ws.onerror = (error) => {
-      console.error("WebSocket error:", error);
-    };
+      ws.onerror = (error) => {
+        console.error("WebSocket error:", error);
+      };
 
-    ws.onclose = () => {
-      setIsConnected(false);
-      console.log("Disconnected from WebSocket server");
-    };
+      ws.onclose = () => {
+        setIsConnected(false);
+        console.log("Disconnected from WebSocket server");
+      };
+    }
+  };
+
+  useEffect(() => {
+    handleReconnect();
 
     return () => {
-      ws.close();
+      wsRef.current?.close();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Throttled function to send player updates
@@ -126,7 +134,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ player }) => {
         );
       }
     }, 1000), // Adjust throttle rate here (500ms)
-    []
+    [isConnected]
   );
 
   // When player state changes (frequent in clicker games), throttle the updates
@@ -184,17 +192,26 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ player }) => {
 
   return (
     <div className="flex flex-col bg-[#091428] p-4 border-2 border-[#C8AA6E] shadow-lg shadow-[#C8AA6E]/20">
-      <h2 className="text-center text-xl font-bold text-[#C8AA6E]">
-        Leaderboard
+      <div className="grid gap-1 grid-cols-[1fr,auto,1fr] place-items-center">
+        <div />
+        <h2 className="text-center text-xl font-bold text-[#C8AA6E]">
+          Leaderboard
+        </h2>
         {isConnected ? (
-          <span className="h-2 w-2 mb-1 bg-green-500 rounded-full inline-block ml-2" />
+          <div className="flex h-min w-min gap-1 px-1 items-center text-xs font-spiegel text-green-500">
+            <span className="h-2 w-2 bg-green-500 rounded-full inline-block" />
+          </div>
         ) : (
-          <span className="h-2 w-2 mb-1 bg-red-500 rounded-full inline-block ml-2" />
+          <button
+            className="flex h-min w-min gap-1 px-1 items-center text-xs font-spiegel border border-red-500 text-red-500"
+            onClick={handleReconnect}
+          >
+            <span className="h-2 w-2 bg-red-500 rounded-full inline-block" />
+            <span className="">Reconnect</span>
+          </button>
         )}
-      </h2>
-
+      </div>
       <Divider />
-
       {/* Sorting Tabs */}
       <div className="flex justify-center mb-4">
         {["lp", "gold", "wins", "losses", "games", "activity"].map((option) => (
@@ -205,7 +222,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ player }) => {
                 option as "lp" | "gold" | "wins" | "losses" | "games"
               )
             }
-            className={`px-2 py-1 text-white font-bold text-sm font-beaufort ${
+            className={`px-1.5 text-white font text-xs font-spiegel ${
               sortOption === option
                 ? "bg-[#C8AA6E] text-black"
                 : "bg-slate-700 hover:bg-slate-600"
@@ -215,7 +232,6 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ player }) => {
           </button>
         ))}
       </div>
-
       {/* Username input field */}
       <div className="flex items-center gap-2 mb-4">
         <input
@@ -232,7 +248,6 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ player }) => {
           Set Name
         </button>
       </div>
-
       <div className="flex flex-col gap-2 max-h-96 overflow-auto scrollbar-thin scrollbar-thumb-[#C8AA6E] scrollbar-track-[#091428] border p-2 border-[#C8AA6E]/20">
         {sortedPlayers.map((player, index) => (
           <div
