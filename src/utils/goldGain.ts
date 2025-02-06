@@ -1,6 +1,8 @@
 import { ItemStats } from "../types";
 import { RANK_DIFFICULTY_MULTIPLIER } from "./ranks";
 
+const nLogN = (n: number) => n * Math.log(n);
+
 export const calculateGoldGain = (
   totalStats: ItemStats,
   rank: string,
@@ -16,12 +18,13 @@ export const calculateGoldGain = (
   const statsBonus =
     (moveSpeed + moveSpeedPercent * 4 + tenacity + healAndShieldPower) / 4;
 
-  const lpScaling = lp ** 1.1 / 100;
-  const rankMultiplier =
+  const lpScaling = lp / 100;
+
+  const rankMultiplier = nLogN(
     RANK_DIFFICULTY_MULTIPLIER[
       rank as keyof typeof RANK_DIFFICULTY_MULTIPLIER
-    ] +
-    lpScaling ** 1.1;
+    ] + lpScaling
+  );
 
   return Math.max(10, Math.round(10 + statsBonus - rankMultiplier));
 };
