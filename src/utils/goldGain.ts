@@ -17,5 +17,5 @@ export const calculateGoldGain = (
     ] +
     lpScaling ** 1.1;
 
-  return Math.max(10, Math.round(10 * (1 + msBonus / 10) - rankMultiplier));
+  return Math.max(10, Math.round(1 + msBonus / 10 - rankMultiplier));
 };

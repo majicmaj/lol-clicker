@@ -85,19 +85,19 @@ const LeaderboardRow = ({ player, index }: { player: any; index: number }) => {
       <div className="w-full grid grid-cols-4 place-items-center gap-2">
         <div className="flex flex-col items-center">
           <span className="text-white">{formatBigNumbers(player.lp)}</span>
-          <span className="text-sm text-[#C8AA6E]">LP</span>
+          <span className="text-xs text-[#C8AA6E]">LP</span>
         </div>
         <div className="flex flex-col items-center">
           <span className="text-white">{formatBigNumbers(player.wins)}</span>
-          <span className="text-sm text-[#C8AA6E]">W</span>
+          <span className="text-xs text-[#C8AA6E]">W</span>
         </div>
         <div className="flex flex-col items-center">
           <span className="text-white">{formatBigNumbers(player.losses)}</span>
-          <span className="text-sm text-[#C8AA6E]">L</span>
+          <span className="text-xs text-[#C8AA6E]">L</span>
         </div>
         <div className="flex flex-col items-center">
           <span className="text-white">{formatBigNumbers(player.gold)}</span>
-          <img src={GOLD_ICON} alt="Gold" className="w-5 h-5 object-cover" />
+          <img src={GOLD_ICON} alt="Gold" className="w-4 h-4 object-cover" />
         </div>
 
         {!!player?.items?.length && (

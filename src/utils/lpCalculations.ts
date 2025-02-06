@@ -36,7 +36,7 @@ export const calculateLpGain = (
   const lpScaling = (lp / 10000) * 0.3;
   const rankMultiplier = (RANK_DIFFICULTY_MULTIPLIER[rank] + lpScaling) ** 1.1;
 
-  return Math.max(1, Math.round((baseGain + statsBonus) / rankMultiplier));
+  return Math.max(10, Math.round((baseGain + statsBonus) / rankMultiplier));
 };
 
 export const calculateLpLoss = (
@@ -57,6 +57,6 @@ export const calculateLpLoss = (
   const lpScaling = lp / 10000;
 
   return Math.round(
-    Math.max(-0, baseLoss + (rankMultiplier + lpScaling) ** 1.1 - statsBonus)
+    Math.max(10, baseLoss + (rankMultiplier + lpScaling) ** 1.1 - statsBonus)
   );
 };
