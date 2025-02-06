@@ -8,7 +8,7 @@ export const calculateGoldGain = (
 ): number => {
   const { moveSpeed = 0, moveSpeedPercent = 0 } = totalStats;
 
-  const msBonus = moveSpeed + moveSpeedPercent * moveSpeed;
+  const msBonus = moveSpeed + moveSpeedPercent;
   const tenacity = totalStats.tenacity || 0;
   const healAndShieldPower = totalStats.healAndShieldPower || 0;
 
