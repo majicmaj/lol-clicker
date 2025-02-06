@@ -111,7 +111,7 @@ const LeaderboardRow = ({ player, index }: { player: any; index: number }) => {
                   title={item.name}
                 />
                 <span className="absolute -bottom-1 -right-1 bg-slate-900 text-[#C8AA6E] text-xs font-bold px-0.5">
-                  {formatBigNumbers(item.count)}
+                  {formatBigNumbers(item.count || 1)}
                 </span>
               </div>
             ))}
