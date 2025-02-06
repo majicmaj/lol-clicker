@@ -79,24 +79,8 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#10A13] bg-[radial-gradient(circle_at_center,rgba(0,168,255,0.15),rgba(9,20,40,0))]">
+    <div className="min-h-screen bg-[#10A13] bg-gradient-to-b from-[#091428] to-[#0A1428]">
       <div className="lg:grid lg:grid-rows-1 h-[100vh] p-4 gap-8">
-        {/* Reset Button */}
-        {/* <div className="absolute top-2 right-6">
-          <button
-            onClick={handleReset}
-            className={`flex items-center gap-2 px-4 py-1 text-sm transition-all duration-300 border border-[#0397AB]/80 shadow-lg shadow-[#0397AB]/20 text-white font-bold 
-              ${
-                showResetConfirm
-                  ? "bg-red-500 hover:bg-red-600"
-                  : "bg-[#0A1428] hover:bg-[#0A1428]/80"
-              }`}
-          >
-            <RotateCcw size={12} />
-            <span>{showResetConfirm ? "Confirm" : "Reset"}</span>
-          </button>
-        </div> */}
-
         {/* Mobile Layout */}
         <div className="lg:hidden flex flex-col overflow-auto max-h-[calc(100vh-6rem)]">
           {activeTab === "overview" && (

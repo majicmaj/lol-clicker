@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 const monsterColors = {
-  Storm: "text-blue-600",
+  Storm: "text-blue-500",
   Infernal: "text-red-600",
   Glacial: "text-blue-300",
   Ocean: "text-blue-300",
@@ -159,8 +159,8 @@ const DrakeDisplay = () => {
   return (
     <div>
       {weather && (
-        <div className="font-beaufort flex flex-col items-center gap-1">
-          <p className=" text-[#C8AA6E]">Current Dragon Soul</p>
+        <div className="text-xl font-medium font-beaufort flex flex-col items-center gap-1">
+          <p className="font-thin text-xl text-[#C8AA6E]">Dragon Soul</p>
           <span className={getColor(activeMonster)}>
             {dragonEffectName[activeMonster]}
           </span>
@@ -169,8 +169,7 @@ const DrakeDisplay = () => {
             alt={activeMonster}
             className="w-6 h-6"
           />
-          {activeMonster}
-          <span className="italic text-sm font-spiegel opacity-70">
+          <span className="mt-1 italic text-xs font-spiegel opacity-70">
             No Effect
           </span>
         </div>
