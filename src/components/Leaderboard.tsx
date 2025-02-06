@@ -123,39 +123,41 @@ export const Leaderboard: React.FC<LeaderboardProps> = () => {
   };
 
   // Sort players based on the selected sorting option
-  const sortedPlayers = [...players].sort((a, b) => {
-    if (sortOption === "lp") {
-      // Compare ranks first
-      const rankA = rankOrder.indexOf(a.rank.toUpperCase());
-      const rankB = rankOrder.indexOf(b.rank.toUpperCase());
+  const sortedPlayers = [...players]
+    .filter((p) => p.wins + p.losses > 0)
+    .sort((a, b) => {
+      if (sortOption === "lp") {
+        // Compare ranks first
+        const rankA = rankOrder.indexOf(a.rank.toUpperCase());
+        const rankB = rankOrder.indexOf(b.rank.toUpperCase());
 
-      if (rankA !== rankB) return rankB - rankA; // Higher rank first
+        if (rankA !== rankB) return rankB - rankA; // Higher rank first
 
-      // Compare divisions if they exist
-      const divisionA = a.division ? romanToNumber[a.division] || 0 : 0;
-      const divisionB = b.division ? romanToNumber[b.division] || 0 : 0;
+        // Compare divisions if they exist
+        const divisionA = a.division ? romanToNumber[a.division] || 0 : 0;
+        const divisionB = b.division ? romanToNumber[b.division] || 0 : 0;
 
-      if (divisionA !== divisionB) return divisionA - divisionB; // Lower division first (I < II)
+        if (divisionA !== divisionB) return divisionA - divisionB; // Lower division first (I < II)
 
-      // Compare LP last
-      return b.lp - a.lp;
-    }
+        // Compare LP last
+        return b.lp - a.lp;
+      }
 
-    switch (sortOption) {
-      case "gold":
-        return b.gold - a.gold;
-      case "wins":
-        return b.wins - a.wins;
-      case "losses":
-        return b.losses - a.losses;
-      case "games":
-        return b.wins + b.losses - (a.wins + a.losses);
-      case "lastGameTime":
-        return b.lastGameTime - a.lastGameTime;
-      default:
-        return 0;
-    }
-  });
+      switch (sortOption) {
+        case "gold":
+          return b.gold - a.gold;
+        case "wins":
+          return b.wins - a.wins;
+        case "losses":
+          return b.losses - a.losses;
+        case "games":
+          return b.wins + b.losses - (a.wins + a.losses);
+        case "activity":
+          return b.lastGameTime - a.lastGameTime;
+        default:
+          return 0;
+      }
+    });
 
   return (
     <div className="overflow-auto flex flex-col bg-[#091428] p-4 border-2 border-[#C8AA6E] shadow-lg shadow-[#C8AA6E]/20">
