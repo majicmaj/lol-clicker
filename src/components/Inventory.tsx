@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { GOLD_ICON } from "../constants/goldIcon";
 import { Item } from "../types";
 import { Divider } from "./dividers/Divider";
+import { formatBigNumbers } from "../utils/formatBigNumbers";
 
 interface InventoryProps {
   items: Record<string, Item>;
@@ -96,7 +97,7 @@ export const Inventory: React.FC<InventoryProps> = ({ items, onSell }) => {
 
             {item.count > 1 && (
               <div className="absolute bottom-0 right-0 text-xs text-[#C8AA6E] font-bold bg-[#0A1428] border border-[#C8AA6E] px-1">
-                {item.count}
+                {formatBigNumbers(item.count)}
               </div>
             )}
             <div className="opacity-0 group-hover:opacity-100 absolute inset-0 bg-slate-950/60 flex items-center justify-center transition-opacity">

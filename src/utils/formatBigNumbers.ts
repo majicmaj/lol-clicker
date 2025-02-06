@@ -1,4 +1,4 @@
-export function formatBigNumbers(n: number | string): string {
+export function formatBigNumbers(n: number | string, decimals = 1): string {
   const num = Number(n);
   const absNum = Math.abs(num);
 
@@ -11,7 +11,7 @@ export function formatBigNumbers(n: number | string): string {
 
   // If it's larger than Sx, format it in scientific notation
   if (absNum >= 1e27) {
-    formatted = num.toExponential(1);
+    formatted = num.toExponential(decimals);
   } else if (absNum >= 1e24) {
     formatted = (num / 1e24).toFixed(1) + "Sx";
   } else if (absNum >= 1e21) {
