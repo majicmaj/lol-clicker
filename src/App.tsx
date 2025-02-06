@@ -79,7 +79,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-[#10A13] bg-[radial-gradient(circle_at_center,rgba(0,168,255,0.15),rgba(9,20,40,0))]">
-      <div className="grid grid-rows-2 h-[200vh] p-4 gap-8">
+      <div className="lg:grid lg:grid-rows-2 lg:h-[200vh] p-4 gap-8">
         {/* Reset Button */}
         {/* <div className="absolute top-2 right-6">
           <button
