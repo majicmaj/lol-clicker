@@ -1,6 +1,3 @@
-// A helper that extracts a stat's value from an item description.
-// It first isolates the <stats> block (if it exists) so that values in other sections (like passives)
-
 import { Item } from "../types";
 
 const STAT_LABELS = [
@@ -25,6 +22,7 @@ const STAT_LABELS = [
   "Base Mana Regen",
   "Mana",
   "Move Speed",
+  "Percent Move Speed",
   "Shield Penetration",
   "Shield Power",
   "Shield",
@@ -45,72 +43,51 @@ const NAMES_MAP = {
   lethality: "Lethality",
   lifesteal: "Life Steal",
   magicPen: "Magic Penetration",
-  magicPenPercent: "Magic Penetration %",
   magicResist: "Magic Resist",
   manaRegen: "Base Mana Regen",
   mana: "Mana",
   moveSpeed: "Move Speed",
-  moveSpeedPercent: "Move Speed %",
-  omnivamp: "Spell Vamp",
+  spellVamp: "Spell Vamp",
   tenacity: "Tenacity",
 };
 
 const REVERSE_NAMES_MAP = Object.fromEntries(
   Object.entries(NAMES_MAP).map(([key, value]) => [value, key])
 );
-// "\u003CmainText\u003E\u003C[[stats\u003E\u003Cattention\u003E20\u003C/attention\u003E Attack "Damage\u003Cbr\u003E\u003Cattention\u003E18%\u003C/attention\u003E Armor Penetration\u003C/stats\u003E\u003Cbr\u003E\u003Cbr\u003E\u003C/mainText\u003E",
 
-export const extractStatFromDescription = (
-  description: string,
-  label: string
-) => {
-  const match = description.match(
-    new RegExp(`<attention>(.*?)</attention> ${label}`, "i")
-  );
-
-  if (match) {
-    return parseFloat(match[1]);
-  }
-  return null;
-};
-
-// aren't accidentally matched.
-export function getItemStats(item: Item) {
+const extractStats = (description) => {
   const stats = {};
-  const passiveAbilities = [];
-  const activeAbilities = [];
+  const statMatches = [
+    ...description.matchAll(/<attention>(.*?)<\/attention>\s*([^<\n]+)/g),
+  ];
 
-  const { description } = item;
-
-  // Extract stats
-  STAT_LABELS.forEach((label) => {
-    const key = REVERSE_NAMES_MAP[label];
-    const value = extractStatFromDescription(description, label);
-
-    if (value !== null) {
-      stats[key] = Number(value);
+  statMatches.forEach(([_, value, label]) => {
+    label = label.trim();
+    if (STAT_LABELS.includes(label)) {
+      const key = REVERSE_NAMES_MAP[label];
+      stats[key] = parseFloat(value.replace("%", ""));
     }
   });
 
-  // Extract passive abilities
-  const passiveMatches = [
-    ...description.matchAll(/<passive>(.*?)<\/passive><br>(.*?)<br>/g),
-  ];
-  passiveMatches.forEach((match) => {
-    passiveAbilities.push({ name: match[1], description: match[2] });
-  });
+  return stats;
+};
 
-  // Extract active abilities (assuming active abilities are marked in some way, adjust accordingly)
-  const activeMatches = [
-    ...description.matchAll(/<active>(.*?)<\/active><br>(.*?)<br>/g),
-  ];
+const extractAbilities = (description, type) => {
+  const abilities = [];
+  const regex = new RegExp(`<${type}>(.*?)<\/${type}><br>(.*?)<br>`, "g");
 
-  activeMatches.forEach((match) => {
-    activeAbilities.push({
-      name: match[1],
-      description: match[2],
-    });
-  });
+  for (const match of description.matchAll(regex)) {
+    abilities.push({ name: match[1], description: match[2] });
+  }
 
-  return { stats, passiveAbilities, activeAbilities };
+  return abilities;
+};
+
+export function getItemStats(item) {
+  const { description } = item;
+  return {
+    stats: extractStats(description),
+    passiveAbilities: extractAbilities(description, "passive"),
+    activeAbilities: extractAbilities(description, "active"),
+  };
 }

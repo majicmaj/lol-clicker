@@ -55,6 +55,7 @@ const fetchItems = async (): Promise<Item[]> => {
   const data = await response.json();
   const blacklistedItems = ["Empyrean Promise"];
 
+  console.log(data.data);
   return Object.entries(data.data)
     .filter(
       ([, item]: [string, any]) =>
