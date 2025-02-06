@@ -29,9 +29,18 @@ export const calculateWinChance = (
   const manaBonus = getStatBonus("mana", totalStats.mana);
   const manaRegenBonus = getStatBonus("manaRegen", totalStats.manaRegen);
   const magicPenBonus = getStatBonus("magicPen", totalStats.magicPen);
+  const magicPenPercentBonus = getStatBonus(
+    "magicPenPercent",
+    totalStats.magicPenPercent
+  );
 
   const statBonus =
-    (apBonus + abilityHasteBonus + manaBonus + manaRegenBonus + magicPenBonus) /
+    (apBonus +
+      abilityHasteBonus +
+      manaBonus +
+      manaRegenBonus +
+      magicPenBonus +
+      magicPenPercentBonus) /
     5000;
 
   const rankMultiplier = (RANK_DIFFICULTY_MULTIPLIER[rank] + lp / 10000) ** 1.1;
