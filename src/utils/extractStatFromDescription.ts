@@ -22,7 +22,6 @@ const STAT_LABELS = [
   "Base Mana Regen",
   "Mana",
   "Move Speed",
-  "Percent Move Speed",
   "Shield Penetration",
   "Shield Power",
   "Shield",
@@ -43,10 +42,12 @@ const NAMES_MAP = {
   lethality: "Lethality",
   lifesteal: "Life Steal",
   magicPen: "Magic Penetration",
+  magicPenPercent: "Magic Penetration %",
   magicResist: "Magic Resist",
   manaRegen: "Base Mana Regen",
   mana: "Mana",
   moveSpeed: "Move Speed",
+  percentMoveSpeed: "Move Speed %",
   spellVamp: "Spell Vamp",
   tenacity: "Tenacity",
   healAndShieldPower: "Heal and Shield Power",
@@ -65,7 +66,15 @@ const extractStats = (description) => {
   statMatches.forEach(([_, value, label]) => {
     label = label.trim();
     if (STAT_LABELS.includes(label)) {
-      const key = REVERSE_NAMES_MAP[label];
+      const mainKey = REVERSE_NAMES_MAP[label];
+      let key = REVERSE_NAMES_MAP[label];
+
+      if (value.includes("%")) {
+        if (mainKey === "moveSpeed") key = "moveSpeedPercent";
+        if (mainKey === "magicPen") key = "magicPenPercent";
+      }
+
+      // @ts-expect-error FIXME
       stats[key] = parseFloat(value.replace("%", ""));
     }
   });
