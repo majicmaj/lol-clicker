@@ -47,7 +47,7 @@ const LeaderboardRow = ({ player, index }: { player: any; index: number }) => {
   return (
     <div
       key={player.id}
-      className="flex flex-col gap-2 border-b border-[#C8AA6E]/20 pb-2"
+      className="flex flex-col gap-2 border-b border-[#C8AA6E]/20 pt-1 pb-3"
     >
       <div className="flex items-center justify-start gap-2">
         <span className="text-lg font-bold text-white w-4 flex justify-between">
