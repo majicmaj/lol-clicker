@@ -40,7 +40,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [usernameInput, setUsernameInput] = useState(player.username || "");
   const [sortOption, setSortOption] = useState<
-    "lp" | "gold" | "wins" | "losses" | "games" | "lastGameTime"
+    "lp" | "gold" | "wins" | "losses" | "games" | "lastGameTime" | "activity"
   >("lp");
 
   const wsRef = React.useRef<WebSocket | null>(null);
@@ -194,7 +194,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = () => {
         />
         <button
           onClick={handleSetUsername}
-          className="bg-[#C8AA6E] min-w-max text-white font-spiegel px-2 hover:bg-[#a58a5d]"
+          className="bg-[#C8AA6E] min-w-max text-black font-spiegel px-2 hover:bg-[#a58a5d]"
         >
           Set Name
         </button>
@@ -207,16 +207,22 @@ export const Leaderboard: React.FC<LeaderboardProps> = () => {
             key={option}
             onClick={() =>
               setSortOption(
-                option as "lp" | "gold" | "wins" | "losses" | "games"
+                option as
+                  | "lp"
+                  | "gold"
+                  | "wins"
+                  | "losses"
+                  | "games"
+                  | "activity"
               )
             }
             className={`px-1.5 text-white text-xs lg:font-medium font-spiegel ${
               sortOption === option
                 ? "bg-[#C8AA6E] text-black"
-                : "bg-slate-700 hover:bg-slate-600"
+                : "bg-transparent hover:bg-slate-600"
             }`}
           >
-            {option.toUpperCase()}
+            {option.slice(0, 3).toUpperCase()}
           </button>
         ))}
       </div>

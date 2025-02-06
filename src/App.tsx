@@ -82,11 +82,9 @@ function App() {
     <div className="min-h-screen bg-[#10A13] bg-gradient-to-b from-[#091428] to-[#0A1428]">
       <div className="lg:grid lg:grid-rows-1 h-[100vh] p-4 gap-8">
         {/* Mobile Layout */}
-        <div className="lg:hidden flex flex-col overflow-auto max-h-[calc(100vh-6rem)]">
+        <div className="lg:hidden overflow-auto h-full grid max-h-[calc(100vh-6rem)]">
           {activeTab === "overview" && (
-            <div className="space-y-6">
-              <RankDisplay player={gameState.player} />
-            </div>
+            <RankDisplay player={gameState.player} />
           )}
           {activeTab === "stats" && (
             <div className="grid gap-2bg-[#091428] p-4 pb-6 border-2 border-[#C8AA6E] shadow-lg shadow-[#C8AA6E]/20">
@@ -103,7 +101,7 @@ function App() {
             </div>
           )}
           {activeTab === "leaderboard" && (
-            <div className="bg-[#091428] p-4 border-2 border-[#C8AA6E] shadow-lg shadow-[#C8AA6E]/20 grid grid-rows-2 gap-6 overflow-auto">
+            <div className="grid bg-[#091428] p-4 border-2 border-[#C8AA6E] shadow-lg shadow-[#C8AA6E]/20 overflow-auto">
               <Leaderboard player={gameState.player} />
             </div>
           )}
