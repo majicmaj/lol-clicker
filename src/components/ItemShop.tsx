@@ -41,8 +41,8 @@ export const ItemShop: React.FC<ItemShopProps> = ({ items }) => {
 
   const filteredItems = items.filter((item) => {
     const matchesSearch = item.name
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase());
+      ?.toLowerCase()
+      ?.includes(searchQuery?.toLowerCase());
     const hasStats =
       selectedStats.length === 0 ||
       selectedStats.every(
@@ -58,7 +58,7 @@ export const ItemShop: React.FC<ItemShopProps> = ({ items }) => {
   );
 
   const filteredSuggestions = items.filter((item) =>
-    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+    item.name?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (

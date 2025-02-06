@@ -36,7 +36,7 @@ export const getAvailableUpgrades = (
 
   const upgrades = items.filter(
     (item) =>
-      item.from.length > 0 &&
+      item.from?.length > 0 &&
       item.from.some((componentId) => inventoryIds.includes(componentId)) &&
       !inventoryIds.includes(item.id)
   );

@@ -102,10 +102,13 @@ const LeaderboardRow = ({ player, index }: { player: any; index: number }) => {
 
         {!!player?.items?.length && (
           <div className="col-span-4 flex gap-1">
-            {player.items.map((item) => (
+            {player.items.map((item, index) => (
               <div className="relative">
                 <img
-                  className="w-7 h-7 object-cover"
+                  className={
+                    "w-7 h-7 object-cover" +
+                    (index === 0 ? " border border-[#C8AA6E]" : "")
+                  }
                   src={item.image}
                   alt={item.name}
                   title={item.name}

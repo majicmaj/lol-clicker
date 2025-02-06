@@ -2,6 +2,7 @@ import { GOLD_ICON } from "../constants/goldIcon";
 import { STATS_LABELS_ICON_MAP } from "../constants/statLabels";
 import { useGameState } from "../hooks/useGameState";
 import { Item } from "../types";
+import { formatBigNumbers } from "../utils/formatBigNumbers";
 import { calculateDiscountedCost } from "../utils/inventory";
 
 const ShopItemCard: React.FC<{
@@ -56,12 +57,12 @@ const ShopItemCard: React.FC<{
             canAfford ? "text-[#C8AA6E]" : "text-gray-500"
           }`}
         >
-          {discountedCost}
+          {formatBigNumbers(discountedCost)}
           <img src={GOLD_ICON} className="h-3 w-3 inline-block" />
         </span>
         {discountedCost !== item.cost && (
           <span className="text-sm text-gray-400 line-through">
-            {item.cost}g
+            {formatBigNumbers(item.cost)}g
           </span>
         )}
       </div>
