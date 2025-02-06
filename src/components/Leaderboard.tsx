@@ -88,8 +88,9 @@ export const Leaderboard: React.FC<LeaderboardProps> = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const getItemValue = (item) => item.count * item.cost;
   const top10Items = Object.values(inventory)
-    .sort((item) => item.count * item.cost)
+    .sort((a, b) => getItemValue(b) - getItemValue(a))
     .slice(0, 10);
 
   console.log(top10Items);

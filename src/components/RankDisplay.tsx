@@ -18,6 +18,7 @@ import { Divider } from "./dividers/Divider";
 import { useGameState } from "../hooks/useGameState";
 import { handleGameClick } from "../utils/gameLogic";
 import PlayButton from "./PlayButton";
+import DrakeDisplay from "./DrakeDisplay";
 
 interface RankDisplayProps {
   player: PlayerStats;
@@ -86,8 +87,10 @@ export const RankDisplay: React.FC<RankDisplayProps> = ({ player }) => {
             >
               {player.rank}
             </div>
-
             <Divider />
+
+            <DrakeDisplay />
+
             <div className="relative grid place-items-center">
               <img
                 src={rankImage}
