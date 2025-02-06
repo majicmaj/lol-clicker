@@ -19,7 +19,15 @@ export const ItemShop: React.FC<ItemShopProps> = ({ items }) => {
   const { gameState, setGameState } = useGameState();
 
   const handlePurchase = (item: Item) => {
-    const newGameState = purchaseItem(gameState, item);
+    // prompt user for quantity
+    const maxCanAfford = Math.floor(gameState.player.gold / item.cost);
+    const quantity = parseInt(
+      prompt(
+        `How many ${item.name} would you like to purchase? (Max: ${maxCanAfford})`
+      ) || "0",
+      10
+    );
+    const newGameState = purchaseItem(gameState, item, quantity);
     if (newGameState) {
       setGameState(newGameState);
     }

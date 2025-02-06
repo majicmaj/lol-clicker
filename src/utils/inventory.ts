@@ -61,18 +61,19 @@ export const calculateDiscountedCost = (
 
 export const purchaseItem = (
   gameState: GameState,
-  item: Item
+  item: Item,
+  quantity = 1
 ): GameState | null => {
-  const cost = calculateDiscountedCost(item, gameState.inventory);
+  const cost = calculateDiscountedCost(item, gameState.inventory) * quantity;
 
   if (gameState.player.gold < cost) return null;
 
   const newInventory = { ...gameState.inventory };
 
   if (item.id in newInventory) {
-    newInventory[item.id].count += 1;
+    newInventory[item.id].count += quantity;
   } else {
-    newInventory[item.id] = { ...item, count: 1 };
+    newInventory[item.id] = { ...item, count: quantity };
   }
 
   return {
