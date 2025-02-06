@@ -14,7 +14,7 @@ export const calculateGoldGain = (
   } = totalStats;
 
   const statsBonus =
-    (moveSpeed + moveSpeedPercent * 4 + tenacity + healAndShieldPower) / 4;
+    (moveSpeed + moveSpeedPercent * 4 + tenacity * 4 + healAndShieldPower) / 4;
 
   const lpScaling = lp / 100;
 
