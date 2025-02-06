@@ -26,21 +26,21 @@ const dragonEffectName = {
 
 const dragonIcons = {
   Ocean:
-    "https://wiki.leagueoflegends.com/en-us/images/Balanced_LoR_icon_HD.png/",
+    "https://wiki.leagueoflegends.com/en-us/images/Balanced_LoR_icon_HD.png",
   Infernal:
-    "https://wiki.leagueoflegends.com/en-us/images/PoC_Wild_Fragment_icon_HD.png/",
+    "https://wiki.leagueoflegends.com/en-us/images/PoC_Wild_Fragment_icon_HD.png",
   Mountain:
-    "https://wiki.leagueoflegends.com/en-us/images/Keyword_Impact_HD.png/",
+    "https://wiki.leagueoflegends.com/en-us/images/Keyword_Impact_HD.png",
   Cloud:
-    "https://wiki.leagueoflegends.com/en-us/images/Keyword_Quick_Attack_HD.png/",
+    "https://wiki.leagueoflegends.com/en-us/images/Keyword_Quick_Attack_HD.png",
   Glacial:
-    "https://wiki.leagueoflegends.com/en-us/images/Keyword_Frostbite_HD.png/",
+    "https://wiki.leagueoflegends.com/en-us/images/Keyword_Frostbite_HD.png",
   Hextech:
-    "https://wiki.leagueoflegends.com/en-us/images/Keyword_Barrier_HD.png/",
+    "https://wiki.leagueoflegends.com/en-us/images/Keyword_Barrier_HD.png",
   Chemtech:
-    "https://wiki.leagueoflegends.com/en-us/images/Keyword_Lifesteal_HD.png/",
+    "https://wiki.leagueoflegends.com/en-us/images/Keyword_Lifesteal_HD.png",
   Storm:
-    "https://wiki.leagueoflegends.com/en-us/images/Keyword_Overwhelm_HD.png/",
+    "https://wiki.leagueoflegends.com/en-us/images/Keyword_Overwhelm_HD.png",
   Void: "https://wiki.leagueoflegends.com/en-us/images/Balanced_LoR_icon_HD.png",
 };
 
