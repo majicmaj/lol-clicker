@@ -52,7 +52,7 @@ export const calculateDiscountedCost = (
   inventory: Record<string, Item>
 ): number => {
   const discount = Object.values(inventory).reduce(
-    (acc, invItem) => acc + (invItem.discount || 0),
+    (acc, invItem) => acc + (invItem?.discount || 0),
     0
   );
 

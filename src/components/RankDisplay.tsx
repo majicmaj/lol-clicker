@@ -157,7 +157,7 @@ export const RankDisplay: React.FC<RankDisplayProps> = ({ player }) => {
                       : "text-red-500"
                   }`}
                 >
-                  {player.lastGoldChange > 0 ? "+" : "-"}
+                  {player.lastGoldChange > 0 ? "+" : ""}
                   {player.lastGoldChange}
                 </span>
               }
