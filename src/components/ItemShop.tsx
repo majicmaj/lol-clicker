@@ -109,13 +109,13 @@ export const ItemShop: React.FC<ItemShopProps> = ({ items }) => {
 
           <div className="overflow-auto flex flex-col gap-4 w-full">
             <div className="flex overflow-auto">
-              <div className="flex flex-col">
+              <div className="flex flex-col overflow-auto min-w-8 pr-2 ">
                 <button
                   onClick={() => setSelectedStats([])}
                   className={`p-1 text-sm transition-colors ${
                     selectedStats.length === 0
                       ? "bg-[#C8AA6E] text-[#091428]"
-                      : "bg-[#0A1428] text-[#C8AA6E] border border-[#C8AA6E]/50 hover:border-[#C8AA6E]"
+                      : "bg-[#0A1428] text-[#C8AA6E]"
                   }`}
                 >
                   <X className="h-4 w-4" />
@@ -127,7 +127,7 @@ export const ItemShop: React.FC<ItemShopProps> = ({ items }) => {
                     className={`p-1 text-sm transition-colors ${
                       selectedStats.includes(key)
                         ? "bg-[#C8AA6E] text-[#091428]"
-                        : "bg-[#0A1428] text-[#C8AA6E] border border-[#C8AA6E]/50 hover:border-[#C8AA6E]"
+                        : "bg-[#0A1428] text-[#C8AA6E]"
                     }`}
                   >
                     <img
