@@ -19,16 +19,29 @@ export const ItemShop: React.FC<ItemShopProps> = ({ items }) => {
 
   const { gameState, setGameState } = useGameState();
 
+  const ITEM_CAP = 1000000;
+
   const handlePurchase = (item: Item) => {
+    const alreadyOwned = gameState.inventory[item.id]?.count || 0;
     // prompt user for quantity
-    const maxCanAfford = Math.floor(gameState.player.gold / item.cost);
+    const maxCanAfford = Math.min(
+      ITEM_CAP - alreadyOwned,
+      Math.floor(gameState.player.gold / item.cost)
+    );
+
     const quantity = parseInt(
       prompt(
         `How many ${item.name} would you like to purchase? (Max: ${maxCanAfford})`
-      ) || "0",
+      ) || "1",
       10
     );
+
+    if (isNaN(quantity) || quantity < 1) {
+      return;
+    }
+
     const newGameState = purchaseItem(gameState, item, quantity);
+
     if (newGameState) {
       setGameState(newGameState);
     }
