@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  /* Nice Thin clean scrollbars */
+  scrollbar-width: thin;
+  scrollbar-color: #4A5568 #2D3748;
+
+  /* Improve windows scrollbars */
+  -ms-overflow-style: none;
+}
 @font-face {
   font-family: 'BeaufortforLOL';
   src: url('./assets/beaufort/BeaufortforLOL-Regular.ttf') format('truetype');

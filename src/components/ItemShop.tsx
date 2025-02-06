@@ -122,37 +122,39 @@ export const ItemShop: React.FC<ItemShopProps> = ({ items }) => {
 
           <div className="overflow-auto flex flex-col gap-4 w-full">
             <div className="flex overflow-auto">
-              <div className="flex flex-col overflow-auto min-w-8 pr-2 ">
-                <button
-                  onClick={() => setSelectedStats([])}
-                  className={`p-1 text-sm transition-colors ${
-                    selectedStats.length === 0
-                      ? "bg-[#C8AA6E] text-[#091428]"
-                      : "bg-[#0A1428] text-[#C8AA6E]"
-                  }`}
-                >
-                  <X className="h-4 w-4" />
-                </button>
-                {Object.entries(STAT_LABELS || {})?.map(([key]) => (
+              <div className="flex flex-col overflow-auto min-w-8 pr-2">
+                <div className="flex flex-col min-h-max overflow-auto min-w-8 pr-2">
                   <button
-                    key={key}
-                    onClick={() => toggleStatFilter(key)}
-                    className={`p-1 text-sm transition-colors ${
-                      selectedStats.includes(key)
+                    onClick={() => setSelectedStats([])}
+                    className={`p-1 min-w-3 min-h-3 text-sm transition-colors ${
+                      selectedStats.length === 0
                         ? "bg-[#C8AA6E] text-[#091428]"
                         : "bg-[#0A1428] text-[#C8AA6E]"
                     }`}
                   >
-                    <img
-                      src={
-                        STATS_LABELS_ICON_MAP[
-                          key as keyof typeof STATS_LABELS_ICON_MAP
-                        ]
-                      }
-                      className="h-4 w-4"
-                    />
+                    <X className="h-4 w-4" />
                   </button>
-                ))}
+                  {Object.entries(STAT_LABELS || {})?.map(([key]) => (
+                    <button
+                      key={key}
+                      onClick={() => toggleStatFilter(key)}
+                      className={`p-1 text-sm min-w-3 min-h-3 transition-colors ${
+                        selectedStats.includes(key)
+                          ? "bg-[#C8AA6E] text-[#091428]"
+                          : "bg-[#0A1428] text-[#C8AA6E]"
+                      }`}
+                    >
+                      <img
+                        src={
+                          STATS_LABELS_ICON_MAP[
+                            key as keyof typeof STATS_LABELS_ICON_MAP
+                          ]
+                        }
+                        className="h-4 w-4"
+                      />
+                    </button>
+                  ))}
+                </div>
               </div>
 
               {/* Main Item Grid */}
