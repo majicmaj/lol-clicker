@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { handleGameClick } from "./utils/gameLogic";
+
 import { sellItem } from "./utils/inventory";
 import { useGameState } from "./hooks/useGameState";
 import { RankDisplay } from "./components/RankDisplay";
@@ -10,7 +10,6 @@ import { ItemStats } from "./components/ItemStats";
 import { Navigation } from "./components/Navigation";
 import { RotateCcw } from "lucide-react";
 import { Leaderboard } from "./components/Leaderboard";
-import PlayButton from "./components/PlayButton";
 
 function App() {
   const {
@@ -23,11 +22,6 @@ function App() {
 
   const [activeTab, setActiveTab] = useState("overview");
   const [showResetConfirm, setShowResetConfirm] = useState(false);
-
-  const handleClick = () => {
-    const newState = handleGameClick(gameState);
-    setGameState(newState);
-  };
 
   const handleSellItem = (id: string, count: number) => {
     const newState = sellItem(gameState, id, count);
@@ -85,7 +79,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#10A13] bg-[radial-gradient(circle_at_center,rgba(0,168,255,0.15),rgba(9,20,40,0))] p-6 pb-24 lg:pb-6">
+    <div className="min-h-screen bg-[#10A13] bg-[radial-gradient(circle_at_center,rgba(0,168,255,0.15),rgba(9,20,40,0))] p-2 lg:p-6 pb-24 lg:pb-6">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Reset Button */}
         <div className="absolute top-2 right-6">
@@ -104,8 +98,8 @@ function App() {
         </div>
 
         {/* Desktop Layout */}
-        <div className="hidden lg:grid lg:grid-cols-3 gap-6">
-          <div className="flex flex-col gap-6">
+        <div className="hidden lg:grid lg:grid-cols-3 gap-6 h-[calc(100vh-8rem)]">
+          <div className="grid grid-rows-2 gap-6">
             <GameStats
               player={gameState.player}
               inventory={gameState.inventory}
@@ -122,11 +116,10 @@ function App() {
         </div>
 
         {/* Mobile Layout */}
-        <div className="lg:hidden">
+        <div className="lg:hidden flex flex-col overflow-auto max-h-[calc(100vh-8rem)]">
           {activeTab === "overview" && (
             <div className="space-y-6">
               <RankDisplay player={gameState.player} />
-              <PlayButton handleClick={handleClick} />
             </div>
           )}
           {activeTab === "stats" && (
@@ -146,24 +139,14 @@ function App() {
           {activeTab === "leaderboard" && (
             <Leaderboard player={gameState.player} />
           )}
-          {activeTab === "shop" && (
-            <div className="space-y-6">
-              <ItemShop items={items} />
-              {/* <ChampionShop onPurchase={handlePurchaseChampion} /> */}
-            </div>
-          )}
+          {activeTab === "shop" && <ItemShop items={items} />}
           {activeTab === "inventory" && (
-            <div className="space-y-6">
-              <Inventory items={gameState.inventory} onSell={handleSellItem} />
-              {/* <ChampionInventory champions={gameState.player.champions} /> */}
-            </div>
+            <Inventory items={gameState.inventory} onSell={handleSellItem} />
           )}
         </div>
 
         {/* Desktop Play Button and Inventory */}
         <div className="hidden lg:visible lg:flex flex-col gap-8">
-          <PlayButton handleClick={handleClick} />
-
           <div className="grid grid-cols-2 gap-8">
             <Inventory items={gameState.inventory} onSell={handleSellItem} />
             {/* <ChampionInventory champions={gameState.player.champions} /> */}

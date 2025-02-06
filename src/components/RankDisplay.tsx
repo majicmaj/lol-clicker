@@ -15,6 +15,9 @@ import silverRank from "../assets/ranks/silver.webp";
 import { formatBigNumbers } from "../utils/formatBigNumbers";
 import { GOLD_ICON } from "../constants/goldIcon";
 import { Divider } from "./dividers/Divider";
+import { useGameState } from "../hooks/useGameState";
+import { handleGameClick } from "../utils/gameLogic";
+import PlayButton from "./PlayButton";
 
 interface RankDisplayProps {
   player: PlayerStats;
@@ -53,8 +56,14 @@ const getRankColor = (rank: string): string => {
 };
 
 export const RankDisplay: React.FC<RankDisplayProps> = ({ player }) => {
+  const { gameState, setGameState } = useGameState();
   const rankImage = useMemo(() => getRankImage(player.rank), [player.rank]);
   const rankGradient = useMemo(() => getRankColor(player.rank), [player.rank]);
+
+  const handleClick = () => {
+    const newState = handleGameClick(gameState);
+    setGameState(newState);
+  };
 
   return (
     <div className="relative flex justify-center">
@@ -69,41 +78,38 @@ export const RankDisplay: React.FC<RankDisplayProps> = ({ player }) => {
       />
 
       <div className="relative bg-[#091428]/90 p-8 border-2 border-[#C8AA6E] shadow-lg shadow-[#C8AA6E]/20 max-w-md w-full backdrop-blur-sm">
-        <h2 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-[#C8AA6E] via-[#C8AA6E]/80 to-[#C8AA6E] text-transparent bg-clip-text">
-          Current Rank
-        </h2>
-
-        <Divider />
-
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center h-full justify-center">
           {/* Rank Image with Glow */}
-          <div className="relative grid place-items-center">
-            <img
-              src={rankImage}
-              alt={player.rank}
-              className="w-48 h-48 object-contain blur-xl absolute inset-0"
-            />
-            <img
-              src={rankImage}
-              alt={player.rank}
-              className="w-48 h-48 object-contain relative"
-            />
-          </div>
-
-          {/* Rank Information */}
-          <div className="text-center w-full space-y-3">
+          <div className="text-center w-full flex flex-col gap-4">
             <div
               className={`text-4xl font-beaufort font-bold bg-gradient-to-r ${rankGradient} text-transparent bg-clip-text`}
             >
               {player.rank}
             </div>
 
+            <Divider />
+            <div className="relative grid place-items-center">
+              <img
+                src={rankImage}
+                alt={player.rank}
+                className="w-full h-full object-contain blur-[16px] absolute inset-0"
+              />
+              <img
+                src={rankImage}
+                alt={player.rank}
+                className="w-44 h-44 lg:w-72 lg:h-72 aspect-square object-contain relative"
+              />
+            </div>
+          </div>
+          {/* Rank Information */}
+          <div className="text-center w-full flex flex-col gap-4">
             {player.division && (
               <div className="text-2xl text-white font-beaufort">
                 Division {player.division}
               </div>
             )}
 
+            {/* LP Display */}
             <div className="text-3xl font-bold text-white font-beaufort">
               {formatBigNumbers(player.lp)} LP
               {player.lastLpChange !== 0 && (
@@ -117,6 +123,8 @@ export const RankDisplay: React.FC<RankDisplayProps> = ({ player }) => {
                 </span>
               )}
             </div>
+
+            {/* LP Bar */}
             <div className="h-6 w-full p-1 border border-[#C8AA6E] rounded-full bg-[#0A1428]">
               <div
                 className={`h-full rounded-full transition-all bg-gradient-to-r from-[#005A82] ${
@@ -132,6 +140,7 @@ export const RankDisplay: React.FC<RankDisplayProps> = ({ player }) => {
               />
             </div>
 
+            {/* Gold Display */}
             <div className="mt-4 text-2xl font-bold bg-gradient-to-r from-[#C8AA6E] to-[#C8AA6E]/80 text-transparent bg-clip-text">
               {formatBigNumbers(player.gold)}{" "}
               {
@@ -148,8 +157,11 @@ export const RankDisplay: React.FC<RankDisplayProps> = ({ player }) => {
               }
               <img src={GOLD_ICON} className="h-4 w-4 inline-block mr-2" />
             </div>
+
+            {/* Play Button */}
           </div>
         </div>
+        <PlayButton handleClick={handleClick} />
       </div>
     </div>
   );

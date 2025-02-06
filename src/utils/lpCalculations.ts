@@ -3,7 +3,7 @@ import { Item, Rank } from "../types";
 import { RANK_DIFFICULTY_MULTIPLIER } from "./ranks";
 import { calculateTotalStats } from "./stats";
 
-const getStatBonus = (
+export const getStatBonus = (
   stat: keyof typeof GOLD_EFFICIENCY,
   value: number
 ): number =>
@@ -57,9 +57,6 @@ export const calculateLpLoss = (
   const lpScaling = lp / 10000;
 
   return Math.round(
-    Math.max(
-      -100000000,
-      baseLoss + (rankMultiplier + lpScaling) ** 1.1 - statsBonus
-    )
+    Math.max(-0, baseLoss + (rankMultiplier + lpScaling) ** 1.1 - statsBonus)
   );
 };

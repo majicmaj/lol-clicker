@@ -1,7 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { GameState, Item } from "../types";
+import { Champion, GameState, Item } from "../types";
 import { getItemStats } from "../utils/extractStatFromDescription";
-import { ItemStats } from "../components/ItemStats";
 
 const STORAGE_KEY = "league-clicker-save";
 const ITEM_API_URL =
@@ -48,7 +47,6 @@ const resetGameState = (): GameState => {
   localStorage.removeItem(STORAGE_KEY);
   return INITIAL_STATE;
 };
-
 // Function to fetch items from API
 const fetchItems = async (): Promise<Item[]> => {
   const response = await fetch(ITEM_API_URL);
@@ -76,6 +74,52 @@ const fetchItems = async (): Promise<Item[]> => {
         from: item?.from?.length ? item.from : [],
       };
     });
+};
+
+const fetchChampions = async () => {
+  // try {
+  //   const response = await fetch(
+  //     "https://ddragon.leagueoflegends.com/cdn/15.2.1/data/en_US/champion.json"
+  //   );
+  //   const data = await response.json();
+
+  //   const processedChampions = (
+  //     Object.values(data.data || {}) as Champion[]
+  //   ).map((champion: Champion) => ({
+  //     id: champion.id,
+  //     name: champion.name,
+  //     title: champion.title,
+  //     image: `https://ddragon.leagueoflegends.com/cdn/15.2.1/img/champion/${champion.image.full}`,
+  //     stats: champion.stats,
+  //     info: champion.info,
+  //     tags: champion.tags,
+  //     inventory: [],
+  //   }));
+
+  //   setChampions(processedChampions);
+  //   setLoading(false);
+  // } catch (error) {
+  //   console.error("Error fetching champions:", error);
+  //   setLoading(false);
+  // }
+
+  const response = await fetch(
+    "https://ddragon.leagueoflegends.com/cdn/15.2.1/data/en_US/champion.json"
+  );
+  if (!response.ok) throw new Error("Failed to fetch champions");
+
+  const data = await response.json();
+
+  return Object.values(data.data || {}).map((champion: any) => ({
+    id: champion.id,
+    name: champion.name,
+    title: champion.title,
+    image: `https://ddragon.leagueoflegends.com/cdn/15.2.1/img/champion/${champion.image.full}`,
+    stats: champion.stats,
+    info: champion.info,
+    tags: champion.tags,
+    inventory: [],
+  }));
 };
 
 // Hook to manage game state using React Query
@@ -117,12 +161,21 @@ export const useGameState = () => {
     staleTime: Infinity, // Keep the data fresh until user refreshes
   });
 
+  // Fetch champions from API
+  const { data: champions = [], isLoading: championsLoading } = useQuery({
+    queryKey: ["champions"],
+    queryFn: fetchChampions,
+    staleTime: Infinity, // Keep the data fresh until user refreshes
+  });
+
   return {
     gameState,
     setGameState: updateGameState.mutate,
     resetGame: resetGame.mutate,
     items,
     itemsLoading,
+    champions,
+    championsLoading,
   };
 };
 

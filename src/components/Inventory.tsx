@@ -45,12 +45,12 @@ export const Inventory: React.FC<InventoryProps> = ({ items, onSell }) => {
   }, [sellPrompt]);
 
   return (
-    <div className="relative bg-[#091428] p-6 border-2 border-[#C8AA6E] shadow-lg shadow-[#C8AA6E]/20">
+    <div className="flex flex-col overflow-auto relative bg-[#091428] p-2 lg:p-6 border lg:border-2 border-[#C8AA6E] shadow-lg shadow-[#C8AA6E]/20">
       <h2 className="text-3xl font-bold mb-4 text-center bg-gradient-to-r from-[#C8AA6E] to-[#C8AA6E]/80 text-transparent bg-clip-text">
         Inventory
       </h2>
       <Divider size="sm" />
-      <div className="border border-[#C8AA6E] max-h-48 overflow-auto flex flex-wrap items-center justify-center gap-2 p-2">
+      <div className="border border-[#C8AA6E] overflow-auto flex flex-wrap items-center justify-center gap-2 p-2">
         {/* {items?.map((item) => (
           <div
             key={item.id}

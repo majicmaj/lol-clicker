@@ -67,6 +67,54 @@ export const handleGameClick = (gameState: GameState): GameState => {
   );
 };
 
+export const handleFreeWinClick = (
+  gameState: GameState,
+  modifier = 1
+): GameState => {
+  const lpGain = calculateLpGain(
+    gameState.inventory,
+    gameState.player.rank,
+    gameState.player.lp
+  );
+
+  const goldGain = calculateGoldGain(
+    calculateTotalStats(gameState.inventory),
+    gameState.player.rank,
+    gameState.player.lp
+  );
+
+  const newLp = gameState.player.lp + lpGain * modifier;
+  const newGold = (gameState.player.gold || 0) + goldGain * modifier;
+
+  const updatedRankHistory = [
+    ...gameState.player.rankHistory,
+    gameState.player.rank,
+  ].slice(-100); // Keep only the last 100 games
+
+  const updatedDivisionHistory = [
+    ...gameState.player.divisionHistory,
+    gameState.player.division,
+  ].slice(-100); // Keep only the last 100 games
+
+  const updatedLpHistory = [
+    ...gameState.player.lpHistory,
+    lpGain * modifier,
+  ].slice(-100); // Keep only the last 100 games
+
+  return updateGameState(
+    gameState,
+    newLp,
+    newGold,
+    goldGain * modifier,
+    lpGain * modifier,
+    true,
+    updatedLpHistory,
+    updatedRankHistory,
+    updatedDivisionHistory,
+    Date.now()
+  );
+};
+
 const updateGameState = (
   gameState: GameState,
   newLp: number,

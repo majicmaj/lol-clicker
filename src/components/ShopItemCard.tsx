@@ -17,7 +17,7 @@ const ShopItemCard: React.FC<{
   return (
     <div
       onClick={() => canAfford && onPurchase(item)}
-      className={`relative bg-[#0A1428] p-1 flex flex-col items-center overflow-hidden border-2 transition-all duration-300 ${
+      className={`w-[100px] relative bg-[#0A1428] p-1 flex flex-col items-center overflow-hidden border-2 transition-all duration-300 ${
         canAfford
           ? "border-[#C8AA6E]/30 hover:border-[#C8AA6E] cursor-pointer hover:shadow-lg hover:shadow-[#C8AA6E]/20"
           : "border-[#C8AA6E]/10 cursor-not-allowed opacity-50"

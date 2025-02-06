@@ -13,7 +13,6 @@ interface ItemShopProps {
 export const ItemShop: React.FC<ItemShopProps> = ({ items }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStats, setSelectedStats] = useState<string[]>([]);
-  const [showFilters, setShowFilters] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
 
@@ -55,14 +54,10 @@ export const ItemShop: React.FC<ItemShopProps> = ({ items }) => {
   );
 
   return (
-    <div className="bg-[#091428] p-6 border-2 border-[#C8AA6E] shadow-lg shadow-[#C8AA6E]/20">
-      <div className="max-w-4xl mx-auto space-y-6">
-        <h2 className="text-3xl font-bold text-center bg-gradient-to-r from-[#C8AA6E] to-[#C8AA6E]/80 text-transparent bg-clip-text">
-          Hextech Shop
-        </h2>
-
+    <div className="overflow-auto flex flex-col bg-[#091428] p-2 lg:p-6 border lg:border-2 border-[#C8AA6E] shadow-lg shadow-[#C8AA6E]/20">
+      <div className="max-w-4xl flex flex-col overflow-auto">
         {/* Controls Container */}
-        <div className="flex flex-col gap-4">
+        <div className="overflow-auto flex flex-col w-full gap-4">
           <div className="flex w-full  items-center justify-between gap-4">
             <div
               className="relative w-full max-w-[600px] flex-1"
@@ -97,86 +92,57 @@ export const ItemShop: React.FC<ItemShopProps> = ({ items }) => {
                 </div>
               )}
             </div>
-
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className="p-2 border-2 border-[#C8AA6E]/50 hover:border-[#C8AA6E] transition-colors"
-            >
-              <svg
-                className={`w-6 h-6 text-[#C8AA6E] transform transition-transform ${
-                  showFilters ? "rotate-180" : ""
-                }`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </button>
           </div>
 
-          {showFilters && (
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-[#C8AA6E]">
-                Filter by Stats:
-              </h3>
-              <div className="grid grid-cols-[auto,1fr] gap-2">
-                <div className="grid grid-cols-1">
+          <div className="overflow-auto flex flex-col gap-4 w-full">
+            <div className="flex overflow-auto">
+              <div className="flex flex-col">
+                <button
+                  onClick={() => setSelectedStats([])}
+                  className={`p-1 text-sm transition-colors ${
+                    selectedStats.length === 0
+                      ? "bg-[#C8AA6E] text-[#091428]"
+                      : "bg-[#0A1428] text-[#C8AA6E] border border-[#C8AA6E]/50 hover:border-[#C8AA6E]"
+                  }`}
+                >
+                  <X className="h-4 w-4" />
+                </button>
+                {Object.entries(STAT_LABELS || {})?.map(([key]) => (
                   <button
-                    onClick={() => setSelectedStats([])}
+                    key={key}
+                    onClick={() => toggleStatFilter(key)}
                     className={`p-1 text-sm transition-colors ${
-                      selectedStats.length === 0
+                      selectedStats.includes(key)
                         ? "bg-[#C8AA6E] text-[#091428]"
                         : "bg-[#0A1428] text-[#C8AA6E] border border-[#C8AA6E]/50 hover:border-[#C8AA6E]"
                     }`}
                   >
-                    <X className="h-4 w-4" />
+                    <img
+                      src={
+                        STATS_LABELS_ICON_MAP[
+                          key as keyof typeof STATS_LABELS_ICON_MAP
+                        ]
+                      }
+                      className="h-4 w-4"
+                    />
                   </button>
-                  {Object.entries(STAT_LABELS || {})?.map(([key]) => (
-                    <button
-                      key={key}
-                      onClick={() => toggleStatFilter(key)}
-                      className={`p-1 text-sm transition-colors ${
-                        selectedStats.includes(key)
-                          ? "bg-[#C8AA6E] text-[#091428]"
-                          : "bg-[#0A1428] text-[#C8AA6E] border border-[#C8AA6E]/50 hover:border-[#C8AA6E]"
-                      }`}
-                    >
-                      <img
-                        src={
-                          STATS_LABELS_ICON_MAP[
-                            key as keyof typeof STATS_LABELS_ICON_MAP
-                          ]
-                        }
-                        className="h-4 w-4"
-                      />
-                    </button>
-                  ))}
-                </div>
-                {/* Main Item Grid */}
-                <section>
-                  <h3 className="text-xl font-bold mb-4 bg-gradient-to-r from-[#C8AA6E] to-[#C8AA6E]/80 text-transparent bg-clip-text">
-                    All Items
-                  </h3>
-                  <div className="max-h-96 overflow-auto border border-[#C8AA6E] p-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {filteredItems?.map((item) => (
-                      <ShopItemCard
-                        key={item.id}
-                        item={item}
-                        onPurchase={handlePurchase}
-                        hasComponents={hasComponents}
-                      />
-                    ))}
-                  </div>
-                </section>
+                ))}
+              </div>
+
+              {/* Main Item Grid */}
+
+              <div className="flex justify-center overflow-auto border border-[#C8AA6E] p-4 flex-wrap gap-4">
+                {filteredItems?.map((item) => (
+                  <ShopItemCard
+                    key={item.id}
+                    item={item}
+                    onPurchase={handlePurchase}
+                    hasComponents={hasComponents}
+                  />
+                ))}
               </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>
