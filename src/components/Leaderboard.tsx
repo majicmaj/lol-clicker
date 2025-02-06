@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { PlayerStats } from "../types";
+import { Item, PlayerStats } from "../types";
 import { throttle } from "lodash"; // Import Lodash throttle
 
 import { Divider } from "./dividers/Divider";
@@ -88,12 +88,10 @@ export const Leaderboard: React.FC<LeaderboardProps> = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const getItemValue = (item) => item.count * item.cost;
+  const getItemValue = (item: Item) => item.count * item.cost;
   const top10Items = Object.values(inventory)
     .sort((a, b) => getItemValue(b) - getItemValue(a))
     .slice(0, 10);
-
-  console.log(top10Items);
 
   // Throttled function to send player updates
   const sendPlayerUpdateThrottled = useCallback(
