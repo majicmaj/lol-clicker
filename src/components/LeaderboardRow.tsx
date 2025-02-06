@@ -101,19 +101,19 @@ const LeaderboardRow = ({ player, index }: { player: any; index: number }) => {
         </div>
 
         {!!player?.items?.length && (
-          <div className="col-span-4 flex gap-1">
+          <div className="col-span-4 flex gap-1 w-full justify-between">
             {player.items.map((item, index) => (
               <div className="relative">
                 <img
                   className={
-                    "w-7 h-7 object-cover" +
+                    "w-7 h-7 lg:w-8 lg:h-8 object-cover " +
                     (index === 0 ? " border border-[#C8AA6E]" : "")
                   }
                   src={item.image}
                   alt={item.name}
                   title={item.name}
                 />
-                <span className="absolute -bottom-1 -right-1 bg-slate-900 text-[#C8AA6E] text-xs font-bold px-0.5">
+                <span className="absolute -bottom-1 -right-1 bg-slate-900 text-[#C8AA6E] text-xs px-0.5 border border-[#C8AA6E]">
                   {formatBigNumbers(item.count || 1)}
                 </span>
               </div>

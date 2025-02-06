@@ -4,7 +4,7 @@ const monsterColors = {
   Storm: "text-blue-600",
   Infernal: "text-red-600",
   Glacial: "text-blue-300",
-  Oceanic: "text-blue-300",
+  Ocean: "text-blue-300",
   Chemtech: "text-green-600",
   Mountain: "text-green-300",
   Hextech: "text-yellow-600",
@@ -85,7 +85,7 @@ const DrakeDisplay = () => {
     // Use humidity if available
     if (humidity !== null) {
       if (humidity >= 90) {
-        return "Oceanic";
+        return "Ocean";
       }
       if (humidity <= 20) {
         return "Chemtech";
@@ -169,6 +169,7 @@ const DrakeDisplay = () => {
             alt={activeMonster}
             className="w-6 h-6"
           />
+          {activeMonster}
           <span className="italic text-sm font-spiegel opacity-70">
             No Effect
           </span>

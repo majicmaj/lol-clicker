@@ -2,22 +2,27 @@ import { statIconMap } from "./statIcons";
 
 export const STAT_LABELS = {
   ad: "AD",
-  ap: "AP",
-  armor: "Armor",
-  magicResist: "MR",
-  critChance: "Crit Chance",
-  abilityHaste: "Haste",
   attackSpeed: "AS",
-  moveSpeed: "MS",
-  moveSpeedPercent: "MS %",
+  critChance: "Crit Chance",
   lethality: "Lethal",
   armorPen: "Armor Pen",
+
+  ap: "AP",
   magicPen: "Magic Pen",
   magicPenPercent: "Magic Pen %",
-  health: "HP",
+  abilityHaste: "Haste",
   mana: "Mana",
-  healthRegen: "HP Regen",
   manaRegen: "Mana Regen",
+
+  armor: "Armor",
+  magicResist: "MR",
+  health: "HP",
+  healthRegen: "HP Regen",
+
+  moveSpeed: "MS",
+  moveSpeedPercent: "MS %",
+  tenacity: "Tenacity",
+  healAndShieldPower: "Heal/Shield",
 };
 
 export const STATS_LABELS_ICON_MAP = {

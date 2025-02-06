@@ -9,6 +9,7 @@ import { GameStats } from "./components/GameStats";
 import { ItemStats } from "./components/ItemStats";
 import { Navigation } from "./components/Navigation";
 import { Leaderboard } from "./components/Leaderboard";
+import { Divider } from "./components/dividers/Divider";
 
 function App() {
   const {
@@ -79,7 +80,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-[#10A13] bg-[radial-gradient(circle_at_center,rgba(0,168,255,0.15),rgba(9,20,40,0))]">
-      <div className="lg:grid lg:grid-rows-2 lg:h-[200vh] p-4 gap-8">
+      <div className="lg:grid lg:grid-rows-1 h-[100vh] p-4 gap-8">
         {/* Reset Button */}
         {/* <div className="absolute top-2 right-6">
           <button
@@ -104,7 +105,7 @@ function App() {
             </div>
           )}
           {activeTab === "stats" && (
-            <div className="grid gap-2">
+            <div className="grid gap-2bg-[#091428] p-4 pb-6 border-2 border-[#C8AA6E] shadow-lg shadow-[#C8AA6E]/20">
               <GameStats
                 player={gameState.player}
                 inventory={gameState.inventory}
@@ -118,7 +119,9 @@ function App() {
             </div>
           )}
           {activeTab === "leaderboard" && (
-            <Leaderboard player={gameState.player} />
+            <div className="bg-[#091428] p-4 border-2 border-[#C8AA6E] shadow-lg shadow-[#C8AA6E]/20 grid grid-rows-2 gap-6 overflow-auto">
+              <Leaderboard player={gameState.player} />
+            </div>
           )}
           {activeTab === "shop" && <ItemShop items={items} />}
           {activeTab === "inventory" && (
@@ -128,28 +131,29 @@ function App() {
 
         {/* Desktop Layout */}
         <div className="h-full overflow-auto hidden lg:grid lg:grid-cols-3 gap-6">
-          <div className="grid grid-rows-2 gap-6 overflow-auto">
-            <GameStats
-              player={gameState.player}
-              inventory={gameState.inventory}
-            />
-            <ItemStats
-              inventory={gameState.inventory}
-              champions={gameState.player.champions}
-              rank={gameState.player.rank}
-              lp={gameState.player.lp}
-            />
+          <div className="bg-[#091428] p-4 border-2 border-[#C8AA6E] shadow-lg shadow-[#C8AA6E]/20 grid grid-rows-2 gap-6 overflow-auto">
+            <Leaderboard player={gameState.player} />
+            <div className="flex flex-col overflow-auto gap-2">
+              <GameStats
+                player={gameState.player}
+                inventory={gameState.inventory}
+              />
+              <Divider size="sm" />
+              <ItemStats
+                inventory={gameState.inventory}
+                champions={gameState.player.champions}
+                rank={gameState.player.rank}
+                lp={gameState.player.lp}
+              />
+            </div>
           </div>
-          <RankDisplay player={gameState.player} />
-          <Leaderboard player={gameState.player} />
-        </div>
 
-        {/* Desktop Play Button and Inventory */}
-        <div className="hidden lg:visible flex-col overflow-auto gap-8 lg:grid grid-cols-2">
-          <Inventory items={gameState.inventory} onSell={handleSellItem} />
-          {/* <ChampionInventory champions={gameState.player.champions} /> */}
-          <ItemShop items={items} />
-          {/* <ChampionShop onPurchase={handlePurchaseChampion} /> */}
+          <RankDisplay player={gameState.player} />
+
+          <div className="bg-[#091428] p-4 border-2 border-[#C8AA6E] shadow-lg shadow-[#C8AA6E]/20 grid grid-rows-2 gap-6 overflow-auto">
+            <Inventory items={gameState.inventory} onSell={handleSellItem} />
+            <ItemShop items={items} />
+          </div>
         </div>
       </div>
 

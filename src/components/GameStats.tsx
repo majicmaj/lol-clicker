@@ -5,6 +5,7 @@ import { WinLossChart } from "./stats/WinLossChart";
 import { LPChart } from "./stats/LPChart";
 import { AverageStats } from "./stats/AverageStats";
 import { WinRateStats } from "./stats/WinRateStats";
+import { Divider } from "./dividers/Divider";
 
 interface GameStatsProps {
   player: PlayerStats;
@@ -68,7 +69,7 @@ export const GameStats: React.FC<GameStatsProps> = ({ player, inventory }) => {
   const showInactivityWarning = isHighElo && player.inactivityWarning;
 
   return (
-    <div className="bg-[#091428] p-4 border-2 border-[#C8AA6E] shadow-lg shadow-[#C8AA6E]/20">
+    <div className="">
       {showInactivityWarning && (
         <div className="bg-red-500/10 border border-red-500/30 p-2 mb-4 text-center">
           <span className="text-red-400 font-bold">Warning: </span>
@@ -78,21 +79,22 @@ export const GameStats: React.FC<GameStatsProps> = ({ player, inventory }) => {
         </div>
       )}
 
-      <h2 className="text-xl font-bold mb-3 text-center bg-gradient-to-r from-[#C8AA6E] to-[#C8AA6E]/80 text-transparent bg-clip-text">
-        Match Statistics
+      <h2 className="text-xl font-bold  text-center bg-gradient-to-r from-[#C8AA6E] to-[#C8AA6E]/80 text-transparent bg-clip-text">
+        Statistics
       </h2>
+      <Divider />
 
       <AverageStats lpGains={lpGains} lpLosses={lpLosses} />
       <WinRateStats player={player} inventory={inventory} />
 
-      <div className="grid grid-cols-2 gap-2 mt-2">
+      {/* <div className="grid grid-cols-2 gap-2 mt-2">
         <LPChart
           lpHistory={lpChartFilteredProps?.map((data) => data.lp)}
           rankHistory={lpChartFilteredProps?.map((data) => data.rank)}
           divisionHistory={lpChartFilteredProps?.map((data) => data.division)}
         />
         <WinLossChart wins={player.wins} losses={player.losses} />
-      </div>
+      </div> */}
     </div>
   );
 };

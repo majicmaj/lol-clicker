@@ -195,43 +195,37 @@ export const ItemStats: React.FC<ItemStatsProps> = ({
   ];
 
   return (
-    <div className="bg-[#091428] p-4 pb-6 border-2 border-[#C8AA6E] shadow-lg shadow-[#C8AA6E]/20">
-      <div className="grid grid-cols-2 gap-2">
-        {statGroups?.map((group, index) => (
-          <div key={index} className="flex flex-col items-center">
-            <h3 className="text-sm font-beaufort text-[#C8AA6E]">
-              {group.title}
-            </h3>
-            <p className="text-sm font-spiegel italic text-white/75 mb-1">
-              {group.description}{" "}
-              <span className="font-bold">({group.value.toFixed(1)})</span>
-            </p>
-            <img src={gold_divider_sm} className="w-full mb-2" />
-            <div className="grid grid-cols-1 gap-1 w-full">
-              {group.stats?.map((stat, statIndex) => (
-                <div
-                  key={statIndex}
-                  className="w-full flex items-center justify-between px-1 pb-0.5 rounded-none"
-                >
-                  <div className={`${stat.color} text-xs font-bold`}>
-                    <img
-                      src={stat.icon}
-                      alt={stat.name}
-                      className="h-4 w-4 inline-block mr-2"
-                    />
-                    {stat.name}
-                  </div>
+    <div className="grid grid-cols-2 gap-2">
+      {statGroups?.map((group, index) => (
+        <div key={index} className="flex flex-col items-center">
+          <h3 className="text-sm font-beaufort text-[#C8AA6E]">
+            {group.title}
+          </h3>
+          <p className="text-sm font-spiegel italic text-white/75 mb-1">
+            {group.description}{" "}
+            <span className="font-bold">({group.value.toFixed(1)})</span>
+          </p>
+          <div className="grid grid-cols-2 w-full">
+            {group.stats?.map((stat, statIndex) => (
+              <div
+                key={statIndex}
+                className="w-full flex items-center justify-between px-1 pb-0.5 rounded-none"
+              >
+                <img
+                  src={stat.icon}
+                  alt={stat.name}
+                  className="h-4 w-4 inline-block mr-2"
+                />
 
-                  <div className="text-sm font-bold text-white">
-                    {formatBigNumbers(stat?.value || 0)}
-                    {stat.suffix}
-                  </div>
+                <div className="text-sm font-beaufort font-bold text-white">
+                  {formatBigNumbers(stat?.value || 0)}
+                  {stat.suffix}
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   );
 };

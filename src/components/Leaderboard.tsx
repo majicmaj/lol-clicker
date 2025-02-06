@@ -160,7 +160,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = () => {
     });
 
   return (
-    <div className="overflow-auto flex flex-col bg-[#091428] p-4 border-2 border-[#C8AA6E] shadow-lg shadow-[#C8AA6E]/20">
+    <div className="overflow-auto flex flex-col">
       <div className="grid gap-1 grid-cols-[1fr,auto,1fr] place-items-center">
         <div />
         <h2 className="text-center text-xl font-bold text-[#C8AA6E]">
@@ -183,8 +183,25 @@ export const Leaderboard: React.FC<LeaderboardProps> = () => {
 
       <Divider />
 
+      {/* Username input field */}
+      <div className="flex items-center gap-1 mb-1">
+        <input
+          type="text"
+          placeholder="Enter your name"
+          value={usernameInput}
+          onChange={(e) => setUsernameInput(e.target.value)}
+          className="px-1 border border-[#a58a5d] bg-slate-900 text-white w-full"
+        />
+        <button
+          onClick={handleSetUsername}
+          className="bg-[#C8AA6E] min-w-max text-white font-spiegel px-2 hover:bg-[#a58a5d]"
+        >
+          Set Name
+        </button>
+      </div>
+
       {/* Sorting Tabs */}
-      <div className="flex justify-center mb-4">
+      <div className="grid gap-0.5 grid-cols-6 text-center">
         {["lp", "gold", "wins", "losses", "games", "activity"].map((option) => (
           <button
             key={option}
@@ -193,7 +210,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = () => {
                 option as "lp" | "gold" | "wins" | "losses" | "games"
               )
             }
-            className={`px-1.5 text-white font text-xs font-spiegel ${
+            className={`px-1.5 text-white text-xs lg:font-medium font-spiegel ${
               sortOption === option
                 ? "bg-[#C8AA6E] text-black"
                 : "bg-slate-700 hover:bg-slate-600"
@@ -202,23 +219,6 @@ export const Leaderboard: React.FC<LeaderboardProps> = () => {
             {option.toUpperCase()}
           </button>
         ))}
-      </div>
-
-      {/* Username input field */}
-      <div className="flex items-center gap-2 mb-4">
-        <input
-          type="text"
-          placeholder="Enter your name"
-          value={usernameInput}
-          onChange={(e) => setUsernameInput(e.target.value)}
-          className="p-2 border border-[#a58a5d] bg-slate-900 text-white w-full"
-        />
-        <button
-          onClick={handleSetUsername}
-          className="bg-[#C8AA6E] min-w-max text-black font-bold px-4 py-2 hover:bg-[#a58a5d]"
-        >
-          Set Name
-        </button>
       </div>
 
       {/* Leaderboard Rows */}

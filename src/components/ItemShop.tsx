@@ -5,6 +5,7 @@ import ShopItemCard from "./ShopItemCard";
 import { useGameState } from "../hooks/useGameState";
 import { X } from "lucide-react";
 import { useRef, useState } from "react";
+import { Divider } from "./dividers/Divider";
 
 interface ItemShopProps {
   items: Item[];
@@ -62,8 +63,12 @@ export const ItemShop: React.FC<ItemShopProps> = ({ items }) => {
   );
 
   return (
-    <div className="overflow-auto flex flex-col bg-[#091428] p-2 lg:p-6 border lg:border-2 border-[#C8AA6E] shadow-lg shadow-[#C8AA6E]/20">
+    <div className="overflow-auto flex flex-col ">
       <div className="max-w-4xl flex flex-col overflow-auto">
+        <h2 className="text-xl font-bold  text-center bg-gradient-to-r from-[#C8AA6E] to-[#C8AA6E]/80 text-transparent bg-clip-text">
+          Shop
+        </h2>
+        <Divider />
         {/* Controls Container */}
         <div className="overflow-auto flex flex-col w-full gap-4">
           <div className="flex w-full  items-center justify-between gap-4">
@@ -80,7 +85,7 @@ export const ItemShop: React.FC<ItemShopProps> = ({ items }) => {
                   setShowSuggestions(!!e.target.value);
                 }}
                 onFocus={() => setShowSuggestions(!!searchQuery)}
-                className="w-full p-3 bg-[#0A1428] border-2 border-[#C8AA6E]/50 text-[#C8AA6E] focus:outline-none focus:border-[#C8AA6E]"
+                className="w-full px-1 bg-[#0A1428] border-2 border-[#C8AA6E]/50 text-[#C8AA6E] focus:outline-none focus:border-[#C8AA6E]"
               />
 
               {showSuggestions && (
