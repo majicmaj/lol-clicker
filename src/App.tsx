@@ -8,7 +8,6 @@ import { Inventory } from "./components/Inventory";
 import { GameStats } from "./components/GameStats";
 import { ItemStats } from "./components/ItemStats";
 import { Navigation } from "./components/Navigation";
-import { RotateCcw } from "lucide-react";
 import { Leaderboard } from "./components/Leaderboard";
 
 function App() {
@@ -79,8 +78,8 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#10A13] bg-[radial-gradient(circle_at_center,rgba(0,168,255,0.15),rgba(9,20,40,0))] p-4">
-      <div className="grid grid-rows-2 lg:h-[200vh] gap-6 relative">
+    <div className="min-h-screen bg-[#10A13] bg-[radial-gradient(circle_at_center,rgba(0,168,255,0.15),rgba(9,20,40,0))]">
+      <div className="grid grid-rows-2 h-[200vh] p-4 gap-8">
         {/* Reset Button */}
         {/* <div className="absolute top-2 right-6">
           <button
@@ -128,8 +127,8 @@ function App() {
         </div>
 
         {/* Desktop Layout */}
-        <div className="hidden lg:grid lg:grid-cols-3 gap-6 h-[calc(100vh-3rem)]">
-          <div className="grid grid-rows-2 gap-6">
+        <div className="h-full overflow-auto hidden lg:grid lg:grid-cols-3 gap-6">
+          <div className="grid grid-rows-2 gap-6 overflow-auto">
             <GameStats
               player={gameState.player}
               inventory={gameState.inventory}
@@ -146,7 +145,7 @@ function App() {
         </div>
 
         {/* Desktop Play Button and Inventory */}
-        <div className="hidden lg:visible  flex-col overflow-auto gap-8 lg:grid grid-cols-2 gap-8">
+        <div className="hidden lg:visible flex-col overflow-auto gap-8 lg:grid grid-cols-2">
           <Inventory items={gameState.inventory} onSell={handleSellItem} />
           {/* <ChampionInventory champions={gameState.player.champions} /> */}
           <ItemShop items={items} />
