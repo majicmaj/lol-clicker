@@ -75,6 +75,7 @@ export interface ItemStats {
   armorPen?: number;
   attackSpeed?: number;
   critChance?: number;
+  healAndShieldPower?: number;
   health?: number;
   healthRegen?: number;
   lethality?: number;

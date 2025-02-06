@@ -49,6 +49,7 @@ const NAMES_MAP = {
   moveSpeed: "Move Speed",
   spellVamp: "Spell Vamp",
   tenacity: "Tenacity",
+  healAndShieldPower: "Heal and Shield Power",
 };
 
 const REVERSE_NAMES_MAP = Object.fromEntries(

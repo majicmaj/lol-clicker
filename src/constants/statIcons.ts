@@ -55,6 +55,8 @@ export const statIconMap = {
     "https://static.wikia.nocookie.net/leagueoflegends/images/8/84/Magic_resistance_icon.png",
   GoldPer:
     "https://static.wikia.nocookie.net/leagueoflegends/images/2/2b/Gold_icon.png",
+  HealAndShieldPower:
+    "https://static.wikia.nocookie.net/leagueoflegends/images/8/89/Heal_and_shield_power_colored_icon.png",
 };
 
 export const statsNameMap = {
@@ -92,4 +94,5 @@ export const STAT_ICON_MAP = {
   FlatAttackSpeedMod: statIconMap.AttackSpeed,
   ManaRegen: statIconMap.ManaRegen,
   Mana: statIconMap.Mana,
+  HealAndShieldPower: statIconMap.HealAndShieldPower,
 };

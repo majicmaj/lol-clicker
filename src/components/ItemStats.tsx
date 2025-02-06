@@ -176,6 +176,20 @@ export const ItemStats: React.FC<ItemStatsProps> = ({
           color: "text-yellow-100",
           suffix: "%",
         },
+        {
+          icon: statIconMap.Tenacity,
+          name: "Tenacity",
+          value: (totalStats.tenacity || 0).toFixed(1),
+          color: "text-[#C8AA6E]",
+          suffix: "%",
+        },
+        {
+          icon: statIconMap.HealAndShieldPower,
+          name: "Heal/Shield",
+          value: (totalStats.healAndShieldPower || 0).toFixed(1),
+          color: "text-green-400",
+          suffix: "%",
+        },
       ],
     },
   ];
