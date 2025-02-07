@@ -50,7 +50,7 @@ export const calculateWinChance = (
 
   return clamp(
     (baseWinChance + statBonus + perChampionBonus) / rankMultiplier,
-    0.05,
-    99999.95
+    0.001,
+    0.999
   );
 };

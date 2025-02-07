@@ -1,5 +1,6 @@
 import React from "react";
 import { TrendingUp, TrendingDown } from "lucide-react";
+import { formatBigNumbers } from "../../utils/formatBigNumbers";
 
 interface AverageStatsProps {
   lpGains: number[];
@@ -25,20 +26,20 @@ export const AverageStats: React.FC<AverageStatsProps> = ({
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-1">
           <TrendingUp className="w-4 h-4 text-green-400" />
-          <div className="text-green-400 text-sm font-bold">LP Gain</div>
+          <div className="text-green-400 text-sm font-bold">+LP</div>
         </div>
         <div className="text-lg font-bold text-white">
-          +{avgLpGain.toFixed(1)}
+          +{formatBigNumbers(avgLpGain)}
         </div>
       </div>
 
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-1">
           <TrendingDown className="w-4 h-4 text-red-400" />
-          <div className="text-red-400 text-sm font-bold">LP Loss</div>
+          <div className="text-red-400 text-sm font-bold">-LP</div>
         </div>
         <div className="text-lg font-bold text-white">
-          -{avgLpLoss.toFixed(1)}
+          -{formatBigNumbers(avgLpLoss)}
         </div>
       </div>
     </div>

@@ -25,15 +25,15 @@ export const ItemShop: React.FC<ItemShopProps> = ({ items }) => {
     const alreadyOwned = gameState.inventory[item.id]?.count || 0;
     const maxCanAfford = Math.min(
       ITEM_CAP - alreadyOwned,
-      Math.floor(gameState.player.gold / item.cost)
+      Math.floor(gameState.player.gold / item.cost),
     );
 
     const quantityInput = prompt(
-      `How many ${item.name} would you like to purchase? (Max: ${maxCanAfford})`
+      `How many ${item.name} would you like to purchase? (Max: ${maxCanAfford})`,
     );
     const quantity = parseInt(quantityInput || "0", 10);
 
-    if (isNaN(quantity) || quantity < 1) return;
+    if (isNaN(quantity) || quantity < 1 || quantity > maxCanAfford) return;
 
     const newGameState = purchaseItem(gameState, item, quantity);
     if (newGameState) {
@@ -44,7 +44,7 @@ export const ItemShop: React.FC<ItemShopProps> = ({ items }) => {
   // Toggle the stat filter for the given stat key.
   const toggleStatFilter = (stat: string) => {
     setSelectedStats((prev) =>
-      prev.includes(stat) ? prev.filter((s) => s !== stat) : [...prev, stat]
+      prev.includes(stat) ? prev.filter((s) => s !== stat) : [...prev, stat],
     );
   };
 
@@ -68,7 +68,7 @@ export const ItemShop: React.FC<ItemShopProps> = ({ items }) => {
 
   // Suggestions for the search dropdown.
   const filteredSuggestions = items.filter((item) =>
-    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+    item.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   return (
@@ -76,7 +76,7 @@ export const ItemShop: React.FC<ItemShopProps> = ({ items }) => {
       <div className="max-w-4xl mx-auto flex flex-col overflow-auto">
         <h2
           className="text-xl font-bold text-center
-                     bg-gradient-to-r from-[#C8AA6E] to-[#C8AA6E]/80 
+                     bg-gradient-to-r from-[#C8AA6E] to-[#C8AA6E]/80
                      text-transparent bg-clip-text"
         >
           Shop
@@ -84,7 +84,7 @@ export const ItemShop: React.FC<ItemShopProps> = ({ items }) => {
         <Divider />
 
         {/* Controls Container */}
-        <div className="flex flex-col gap-4 w-full overflow-auto">
+        <div className="flex flex-col gap-0 w-full overflow-auto">
           {/* Search Input */}
           <div className="flex items-center justify-between gap-4">
             <div className="relative w-full max-w-[600px]" ref={searchRef}>
@@ -104,9 +104,9 @@ export const ItemShop: React.FC<ItemShopProps> = ({ items }) => {
           </div>
 
           {/* Stat Filter Buttons and Items Grid */}
-          <div className="flex gap-4 overflow-auto">
+          <div className="flex gap-0 overflow-auto">
             {/* Stat Filter Buttons */}
-            <div className="flex flex-col gap-2 overflow-auto">
+            <div className="flex flex-col gap-1 overflow-auto">
               {/* Clear Filters Button */}
               <button
                 onClick={() => setSelectedStats([])}
@@ -122,7 +122,7 @@ export const ItemShop: React.FC<ItemShopProps> = ({ items }) => {
                 <button
                   key={statKey}
                   onClick={() => toggleStatFilter(statKey)}
-                  className={`p-1 text-sm transition-colors ${
+                  className={`text-sm transition-colors p-1 ${
                     selectedStats.includes(statKey)
                       ? "bg-[#C8AA6E] text-[#091428]"
                       : "bg-[#0A1428] text-[#C8AA6E]"
@@ -143,15 +143,24 @@ export const ItemShop: React.FC<ItemShopProps> = ({ items }) => {
 
             {/* Main Items Grid */}
             <div
-              className="flex flex-wrap gap-4 p-4 border border-[#C8AA6E]
+              className="flex flex-1 flex-wrap gap-2 p-2 border border-[#C8AA6E]
                          w-full justify-center items-start overflow-auto"
             >
+              {showSuggestions &&
+                filteredSuggestions.map((item) => (
+                  <ShopItemCard
+                    key={item.id}
+                    item={item}
+                    onPurchase={handlePurchase}
+                    hasComponents={getHasComponents(item)}
+                  />
+                ))}
               {filteredItems.map((item) => (
                 <ShopItemCard
                   key={item.id}
                   item={item}
                   onPurchase={handlePurchase}
-                  hasComponents={getHasComponents(item, availableUpgrades)}
+                  hasComponents={getHasComponents(item)}
                 />
               ))}
             </div>

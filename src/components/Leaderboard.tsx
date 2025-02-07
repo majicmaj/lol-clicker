@@ -162,10 +162,6 @@ export const Leaderboard: React.FC<LeaderboardProps> = () => {
   return (
     <div className="overflow-auto flex flex-col">
       <div className="grid gap-1 grid-cols-[1fr,auto,1fr] place-items-center">
-        <div />
-        <h2 className="text-center text-xl font-bold text-[#C8AA6E]">
-          Leaderboard
-        </h2>
         {isConnected ? (
           <div className="flex h-min w-min gap-1 px-1 items-center text-xs font-spiegel text-green-500">
             <span className="h-2 w-2 bg-green-500 rounded-full inline-block" />
@@ -179,6 +175,9 @@ export const Leaderboard: React.FC<LeaderboardProps> = () => {
             <span className="">Reconnect</span>
           </button>
         )}
+        <h2 className="text-center text-xl font-bold text-[#C8AA6E]">
+          Leaderboard
+        </h2>
       </div>
 
       <Divider />
@@ -194,14 +193,14 @@ export const Leaderboard: React.FC<LeaderboardProps> = () => {
         />
         <button
           onClick={handleSetUsername}
-          className="bg-[#C8AA6E] min-w-max text-black font-spiegel px-2 hover:bg-[#a58a5d]"
+          className="bg-[#C8AA6E] min-w-max text-black text-sm font-beaufort px-2 py-[2.8px] hover:bg-[#a58a5d]"
         >
-          Set Name
+          SET NAME
         </button>
       </div>
 
       {/* Sorting Tabs */}
-      <div className="grid gap-0.5 grid-cols-6 text-center">
+      <div className="overflow-auto h-12 grid gap-0.5 grid-cols-6 text-center">
         {["lp", "gold", "wins", "losses", "games", "activity"].map((option) => (
           <button
             key={option}
@@ -216,19 +215,19 @@ export const Leaderboard: React.FC<LeaderboardProps> = () => {
                   | "activity"
               )
             }
-            className={`px-1.5 text-white text-xs lg:font-medium font-spiegel ${
+            className={`px-1.5 text-xs border-b-2 lg:font-medium font-beaufort ${
               sortOption === option
-                ? "bg-[#C8AA6E] text-black"
-                : "bg-transparent hover:bg-slate-600"
+                ? "text-[#C8AA6E] border-[#C8AA6E]"
+                : "bg-transparent border-transparent hover:text-amber-300 truncate"
             }`}
           >
-            {option.slice(0, 3).toUpperCase()}
+            {option.toUpperCase()}
           </button>
         ))}
       </div>
 
       {/* Leaderboard Rows */}
-      <div className="overflow-auto border p-2 border-[#C8AA6E]/20">
+      <div className="overflow-auto border p-2 border-[#C8AA6E]">
         {sortedPlayers.map((player, index) => (
           <LeaderboardRow key={player.id} player={player} index={index} />
         ))}

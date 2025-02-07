@@ -10,6 +10,8 @@ import { ItemStats } from "./components/ItemStats";
 import { Navigation } from "./components/Navigation";
 import { Leaderboard } from "./components/Leaderboard";
 import { Divider } from "./components/dividers/Divider";
+import { Settings } from "lucide-react";
+import SettingsModal from "./components/SettingsModal";
 
 function App() {
   const {
@@ -17,26 +19,16 @@ function App() {
     setGameState,
     items,
     itemsLoading: loading,
-    resetGame,
   } = useGameState();
 
   const [activeTab, setActiveTab] = useState("overview");
-  const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+
+  const toggleSettings = () => setShowSettings((prev) => !prev);
 
   const handleSellItem = (id: string, count: number) => {
     const newState = sellItem(gameState, id, count);
     setGameState(newState);
-  };
-
-  const handleReset = () => {
-    if (showResetConfirm) {
-      resetGame();
-      setShowResetConfirm(false);
-    } else {
-      setShowResetConfirm(true);
-      // Auto-hide the confirmation after 3 seconds
-      setTimeout(() => setShowResetConfirm(false), 3000);
-    }
   };
 
   // Give the player a random UUID if they don't have one
@@ -59,10 +51,13 @@ function App() {
       const oldInv = gameState.inventory as any[];
       setGameState({
         ...gameState,
-        inventory: oldInv.reduce((acc, item) => {
-          acc[item.id] = item;
-          return acc;
-        }, {} as Record<string, any>),
+        inventory: oldInv.reduce(
+          (acc, item) => {
+            acc[item.id] = item;
+            return acc;
+          },
+          {} as Record<string, any>,
+        ),
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -138,6 +133,18 @@ function App() {
           </div>
         </div>
       </div>
+
+      <div className="absolute right-4 top-4 z-10">
+        <button
+          className="text-[#F0E6D2] p-1 rounded-md hover:bg-[#C8AA6E]/20"
+          onClick={toggleSettings}
+        >
+          <Settings />
+        </button>
+      </div>
+
+      {/* Settings */}
+      {showSettings && <SettingsModal />}
 
       {/* Mobile Navigation */}
       <Navigation activeTab={activeTab} onTabChange={setActiveTab} />
